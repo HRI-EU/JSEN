@@ -15,7 +15,7 @@ JSEN can be installed simply by copying the following files ...
 Documentation
 ===================================
 
-The documentation is built using Doxygen. You can generate it through ...
+The documentation is built using `jsdoc`. You can generate/udpate it by running `npm run docs`.
 
 The generated documentation can be found in `doc/html`.
 

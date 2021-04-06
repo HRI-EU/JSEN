@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "node test/test*.js",
-    "docs": "npx jsdoc -d doc src/*.js"
+    "docs": "npx jsdoc -d doc/html src/*.js"
   },
   "repository": {
     "type": "git",
