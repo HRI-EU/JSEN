@@ -1,0 +1,28 @@
+{
+  "name": "jsen",
+  "version": "1.0.0",
+  "description": "JSEN - JavaScript Executable Notation Project",
+  "main": "src/JSEN.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node test/test*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HRI-EU/JSEN.git"
+  },
+  "keywords": [
+    "jsen",
+    "javascript",
+    "json"
+  ],
+  "author": "Honda Research Institute Europe GmbH",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/HRI-EU/JSEN/issues"
+  },
+  "homepage": "https://github.com/HRI-EU/JSEN#readme"
+}
