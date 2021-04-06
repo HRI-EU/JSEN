@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node test/test*.js"
+    "test": "node test/test*.js",
+    "docs": "npx jsdoc -d doc src/*.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/HRI-EU/JSEN/issues"
   },
-  "homepage": "https://github.com/HRI-EU/JSEN#readme"
+  "homepage": "https://github.com/HRI-EU/JSEN#readme",
+  "devDependencies": {
+    "jsdoc": "^3.6.6"
+  }
 }
