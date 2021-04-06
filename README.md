@@ -1,6 +1,6 @@
-JSEN - JavaScript Executable Notation Project
-Authors: Antonello Ceravola, Frank Joublin
-Contributors: Catalina Ioan
+JSEN - JavaScript Executable Notation Project  
+Authors: Antonello Ceravola, Frank Joublin  
+Contributors: Catalina Ioan  
 
 ====================================
 
@@ -10,7 +10,7 @@ A description of all pure JSEN statements, the JSENThreadClass and the JSENVM AP
 
 Installation 
 ===================================
-JSEN can be installed simply by copying the following files ...
+JSEN can be installed simply by copying the `src` folder into your projects or by using `npm`.
 
 Documentation
 ===================================
