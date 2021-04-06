@@ -10,7 +10,7 @@ A description of all pure JSEN statements, the JSENThreadClass and the JSENVM AP
 
 Installation 
 ===================================
-JSEN can be installed simply by copying the `src` folder into your projects or by using `npm`.
+JSEN can be installed simply by copying the `src` folder into your projects or by using `npm install https://github.com/HRI-EU/JSEN`.
 
 Documentation
 ===================================
