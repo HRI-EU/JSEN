@@ -1,7 +1,4 @@
-JSEN - JavaScript Executable Notation Project  
-Authors: Antonello Ceravola, Frank Joublin  
-Contributors: Catalina Ioan  
-
+JSEN - JavaScript Executable Notation Project
 ====================================
 
 The JSEN library provides a set of functions to manipulate JSEN data structures that can be used to store executable statements or run them in a concurent multi-threding environment through the JSEN Virtual Machine.
