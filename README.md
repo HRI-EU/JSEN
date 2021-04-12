@@ -34,4 +34,5 @@ The copyright holders are not liable for any damage(s) incurred due to improper 
 
 * <a href="https://github.com/antonelloceravola">Antonello Ceravola</a>
 * Catalina Ioan
-* Frank Joublin
+* <a href="https://github.com/frankjoublin">Frank Joublin</a>
+* 
