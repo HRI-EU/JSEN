@@ -1,0 +1,2082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: JSEN</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: JSEN</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>JSEN<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">JSEN Main Reference Object
+This object implements the basic features of JSEN and the 
+introduced the basic JSEN Virtual Languages statements</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="JSEN"><span class="type-signature"></span>new JSEN<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="break"><span class="type-signature"></span>break<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Interrupt the execution of a JSEN block, continuing execution after it.
+In case there is no other continuation, the JSEN tread will be terminated.
+JSEN.break can be used in conbination of a control statement or just into a 
+simple JSEN block not controlled by any control statement
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line338">line 338</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.continue, JSEN.loop, JSEN.for, JSEN.foreach, JSEN.while, JSEN.until</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="case"><span class="type-signature"></span>case<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Case for multi value control statement, switching on different cases
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line590">line 590</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.switch, JSEN.break, JSEN.if, JSEN.else</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.switch( ()=> testVar ),
+  JSEN.case( 0 ),
+  [
+    ()=> console.log( 'testVar 0' ),
+  ],
+  JSEN.case( 1 ),
+  [
+    ()=> console.log( 'testVar 1' ),
+  ],
+  JSEN.case( 2 ),
+  [
+    ()=> console.log( 'testVar 2' ),
+  ],</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="continue"><span class="type-signature"></span>continue<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Continue the execution of a JSEN block from the beginning of it.
+JSEN.continue can be used in conbination of a control statement or just into a 
+simple JSEN block not controlled by any control statement
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line352">line 352</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.break, JSEN.loop, JSEN.for, JSEN.foreach, JSEN.while, JSEN.until</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="else"><span class="type-signature"></span>else<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Control statement else, used in combination with a JSEN.if statement.
+It executes the associated block in case the if condition is not true
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line300">line 300</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.if</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.if( ()=> i > 5 ),
+    JSEN.print( 'Condition true' ),
+  JSEN.else(),
+    JSEN.print( 'Condition false' ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="for"><span class="type-signature"></span>for<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Iterate on the associated JSEN block moving the iterator from lower to upper values.
+Such a loop can be terminated using JSEN.break
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line411">line 411</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.continue, JSEN.break, JSEN.loop, JSEN.foreach, JSEN.while, JSEN.until</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.for( 'i', 10 ), // i => [0, 10[, increment 1
+  [
+    JSEN.print( 'We print this line 10 times' ),
+  ],
+  JSEN.for( 'i', 5, 10 ), // i => [5, 10[, increment 1
+  [
+    JSEN.print( 'We print this line 5 times' ),
+  ],
+  JSEN.for( 'i', 5, 10, 2 ), // i => [5, 7, 9], increment 2
+  [
+    JSEN.print( 'We print this line 3 times' ),
+  ],
+  JSEN.for( 'i', 10, 5 ), // i => [10, 5[, increment -1
+  [
+    JSEN.print( 'We print this line 5 times' ),
+  ],
+  JSEN.for( 'i', 10, 5, -2 ), // i => [-10, -8, -6], increment -2
+  [
+    JSEN.print( 'We print this line 3 times' ),
+  ],
+  JSEN.for( 'i', ()=> beginIndex, ()=> endIndex ), // i => [beginIndex, endIndex[, increment -1
+  [
+    JSEN.print( 'We print this line several times' ),
+  ],</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="forceCheckOn"><span class="type-signature"></span>forceCheckOn<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Force the execution of the threat that test all condition for suspended thread on JSEN.on()
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line607">line 607</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.on+++</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.forceCheckOn(),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="foreach"><span class="type-signature"></span>foreach<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Iterate on the associated JSEN block moving the iterator along the elements of an iteralbe object.
+Such a loop can be terminated using JSEN.break
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line460">line 460</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.continue, JSEN.break, JSEN.loop, JSEN.for, JSEN.while, JSEN.until</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.foreach( 'i', [1, 2, 3] ), // i => [1, 2, 3]
+  [
+    JSEN.print( 'We print this line 3 times' ),
+  ],
+  JSEN.foreach( 'i', ['a', 'b'] ), // i => ['a', 'b']
+  [
+    JSEN.print( 'We print this line 2 times' ),
+  ],
+  JSEN.foreach( 'i', arrayValue ), // Statically assigned
+  [
+    JSEN.print( 'We print this line several times' ),
+  ],
+  JSEN.foreach( 'i', ()=> arrayValue ), // Dynamically evaluated
+  [
+    JSEN.print( 'We print this line several times' ),
+  ],</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="get"><span class="type-signature"></span>get<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Get the value of a user variable
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line484">line 484</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.set</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.get( 'i', (value)=> console.log( 'i =', value ) );</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="getOnStatus"><span class="type-signature"></span>getOnStatus<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Returns the exist status of a JSEN.on. It informs if the JSEN.on continued because
+the condition became true (value: 'çondition') or the timeout is over (value: 'timeout')
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line278">line 278</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.on</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.on( ()=> userName == 'guest', 10 ),
+  JSEN.getOnStatus( (value)=> exitStatus = value ),
+  JSEN.print( ()=> 'ON condition continued because of '+exitStatus ),
+
+In this example the variable exitStatus can get the value 'condition' or 'timetout'</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="goto"><span class="type-signature"></span>goto<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Jump to a lablel in a JSEN data structure. The goto have a limitations. A godo can
+only jump into a local JSEN blocks. A jump between JSEN blocks is not supported.
+A goto can only jump backwards, to a previously defined label.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line226">line 226</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.goto</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.goto( 'start' ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="if"><span class="type-signature"></span>if<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Control statement if
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line179">line 179</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.else</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.if( ()=> i > 5 ),
+    JSEN.print( 'Condition true' ),
+  JSEN.else(),
+    JSEN.print( 'Condition false' ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="label"><span class="type-signature"></span>label<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Define a lablel in a JSEN data structure. Label are local in JSEN blocks.
+There are 2 labels available by default in every JSEN block: 'blockBegin', 'blockEnd'
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line202">line 202</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.goto</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.label( 'start' ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="loop"><span class="type-signature"></span>loop<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Infinite loop on the associated JSEN block.
+Such a loop can be terminated using JSEN.break
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line323">line 323</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.break</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.loop(),
+  [
+    JSEN.print( 'We are in the loop' ),
+    JSEN.if( ()=> i > 5 ),
+      JSEN.break(),
+    ()=> ++i,
+  ],</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="on"><span class="type-signature"></span>on<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Suspends the exectuion of the JSEN thread until the condition becames true or the 
+timeout is over (if specified). The JSEN thread is moved in the suspended thread queue
+until the condition is true or until timeout is over
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line251">line 251</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.sleep, JSEN.getOnStatus</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.on( ()=> userName == 'guest', 1.2 ),
+  JSEN.on( ()=> userName == 'guest' ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="print"><span class="type-signature"></span>print<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Log a message in jsen calls (log startd with thread name)
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line155">line 155</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.print( 'Ciao' ),
+  JSEN.print( ()=> variableValue ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="set"><span class="type-signature"></span>set<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Set the value of a user variable
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line508">line 508</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.get</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.set( 'i', 5 );
+  JSEN.set( 'i', ()=> a+b );</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="sleep"><span class="type-signature"></span>sleep<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Sleeps, suspending the execution for an interval of time
+During sleep, a JSEN thread is moved in the suspended thread queue
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line134">line 134</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.on</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.sleep( ()=> timeout ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="switch"><span class="type-signature"></span>switch<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Multi value control statement, switching on different cases
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line562">line 562</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.case, JSEN.break, JSEN.if, JSEN.else</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.switch( ()=> testVar ),
+  JSEN.case( 0 ),
+  [
+    ()=> console.log( 'testVar 0' ),
+  ],
+  JSEN.case( 1 ),
+  [
+    ()=> console.log( 'testVar 1' ),
+  ],
+  JSEN.case( 2 ),
+  [
+    ()=> console.log( 'testVar 2' ),
+  ],</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="until"><span class="type-signature"></span>until<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Loop on the associated JSEN block until the condition becomes false.
+Such a loop can be terminated using JSEN.break
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line533">line 533</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.continue, JSEN.break, JSEN.loop, JSEN.for, JSEN.foreach, JSEN.while</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>[
+    JSEN.print( 'We are in the loop' ),
+  ],
+  JSEN.until( ()=> i &lt; 5 ),</code></pre>
+
+
+
+        
+            
+<h4 class="name" id="while"><span class="type-signature"></span>while<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Loop on the associated JSEN block while the condition is true.
+Such a loop can be terminated using JSEN.break
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line370">line 370</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.continue, JSEN.break, JSEN.loop, JSEN.for, JSEN.foreach, JSEN.until</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>JSEN.while( ()=> i > 5 ),
+  [
+    JSEN.print( 'We are in the loop' ),
+  ],</code></pre>
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".parse"><span class="type-signature">(static) </span>parse<span class="signature">(jsenStr)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Parse a string JSEN data structure and return an instance of it
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jsenStr</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a string encoded according to JSEN syntax</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="JSEN.html#.stringify">JSEN.stringify</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    a JSEN data structure (JavaScript array)
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".stringify"><span class="type-signature">(static) </span>stringify<span class="signature">(jsenCode, replacer, space)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Encode a JSEN data structure into a string
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>jsenCode</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">a JSEN data structure (JavaScript array)</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>replacer</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">parameter not used</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>space</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">an indentation string or a number representing the number of speced for indentation (see JSON.stringify)</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="JSEN.js.html">JSEN.js</a>, <a href="JSEN.js.html#line62">line 62</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>JSEN.parse, JSON.strngify</li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    a string representing a JSEN data structure
+</div>
+
+
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="JSEN.html">JSEN</a></li><li><a href="JSENVM.html">JSENVM</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Apr 06 2021 16:42:49 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

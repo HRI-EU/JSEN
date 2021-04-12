@@ -1,6 +1,6 @@
-JSEN - JavaScript Executable Notation Project
-Authors: Antonello Ceravola, Frank Joublin
-Contributors: Catalina Ioan
+JSEN - JavaScript Executable Notation Project  
+Authors: Antonello Ceravola, Frank Joublin  
+Contributors: Catalina Ioan  
 
 ====================================
 
@@ -10,12 +10,12 @@ A description of all pure JSEN statements, the JSENThreadClass and the JSENVM AP
 
 Installation 
 ===================================
-JSEN can be installed simply by copying the following files ...
+JSEN can be installed simply by copying the `src` folder into your projects or by using `npm install https://github.com/HRI-EU/JSEN`.
 
 Documentation
 ===================================
 
-The documentation is built using Doxygen. You can generate it through ...
+The documentation is built using `jsdoc`. You can generate/udpate it by running `npm run docs`.
 
 The generated documentation can be found in `doc/html`.
 
