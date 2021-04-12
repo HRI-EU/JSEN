@@ -30,10 +30,8 @@ Disclaimer
 
 The copyright holders are not liable for any damage(s) incurred due to improper use of this software.
 
-Authors
+Authors (in alphabetical order)
 ===================================
-(in alphabetical order):
-
 * <a href="https://github.com/antonelloceravola">Antonello Ceravola</a>
 * Catalina Ioan
 * <a href="https://github.com/frankjoublin">Frank Joublin</a>
