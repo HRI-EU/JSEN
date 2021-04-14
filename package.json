@@ -1,5 +1,5 @@
 {
-  "name": "jsen-lang",
+  "name": "@hrieu/jsen",
   "version": "1.0.0",
   "description": "JSEN - JavaScript Executable Notation Project",
   "main": "src/JSEN.js",
@@ -24,7 +24,7 @@
     "threading",
     "homoiconic"
   ],
-  "author": "Honda Research Institute Europe GmbH",
+  "author": "Antonello Ceravola - Honda Research Institute Europe GmbH",
   "license": "BSD-3-Clause",
   "bugs": {
     "url": "https://github.com/HRI-EU/JSEN/issues"
