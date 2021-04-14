@@ -1,5 +1,5 @@
 {
-  "name": "jsen",
+  "name": "jsen-lang",
   "version": "1.0.0",
   "description": "JSEN - JavaScript Executable Notation Project",
   "main": "src/JSEN.js",
@@ -18,7 +18,11 @@
   "keywords": [
     "jsen",
     "javascript",
-    "json"
+    "json",
+    "language",
+    "virtual language",
+    "threading",
+    "homoiconic"
   ],
   "author": "Honda Research Institute Europe GmbH",
   "license": "BSD-3-Clause",
