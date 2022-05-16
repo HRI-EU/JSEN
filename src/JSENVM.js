@@ -32,7 +32,10 @@
  *
  */
 
-const JSEN = require( './JSEN.js' );
+var module;
+if( module ) {
+  window.JSEN = require( './JSEN.js' );
+}
 
 /**
  * JSEN Virtual Machine
@@ -53,7 +56,7 @@ class JSENVM {
     jvm.startThread( '*' );
   }
   /**
-   * JSENVM Virtual Machine constractor
+   * JSENVM Virtual Machine constructor
    */
   constructor( checkOnTimeout ) {
     // Timeout for checking json_on() conditions
@@ -99,7 +102,7 @@ class JSENVM {
     // Artificial delay (in seconds) between execution of consecutive atomic operations
     // for threads in the slow queue (slowThread() function)
     // 0 = no delay
-    this.slowThreadPeriod = 0;
+    this.slowThreadPeriod = 1;
     // Id of last stepped thread, for threads in step by step mode
     this.currentStepByStepIndex = 0;
     // List of registered conditions for "on()" statements
@@ -118,6 +121,9 @@ class JSENVM {
     this.jsenOnStatusCondition = 'condition';
     this.jsenOnStatusTimeout = 'timeout';
 
+    // Signal table (JSEN.signalInit/Notify/Wait)
+    this.signalNameList = {};
+
     // List of registered breakpoints
     this.breakpointList = {};
     // Faster way to know how many breakpoint we have
@@ -133,13 +139,13 @@ class JSENVM {
   /* -----------------------------------------------------------------
    * JSENVM Public High-Level API functions
    *-----------------------------------------------------------------*/
-  static getSingleton(checkOnTimeout) {
-    if (!JSENVM._singletonInstance) {
-      JSENVM._singletonInstance = new JSENVM(checkOnTimeout);
-    }
+  // static getSingleton(checkOnTimeout) {
+  //   if (!JSENVM._singletonInstance) {
+  //     JSENVM._singletonInstance = new JSENVM(checkOnTimeout);
+  //   }
 
-    return JSENVM._singletonInstance;
-  }
+  //   return JSENVM._singletonInstance;
+  // }
   getNextThreadId() {
     return this.thread.byId.length;
   }
@@ -297,8 +303,28 @@ class JSENVM {
     this.slowThreadPeriod = period;
   }
   setThreadToQueue( newQueue, threadList ) {
-    // Destination list
-    const toList = this.thread.byStatus[ newQueue ].running;
+    // TODO: This function must be rewritten from ground
+    /*
+       if move from ready -> running -> startThread
+       if move from ready -> suspended -> suspendThread
+       if move from ready -> terminate -> terminateThread
+       if move from fast -> slow -> check status (running/suspended) and do the right thing
+       ....
+       if( this.isThreadReady( threadId ) {
+        switch( newQueue ) {
+          case 'fast':
+            this.startThreadId( threadId );
+            break;
+          case 'slow':
+            this.startThreadId( threadId );
+            this.slowThread( threadId );
+            break;
+          case 'stepByStep':
+          case 'terminated':
+        }
+      }
+    */
+
     // All eligible source lists
     const allLists = [
       this.thread.byStatus.ready,
@@ -312,10 +338,57 @@ class JSENVM {
     ];
     // Perform moving
     for( const threadNameOrId of threadList ) {
+      // Get thread info
       const threadData = this.getThreadNameId( threadNameOrId );
-      for( const threadList of allLists) {
-        if( threadList.includes( threadData.id ) )
-          this._moveThread( threadData.id, threadList, toList );
+      const threadId = threadData.id;
+      const threadContext = this.thread.byId[threadId];
+
+      // If thread terminated and new quest is not terminated  -> renew it
+      if( this.isThreadTerminated( threadId ) && newQueue != 'terminated' ) {
+        this.renewThreadId( threadId );
+      }
+
+      // Get thread status
+      const isThreadReady = this.isThreadReady( threadId );
+
+      // Move thread to new queue
+      if( isThreadReady && ( newQueue == 'fast' ) ) {
+        this.startThreadId( threadId );
+        this._removeDebugInfo( threadContext );
+      } if( isThreadReady && ( newQueue == 'slow' ) ) {
+        this.startThreadId( threadId );
+        this.slowThread( threadId );
+        this._removeDebugInfo( threadContext );
+      } else {
+        // Destination list
+        const toList = this.thread.byStatus[ newQueue ].running;
+
+        for( const threadList of allLists) {
+          if( threadList.includes( threadId ) ) {
+            this._moveThread( threadId, threadList, toList );
+  
+            /*
+               TODO: here we should start/suspend threads depending on destination
+            if( ( toList == this.thread.byStatus.fast.running ) ||
+                ( toList == this.thread.byStatus.slow.running ) ) {
+              this.startThread( threadId ); // We can not start in this way...to check full process
+            } else if( ( toList == this.thread.byStatus.fast.suspended ) ||
+                       ( toList == this.thread.byStatus.slow.suspended ) ||
+                       ( toList == this.thread.byStatus.stepByStep.suspended ) ) {
+              this.suspendThread( threadId ); // We can not suspend in this way...to check full process
+            }
+            */
+  
+            const threadContext = this.thread.byId[threadId];
+            if( newQueue == 'stepByStep' ) {
+              // Insert debug info
+              this._insertDebugInfo( threadContext, threadContext.blockContext.code );
+            } else {
+              // Remove debug info
+              this._removeDebugInfo( threadContext );
+            }
+          }
+        }
       }
     }
   }
@@ -327,7 +400,7 @@ class JSENVM {
       const threadContext = this.thread.byId[threadId];
 
       // Skip checkOn thread
-      if( threadId != this.checkOnThreadId ) {
+      if( threadId == this.checkOnThreadId ) {
         continue;
       }
 
@@ -361,7 +434,7 @@ class JSENVM {
       const threadContext = this.thread.byId[threadId];
 
       // Skip checkOn thread
-      if( threadId != this.checkOnThreadId ) {
+      if( threadId == this.checkOnThreadId ) {
         continue;
       }
 
@@ -388,7 +461,7 @@ class JSENVM {
       const threadContext = this.thread.byId[ threadId ];
 
       // Skip checkOn thread
-      if( threadId != this.checkOnThreadId ) {
+      if( threadId == this.checkOnThreadId ) {
         continue;
       }
 
@@ -506,6 +579,12 @@ class JSENVM {
         break;
       }
     }
+  }
+  signalInit( signalName ) {
+    this.statementMap['signalInit']( null, signalName );
+  }
+  signalNotify( signalName ) {
+    this.statementMap['signalNotify']( null, signalName );
   }
   /* -----------------------------------------------------------------
    * JSENVM Public Low-Level API functions
@@ -810,7 +889,7 @@ class JSENVM {
     // Get thread id from name
     const name = '';
     
-    const threadCondext = this.thread.byId[ threadId ];
+    const threadContext = this.thread.byId[ threadId ];
     if( threadContext ) {
       name = threadContext.name;
     }
@@ -887,7 +966,7 @@ class JSENVM {
     //if( threadContext.callerContext != null )
     //  return this._getTopLevelCode( threadContext.callerContext );
     //else
-    return threadContext.rootBlockContext;
+    return threadContext.rootBlockContext.code;
   }
   _getNewThreadContext( threadId, name, jsenCode, debugLevel, callerContext ) {
     // New block context instance
@@ -985,15 +1064,19 @@ class JSENVM {
         queue: listName,
       }
       if( threadContext.isDebugInfo ) {
-        result['lineNumber'] = threadContext.lineNumber;
+        let defaultLineNumber = 0;
+        if( result.status == 'ready' ) {
+          defaultLineNumber = -1;
+        }
+        result['lineNumber'] = ( threadContext.lineNumber? 
+                                 threadContext.lineNumber:
+                                 defaultLineNumber );
       }
       if( sublistName == 'suspended' ) {
         const suspendedStatement = threadContext.blockContext.code[ threadContext.blockContext.pc-1 ];
-        if( !suspendedStatement.name )
-          console.log(1);
         const suspendOn = suspendedStatement.name;
         result[ 'suspendedOn' ] = suspendOn;
-        if( suspendOn == 'on' )  {
+        if( suspendOn == 'on' || suspendOn == 'signalWait' )  {
           result[ 'condition' ] = suspendedStatement.params.condition.toString();
           if( suspendedStatement.params.timeout ) {
             result[ 'condition' ] += ', timeout = '+suspendedStatement.params.timeout;
@@ -1018,6 +1101,10 @@ class JSENVM {
           // We store whether the condition was met or timout expired
           const jsenOnStatus = ( conditionEval? this.jsenOnStatusCondition: this.jsenOnStatusTimeout );
           this._set( onInfo.context, JSENVM.wasOnConditionMetVariable, jsenOnStatus );
+          // Execute post-condition since on is satisfied
+          if( typeof( onInfo.onSatisfied ) == 'function' ) {
+            onInfo.onSatisfied();
+          }
           // If condition is true ==> wakeup the thread
           this.wakeupThreadId( onInfo.context.id );
           // NOTE: the "on", when true, execute atomically the next statement
@@ -1241,7 +1328,7 @@ class JSENVM {
       if( this.isThreadStepByStep( threadContext.id ) ) {
         // Compute line idex from line map
         const lineIndex = threadContext.codeLinesMap.indexOf( codeStatement );
-        threadContext['lineNumber'] = lineIndex+1;
+        threadContext['lineNumber'] = lineIndex;
         // Print debug info if debug level > 1
         if( threadContext.debugLevel > 1 ) {
           this._log( 'JVM-Step['+threadContext.name+']( '+blockContext.pc+' ): '+
@@ -1447,7 +1534,7 @@ class JSENVM {
   }
   _logWarning( message ) {
     // Just log for now
-    console.log( 'WARNING: '+message, LogLevel.WARNING );
+    console.log( 'WARNING: '+message );
   }
   _logStatementWrapped( threadContext ) {
     // We exit if there's no context
@@ -1564,6 +1651,7 @@ class JSENVM {
         const condition = params.condition;
         const conditionEval = this._evaluateParam( params.condition, true );
         const timeout = params.timeout;
+        const onSatisfied = params.onSatisfied;
         // We get the timeout, but if it is not defined we set it to infinity
         let timeoutEval = this._evaluateParam( timeout, Infinity );
 
@@ -1578,6 +1666,7 @@ class JSENVM {
             context: threadContext,
             condition: condition,
             timeout: timeoutEval,
+            onSatisfied: onSatisfied,
           };
           // Add the condition in the condition list
           this.checkOnConditionList.push( conditionInfo );
@@ -1936,8 +2025,30 @@ class JSENVM {
       forceCheckOn: ( threadContext, params )=> {
         this._doCheckOn();
       },
+      // Initialize a synchronization signal
+      signalInit: ( threadContext, params )=> {
+        this.signalNameList[params] = false;
+      },
+      // Notify happening of a synchronization signal
+      signalNotify: ( threadContext, params )=> {
+        this.signalNameList[params] = true;
+      },
+      // Wait for the happening of a synchronization signal
+      signalWait: ( threadContext, params )=> {
+        params.condition = ()=> this.signalNameList[params.signalName] === true;
+        params.onSatisfied = ()=> this.signalNameList[params.signalName] = false;
+        this.statementMap['on']( threadContext, params );
+      },
     };
   }
+}
+
+JSENVM.getSingleton = function(checkOnTimeout) {
+  if (!JSENVM._singletonInstance) {
+    JSENVM._singletonInstance = new JSENVM(checkOnTimeout);
+  }
+
+  return JSENVM._singletonInstance;
 }
 
 if( module ) {

@@ -59,9 +59,14 @@ class JSEN {
    * @returns a string representing a JSEN data structure
    * @see JSEN.parse, JSON.strngify
    */
-  static stringify( jsenCode, replacer, space ) {
-    let codeLines = [ '[' ];
-    space = ( space? (typeof(space) == 'number'? ' '.repeat(space) :space): '' ); // Default value: no indentation
+  static stringify( jsenCode, replacer, space, asArray, prevSpace ) {
+    asArray = ( asArray? asArray: false );
+    prevSpace = ( prevSpace? prevSpace: '' );
+
+    let result = '';
+
+    let codeLines = [ prevSpace+'[' ];
+    space = prevSpace+( space? (typeof(space) == 'number'? ' '.repeat(space) :space): '' ); // Default value: no indentation
     let isControlNextStatement = false;
 
     // Loop on all code statement
@@ -92,25 +97,30 @@ class JSEN {
         case 'undefined':
           break;
         case 'block':
-          codeLines.push( space+'[' );
-          const blockLines = JSEN.stringify( codeStatement, replacer, space+space );
+          const blockLines = JSEN.stringify( codeStatement, replacer, space, asArray, space );
           codeLines = codeLines.concat( blockLines );
-          stringLine += ']';
           break;
         case 'object':
           stringLine += codeStatement.toString( codeStatement );
           isControlNextStatement = ( codeStatement.isControlNextStatement? true: false );
           break;
       }
-      codeLines.push( stringLine+',' );
+      if( codeStatementType != 'block' ) {
+        codeLines.push( stringLine+',' );
+      }
     }
 
     if( codeLines.length > 1 ) {
-      codeLines.push( ']' );
+      codeLines.push( prevSpace+'],' );
     } else {
       codeLines[0] = '[]';
     }
-    return codeLines.join( '\n' );
+    if( asArray ) {
+      result = codeLines;
+    } else {
+      result = codeLines.join( '\n' );
+    }
+    return( result );
   }
 
   /* -----------------------------------------------------------------
@@ -239,25 +249,29 @@ class JSEN {
    * until the condition is true or until timeout is over
    * @param {*} condition condition to let the JSEN execution continue
    * @param {*} timeout max timeout to sleep while the condition is false
+   * @param {*} onSatisfied function to execute once on become satisfied
    * 
    * The exit status of a JSEN.on can be captured by JSEN.getOnStatus
    * 
    * @example
    *   JSEN.on( ()=> userName == 'guest', 1.2 ),
    *   JSEN.on( ()=> userName == 'guest' ),
+   *   JSEN.on( ()=> userName == 'guest', null, ()=> console.log( 'User guest found' ) ),
    * 
    * @see JSEN.sleep, JSEN.getOnStatus
    */
-  static on = ( condition, timeout )=> {
+  static on = ( condition, timeout, onSatisfied )=> {
     return {
       name: 'on',
       params: {
         condition: condition,
         timeout: timeout,
+        onSatisfied: onSatisfied,
       },
       toString: (self)=> {
         const timeoutStr = ( self.params.timeout? ', '+JSEN._paramsToString( self.params.timeout ): '' );
-        return 'JSEN.'+self.name+'( '+JSEN._paramsToString( self.params.condition )+timeoutStr+' )';
+        const onSatisfiedStr = ( self.params.onSatisfied? ', '+JSEN._paramsToString( self.params.onSatisfied ): '' );
+        return 'JSEN.'+self.name+'( '+JSEN._paramsToString( self.params.condition )+timeoutStr+onSatisfiedStr+' )';
       },
     };
   }
@@ -602,13 +616,67 @@ class JSEN {
    * @example
    *   JSEN.forceCheckOn(),
    * 
-   * @see JSEN.on+++
+   * @see JSEN.on
    */
   static forceCheckOn = ()=> {
     return {
       name: 'forceCheckOn',
       params: 0,
       toString: JSEN._toStringNoParams,
+    };
+  }
+  /**
+   * Initialize a synchronization signal
+   * @param {*} signalName name of the signal
+   * 
+   * @example
+   *   JSEN.signalInit( 'actionDone' ),
+   * 
+   * @see JSEN.signalNotify, JSEN.signalWait, JSEN.on
+   */
+   static signalInit = ( signalName )=> {
+    return {
+      name: 'signalInit',
+      params: signalName,
+      toString: JSEN._toStringOneParams,
+    };
+  }
+  /**
+   * Notify happening of a synchronization signal
+   * @param {*} signalName name of the signal
+   * 
+   * @example
+   *   JSEN.signalNotify( 'actionDone' ),
+   * 
+   * @see JSEN.signalInit, JSEN.signalWait, JSEN.on
+   */
+   static signalNotify = ( signalName )=> {
+    return {
+      name: 'signalNotify',
+      params: signalName,
+      toString: JSEN._toStringOneParams,
+    };
+  }
+  /**
+   * Wait for the happening of a synchronization signal
+   * @param {*} signalName name of the signal
+   * 
+   * @example
+   *   JSEN.signalWait( 'actionDone', 2.5 ),
+   * 
+   * @see JSEN.signalInit, JSEN.signalNotify, JSEN.on
+   */
+   static signalWait = ( signalName, timeout )=> {
+    return {
+      name: 'signalWait',
+      params: {
+        signalName: signalName,
+        timeout: timeout,
+      },
+      toString: (self)=> {
+        const timeoutStr = ( self.params.timeout? ', '+JSEN._paramsToString( self.params.timeout ): '' );
+        return 'JSEN.'+self.name+'( '+JSEN._paramsToString( self.params.signalName )+timeoutStr+' )';
+      },
     };
   }
   /* -----------------------------------------------------------------
@@ -639,6 +707,7 @@ class JSEN {
   }
 }
 
+var module;
 if( module ) {
   module.exports = JSEN;
 }

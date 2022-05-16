@@ -41,8 +41,8 @@ class JSENThreadClass {
       JSENThreadClass.jvm = JSENVM.getSingleton();
     }
 
-    // TODO: move this signalNameList table to JSENVM
-    this.signalNameList = {};
+    // // TODO: move this signalNameList table to JSENVM
+    // this.signalNameList = {};
 
     this.logLevel = 0;
   }
@@ -62,29 +62,6 @@ class JSENThreadClass {
   }
   setLogLevel( level ) {
     this.logLevel = level;
-  }
-  // TODO: move this function to JSENVM
-  signalWait( signalName, timeout ) {
-    return([
-      ()=> {
-        // If the signal is not yet defined, we define it as false
-        if( this.signalNameList[signalName] === undefined ) {
-          this.signalNameList[signalName] = false;
-        }
-      },
-      // Suspend the thread until the signal is notified
-      jsen_on( ()=> this.signalNameList[signalName], timeout ),
-      // Reset the signal status
-      ()=> this.signalNameList[signalName] = false,
-    ]);
-  }
-  // TODO: move this function to JSENVM
-  signalNotify( signalName ) {
-    this.signalNameList[signalName] = true;
-  }
-  // TODO: move this function to JSENVM
-  signalInit( signalName ) {
-    this.signalNameList[signalName] = false;
   }
   /* -----------------------------------------------------------------
    * Private functions
