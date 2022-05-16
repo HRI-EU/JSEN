@@ -32,56 +32,226 @@
  *
  */
 
-// JSEN Lesson 1 --------------------------------------------
+const JSEN = require("../../src/JSEN");
 
-const test = [
+// ---------------------------------------------------
+// JSEN: Run a function ------------------------------
+
+// Define a jsen function
+let test = [
   'this is a comment',
   ()=> console.log( 'Ciao a tutti' ),
 ];
 
-console.log( test[0] );  // Print 'this is....' on console
-test[1]();               // Execute line 2 of JSEN test
+// Run function
 JSEN.run( test );
 
-// Lesson 2 --------------------------------------------
+/* OUTPUT:
+/   Ciao a tutti
+/*/
 
-function a() {
+// ---------------------------------------------------
+// JSEN: Get function source -------------------------
+
+// Define a jsen function
+test = [
+  'this is a comment',
+  ()=> console.log( 'Ciao a tutti' ),
+];
+
+// Show function source
+console.log( JSEN.stringify( test, null, 2 ) );
+
+/* OUTPUT:
+/   [
+/     'this is a comment',
+/     ()=> console.log( 'Ciao a tutti' ),
+/   ],
+/*/
+
+// ---------------------------------------------------
+// JSEN: Access function statements ------------------
+
+// Define a jsen function
+test = [
+  'this is a comment',
+  ()=> console.log( 'Ciao a tutti' ),
+];
+
+console.log( test[0] );  // Print 'this is a comment' on console
+test[1]();               // Print 'Ciao a tutti' on console
+
+// ---------------------------------------------------
+// JSEN: Modify function statements ------------------
+
+// Define a jsen function
+test = [
+  'this is a comment',
+  ()=> console.log( 'Ciao a tutti' ),
+];
+
+// Change second line of test function
+test[1] = ()=> console.log( new Date().toDateString() );
+
+// Run function
+JSEN.run( test );
+
+/* OUTPUT:
+/   Ciao a tutti
+/   Sat May 14 2022
+/*/
+
+// ---------------------------------------------------
+// JSEN: Call external function at runtime -----------
+
+function aFunction() {
   console.log( 'ciao ciao' );
 }
 
-const test2 = [
-  ()=> a(),
+ test = [
+  ()=> aFunction(),
   ()=> console.log( 'Ciao a tutti' ),
 ];
 
+// Run function
+JSEN.run( test );
 
+/* OUTPUT:
+/   ciao ciao
+/   Ciao a tutti
+/*/
 
+// ---------------------------------------------------
+// JSEN: Call external function at compile time ------
 
+function aFunction() {
+  return( ()=> console.log( 'This is like a preprocessor' ) );
+}
 
+test = [
+  aFunction(),
+  ()=> console.log( 'Ciao a tutti' ),
+];
 
+/* NOTE: this is a way to use JavaScript as preprocessor,
+/  test after its definition looks like this:
+/
+/    test = [
+/     ()=> console.log( 'This is like a preprocessor' )
+/     ()=> console.log( 'Ciao a tutti' ),
+/   ];
+/
+/*/
 
-JSEN.run( test2 );
-// prints: ciao ciao
-//         Ciao a tutti
+// Run function
+JSEN.run( test );
 
-// Lesson 3 --------------------------------------------
+/* OUTPUT:
+/   This is like a preprocessor
+/   Ciao a tutti
+/*/
+
+// ---------------------------------------------------
+// JSEN: Use of variables 1 ---------------------------
+
 let v = 1;
-const test3 = [
-  jsen_print( 'Saluti'+v ),
-  ()=> console.log( 'Ciao a tutti' ),
+test = [
+  JSEN.print( 'Saluti '+v ),
+  ()=> v = 5,
+  JSEN.print( 'Saluti '+v ),
 ];
 
-// const test2 = [
-//   { callName: 'jsen_print', params: 'Saluti 1' },
-//   ()=> console.log( 'Ciao a tutti' ),
-// ];
+/* NOTE: JSEN.print resolve all its parameters at compile time,
+/  test after its definition is equivalent to this:
+/
+/   test = [
+/     JSEN.print( 'Saluti 1' ),
+/     ()=> v = 5,
+/     JSEN.print( 'Saluti 1' ),
+/   ];
+/
+/*/
 
-JSEN.run( test3 );
+// Run function
+JSEN.run( test );
 
-// Lesson 4 --------------------------------------------
+/* OUTPUT:
+/   Saluti 1
+/   Saluti 1
+/*/
 
-/*
-signalInit( name ) --> (optional) initialize a signal
-signalWait( name ) --> makes a jsen program suspend until signalNotify is called
-signalNotify( name ) --> make a signalWait continue
-*/
+// ---------------------------------------------------
+// JSEN: Useing variables 2 --------------------------
+
+v = 1;
+test = [
+  ()=> console.log( 'Saluti '+v ),
+  ()=> v = 5,
+  ()=> console.log( 'Saluti '+v ),
+];
+
+// Run function
+JSEN.run( test );
+
+/* OUTPUT:
+/   Saluti 1
+/   Saluti 5
+/*/
+
+// ---------------------------------------------------
+// JSEN: Execute threads -----------------------------
+
+let thread1 = [
+  JSEN.sleep( 3 ),
+  ()=> console.log( '[1] This is' ),
+  JSEN.sleep( 1 ),
+  ()=> console.log( '[1] a JSEN' ),
+  JSEN.sleep( 2 ),
+  ()=> console.log( '[1] thread' ),
+];
+
+let thread2 = [
+  JSEN.sleep( 1 ),
+  ()=> console.log( '[2] This is' ),
+  JSEN.sleep( 1 ),
+  ()=> console.log( '[2] a JSEN' ),
+  JSEN.sleep( 1 ),
+  ()=> console.log( '[2] thread' ),
+];
+
+// Instantiate the threads
+jvm.newThread( 'thread1', thread1 );
+jvm.newThread( 'thread2', thread2 );
+
+// Start the threads
+jvm.startThread( 'thread1' );
+jvm.startThread( 'thread2' );
+
+/* OUTPUT
+/   [2] This is
+/   [2] a JSEN
+/   [1] This is
+/   [2] thread
+/   [1] a JSEN
+/   [1] thread
+/*/
+
+// ---------------------------------------------------
+// JSEN: Execute thread objects ---------------------
+
+class ThreadObj extends JSENThreadClass {
+  constructor( instanceName ) {
+    super( instanceName );
+
+    this.threadList = {
+     'basic': [
+       JSEN.print( 'Basic thread' ),
+       JSEN.sleep( 1 ),
+       JSEN.print( 'Defined in a class' ),
+     ],
+    };
+  }
+}
+
+let to = new ThreadObj( 't1' );
+to.start();

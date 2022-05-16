@@ -32,43 +32,133 @@
  *
  */
 
-// JSEN Lesson 1 --------------------------------------------
 
+
+// -------------------------------------------------
+// JS: Run a function ------------------------------
+
+// Define a JavaScript
 function test() {
   // this is a comment
   console.log( 'Ciao a tutti' );
 }
 
-console.log( test.toSource() );
-
+// Run function
 test();
 
-// Lesson 2 --------------------------------------------
+/* OUTPUT:
+/   Ciao a tutti
+/*/
 
-function a() {
+// -------------------------------------------------
+// JS: Get function source -------------------------
+
+// Define a JavaScript
+function test() {
+  // this is a comment
+  console.log( 'Ciao a tutti' );
+}
+
+// Show function source
+console.log( test.toSource() );
+
+/* OUTPUT:
+/   function test() {
+/     // this is a comment
+/     console.log( 'Ciao a tutti' );
+/   }
+/*/
+
+// -------------------------------------------------
+// JS: Access function statements ------------------
+
+// Define a JavaScript
+function test() {
+  // this is a comment
+  console.log( 'Ciao a tutti' );
+}
+
+// Not possible to access individual statement with JavaScript
+
+
+// -------------------------------------------------
+// JS: Modify function statements ------------------
+
+// Define a JavaScript
+function test() {
+  // this is a comment
+  console.log( 'Ciao a tutti' );
+}
+
+// Not possible to modify individual statement with JavaScript
+
+
+
+
+
+
+
+
+
+
+// -------------------------------------------------
+// JS: Modify function statements at runtime -------
+
+function aFunction() {
   console.log( 'ciao ciao' );
 }
 
-function test2() {
-  a();
+function test() {
+  aFunction();
   console.log( 'Ciao a tutti' );
 }
 
+// Run function
+test();
+
+/* OUTPUT:
+/   ciao ciao
+/   Ciao a tutti
+/*/
+
+// -------------------------------------------------
+// JS: Call external function at compile time ------
+
+function aFunction() {
+  console.log( 'ciao ciao' );
+}
+
+function test() {
+  // not possible in JavaScript
+  console.log( 'Ciao a tutti' );
+}
+
+/* Its not possible in JavaScript to preprocess
+   the definition of a function and change its content
+   at compile time
+  */
 
 
 
 
 
 
-test2();
-// prints: ciao ciao
-//         Ciao a tutti
 
-// Lesson 3 --------------------------------------------
+
+
+
+
+
+
+
+// -------------------------------------------------
+// JS: Use of variables 1 --------------------------
+
 let v = 1;
-function test3() {
-  console.log( 'Saluti'+v );
-  console.log( 'Ciao a tutti' );
+function test() {
+  console.log( 'Saluti '+v );
+  v = 5;
+  console.log( 'Saluti '+v );
 }
 
 
@@ -76,9 +166,37 @@ function test3() {
 
 
 
-test3();
-
-// Lesson 4 --------------------------------------------
 
 
 
+
+
+
+// Run function
+test();
+
+/* OUTPUT:
+/   Saluti 1
+/   Saluti 5
+/*/
+
+// -------------------------------------------------
+// JS: Useing variables 2 --------------------------
+
+v = 1;
+function test() {
+  console.log( 'Saluti '+v );
+  v = 5;
+  console.log( 'Saluti '+v );
+}
+
+// Run function
+test();
+
+/* OUTPUT:
+/   Saluti 1
+/   Saluti 5
+/*/
+
+// ---------------------------------------------------
+// ---------------------------------------------------
