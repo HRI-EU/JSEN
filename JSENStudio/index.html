@@ -1,0 +1,200 @@
+<!--
+ *  JSEN Main Object
+ *
+ *  Copyright (c) Honda Research Institute Europe GmbH
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are
+ *  met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  3. Neither the name of the copyright holder nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ *  IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      JSEN Studio
+    </title>
+    <meta charset=utf-8 />
+    <!-- styles goes here -->
+    <link type="text/css" rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- scripts before body goes here -->
+    <script src="./lightJSHighlighter/LightweightJSHighligher.js"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://layout.jquery-dev.com//lib/js/jquery.layout-latest.js"></script>
+    <script src="./Loader/1.0/Loader.js"></script>
+    <script src="../src/JSEN.js"></script>
+    <script src="../src/JSENThreadClass.js"></script>
+    <script src="../src/JSENVM.js"></script>
+
+    <script type="text/javascript" src="./js/JSENStudio.js"></script>
+    <!--script src="./JSENExample.js"></script-->
+    <!-- body goes here -->
+  	<div class="ui-layout-north">
+      <h1 id="headerTitle" style="color:darkOrange;">
+        JSEN Studio
+      </h1>
+  	</div> 
+  	<div class="ui-layout-west">
+      <button class="collapsible" style="background-color: #C0A7BD;">CheckOn Conditions</button>
+      <div class="contentMenu">
+        <table id="checkOnConditionTable">
+          <tr></tr>
+          <!--tr>
+           <td>[F]<td>Meisy.mainLoop:<td>(2)<td> ()=> isActive()
+          <tr>
+           <td>[F]<td>Alex.mainLoop:<td>(6)<td> ()=> isSetConstraints == true
+          <tr>
+           <td>[S]<td>Alex.inputCheck:<td>(8)<td> ()=> isInputReady && isAlexVisible
+          </tr-->
+        </table>
+      </div>
+      <button class="collapsible" style="background-color: #71A1C9;">Threads: Ready</button>
+      <div class="contentMenu">
+        <table id="readyTable">
+          <tr></tr>
+          <!--tr>
+            <td>[F]<td onclick="addThreadCodeDiv('Meisy.testingLoop')">Meisy.testingLoop<td>(4)
+          <tr>
+            <td>[B]<td onclick="addThreadCodeDiv('Tom.mainLoop')">Tom.mainLoop<td>(7)
+          </tr-->
+        </table>
+      </div>
+      <button class="collapsible" style="background-color: #8caa55;">Threads: Running</button>
+      <div class="contentMenu">
+        <table id="runningTable">
+          <tr></tr>
+          <!--tr>
+           <td>[F]<td>Meisy.sensorLoop<td>(0)
+          <tr>
+           <td>[B]<td>Alex.sensorLoop<td>(1)
+          <tr>
+           <td>[F]<td>Tom.inputCheck<td>(3)
+          </tr-->
+        </table>
+      </div>
+      <button class="collapsible" style="background-color: #eee957;">Threads: Suspended</button>
+      <div class="contentMenu">
+        <table id="suspendedTable">
+          <tr></tr>
+          <!--tr>
+            <td>[F]<td>Meisy.mainLoop:<td>(2)<td>jsen_on()
+          <tr>
+            <td>[F]<td>Alex.mainLoop:<td>(6)<td>jsen_on()
+          <tr>
+            <td>[B]<td>Alex.inputCheck:<td>(8)<td>jsen_on()
+          <tr>
+            <td>[S]<td>Tom.sensorCheck:<td>(9)<td>jsen_sleep()
+          </tr-->
+        </table>
+      </div>
+      <button class="collapsible" style="background-color: #D57C7A;">Threads: Terminated</button>
+      <div class="contentMenu">
+        <table id="terminatedTable">
+          <tr></tr>
+          <!--tr>
+            <td>[F]<td>Tom.loadingCheck<td>(5)
+          </tr-->
+        </table>
+      </div>
+      <button class="collapsible" style="background-color: #d59e4c;">Threads Switching</button>
+      <div class="contentMenu">
+        <table>
+          <tr>
+            <td>
+              <div style="overflow-y: scroll;" id="threadQueueList">
+                <!--input type="checkbox" name="Tom.loadingCheck">[fast] Tom.loadingCheck</input><br>
+                <input type="checkbox"name="Alex.loadingCheck">[fast] Alex.loadingCheck</input><br>
+                <input type="checkbox" name="Meisy.loadingCheck">[fast] Meisy.loadingCheck</input><br-->
+              </div>
+            <td>
+              <table id="threadSwitchinButtonTable">
+                <tr><td>[F]<td><button style="width:100px;" type="button" onclick="_selectThreadToQueue( 'fast' )">Fast</button>
+                <tr><td>[S]<td><button style="width:100px;" type="button" onclick="_selectThreadToQueue( 'slow' )">Slow</button>
+                <tr><td>[B]<td><button style="width:100px;" type="button" onclick="_selectThreadToQueue( 'stepByStep' )">Step by Step</button>
+              </table>
+        </table>
+        <p>
+      </div>
+    </div> 
+  	<div class="ui-layout-center">
+      <div id="diagram">
+        <!--div class="threadCode" id="codeDiv_Meisy_mainLoop" draggable="true">
+          <div class="threadCodeHeader" id="codeHead_Meisy_mainLoop">Meisy</div>
+          <table class="treadCodeTable">
+            <tr id="codeRow_Meisy_mainLoop_1"><td>()=> console.log( "ciao" ),
+            <tr id="codeRow_Meisy_mainLoop_2"><td>()=> thisVar = 1,
+          </table>
+        </div-->
+      </div>
+    </div>
+    <div class="ui-layout-east">
+      <div id="editorCodeFileName" onclick="seRighEditorOpen(true)"></div>
+      <div id="aceEditor"></div>
+  	</div> 
+  	<div class="ui-layout-south">
+      <div class="controlCenter">
+        <table>
+          <tr>
+            <td>
+              <div class="button_cont"><a class="cleanTimelineButton" rel="nofollow noopener">Clear Timeline</a></div>
+            <td>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            <td>
+              <img src="./img/player.png" style="height: 40px;" onclick="toggleRepeatStep()">
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;<td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;<td>
+            <td id="sliderTD">Slow Thread Period:
+              <div class="sliderSpeedContainer">
+                <input type="range" min="0" max="100" value="90" class="slider" id="sliderSpeedSlowThread"></input>
+              </div>
+            <td id="sliderSpeedSlowThreadValue">&nbsp;&nbsp;1
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;<td>
+            <td id="sliderTD">Auto Step by Step Period:
+              <div class="sliderSpeedContainer">
+                <input type="range" min="0" max="1000" value="200" class="slider" id="sliderSpeedStep"></input>
+              </div>
+            <td id="sliderSpeedStepValue">&nbsp;&nbsp;200
+          </tr>
+        </table>
+      </div>
+      <div class="heatmap">
+        <table id="statusTimeline">
+          <tr id="timeRow"><th id="timeCell" class="fixTh"><!--td><p id=timeRowValue>1420<td><p id=timeRowValue>1421<td><p id=timeRowValue>1422<td>
+          <tr id="timeRow_Tom_loadingCheck">
+            <td>Tom.loadingCheck<td style="background-color: red;">&nbsp;&nbsp;<td style="background-color: green;">&nbsp;&nbsp;<td  style="background-color: blue;">&nbsp;&nbsp;
+          <tr id="timeRow_Alex_loadingCheck">
+            <td>Alex.loadingCheck<td style="background-color: red;">&nbsp;&nbsp;<td style="background-color: red;">&nbsp;&nbsp;<td  style="background-color: blue;">&nbsp;&nbsp;
+          <tr id="timeRow_Meisy_loadingCheck">
+            <td>Meisy.loadingCheck<td style="background-color: red;">&nbsp;&nbsp;<td style="background-color: blue;">&nbsp;&nbsp;<td  style="background-color: blue;">&nbsp;&nbsp;
+          </tr-->
+        </table>
+      </div>
+  	</div> 
+  </body>
+</html>

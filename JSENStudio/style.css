@@ -1,0 +1,292 @@
+/*
+ *  JSEN Main Object
+ *
+ *  Copyright (c) Honda Research Institute Europe GmbH
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are
+ *  met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice,
+ *     this list of conditions and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *  3. Neither the name of the copyright holder nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ *  IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ *  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ *  PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+ *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ *  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ *  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ *  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ *  LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+ 
+body { 
+  font: 14px helvetica neue, helvetica, arial, sans-serif; 
+}
+
+.ui-layout-pane {
+  border-width: 0;
+}
+
+.ui-layout-west {
+  background: rgb(25, 25, 25);
+  overflow-y: scroll;
+  z-index: 100;
+}
+
+.ui-layout-east {
+  background: rgb(43, 43, 43);
+}
+
+.ui-layout-center {
+  background: rgb(43, 43, 43);
+  padding: 0;
+}
+
+.threadCode
+{
+  position: absolute;
+  z-index: 9;
+  background-color: #363838;
+  color: antiquewhite;
+  border: 1px solid #d3d3d3;
+  text-align: left;
+  font-family: monospace;
+  overflow-y: scroll;
+  box-shadow: 4px 5px 14px black;
+}
+
+.treadCodeTable {
+  margin: 10px;
+}
+
+.threadCodeHeader {
+  color: black;
+  padding: 10px;
+  cursor: move;
+  text-align: center;
+  z-index: 10;
+  background-color: #2196F3;
+}
+
+.ui-layout-center > .wrapper {
+  padding: 10px;
+}
+
+.ui-layout-north {
+  border-bottom-width: 1px;
+  background: linear-gradient(45deg, black, grey);
+  z-index: 100;
+}
+
+.ui-layout-south {
+  border-top-width: 1px;
+  background: linear-gradient(45deg, black, #262633);
+  /* padding-left: 20px; */
+  overflow-y: scroll;
+}
+
+.controlCenter {
+  position: fixed;
+  width: 100%;
+  background: linear-gradient(45deg, black, grey);
+  /* background-color: rgb(78, 89, 100); */
+  padding-left: 20px;
+  color: bisque;
+  z-index: 10;
+}
+
+#timeRowValue {
+  writing-mode: vertical-lr;
+  text-orientation: sideways;
+  height: 100px;
+}
+#timeCell {
+  width: 17px;
+}
+
+.heatmap {
+  padding-top: 70px;
+  width: 100%;
+}
+
+.ui-layout-resizer-west, .ui-layout-resizer-east {
+  border-width: 0 0px;
+  background-color: grey;
+}
+
+.ui-layout-toggler-west, .ui-layout-toggler-east {
+  border-width: 0;
+  background-color: silver;
+}
+
+.ui-layout-toggler-west div, .ui-layout-toggler-east div {
+  width: 8px;
+  height: 35px;
+  /* 2x 35 = 70 total height */
+}
+
+.ui-layout-toggler-west .btnClose-west, .ui-layout-toggler-east .btnOpen-east {
+  background-image: url('./img/leftArrow.png');
+  background-repeat: no-repeat;
+}
+
+.ui-layout-toggler-west .btnOpen-west, .ui-layout-toggler-east .btnClose-east {
+  background-image: url('./img/rightArrow.png');
+  background-repeat: no-repeat;
+}
+
+#headerTitle {
+  position: relative;
+  left: 10%;
+  font-size: 22px;
+  color: White;
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
+#ckEditor {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+#aceEditor {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+#LeftEditorSelector {
+  width: 100%;
+}
+
+.collapsible {
+  background-color: #777;
+  color: black;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+#threadSwitchinButtonTable {
+  text-align: left;
+}
+
+.active, .collapsible:hover  {
+  background-color: #555;
+}
+
+.collapsible:after  {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.contentMenu {
+  padding: 0 18px;
+  color: white;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #707070;
+}
+
+/* Editor Begin */
+#editorCodeFileName {
+  color: white;
+  height: 20px;
+}
+/* Editor End */
+
+/* Slider Begin */
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 23px;
+  height: 24px;
+  border: 0;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 23px;
+  height: 25px;
+  border: 0;
+  cursor: pointer;
+}
+#sliderTd {
+  width: 320;
+}
+#sliderSpeed {
+  width: 300px;
+}
+/* Slider End */
+
+/* Timeline Reset Button Begin */
+.cleanTimelineButton {
+  border: none;
+  background: #404040;
+  color: #ffffff !important;
+  font-weight: 100;
+  padding: 20px;
+  text-transform: uppercase;
+  border-radius: 6px;
+  display: inline-block;
+}
+.cleanTimelineButton:hover {
+  background: rgb(96, 95, 95);
+  -webkit-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0,0,0,0.57);
+  transition: all 0.3s ease 0s;
+}
+/* Timeline End */
+
+#statusTimeline {
+  color: darkOrange;
+  overflow: auto;
+}
+
+.fixTh {
+  position: sticky;
+  left: 0;
+  background: black;
+  text-align: left;
+  font-weight: normal;
+}
