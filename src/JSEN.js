@@ -249,7 +249,7 @@ class JSEN {
    * until the condition is true or until timeout is over
    * @param {*} condition condition to let the JSEN execution continue
    * @param {*} timeout max timeout to sleep while the condition is false
-   * @param {*} onSatisfied function to execute once on become satisfied
+   * @param {*} onSatisfied function to execute once on become satisfied (executed athomically with on())
    * 
    * The exit status of a JSEN.on can be captured by JSEN.getOnStatus
    * 
