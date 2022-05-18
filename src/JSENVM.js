@@ -1107,14 +1107,6 @@ class JSENVM {
           }
           // If condition is true ==> wakeup the thread
           this.wakeupThreadId( onInfo.context.id );
-          // NOTE-NOTE: Since we introduced the third parameter of on() --> onSatisfied
-          // We don't need anymore to athomically execute the next instruction, since
-          // the onSatisfied parameter is executed athomically with the on, once satisfied
-          // NOTE: the "on", when true, execute atomically the next statement
-          // If we're in step by step mode, we wait for the explicit step
-          //if( !this.isStepByStep ) {
-          //  this._step( onInfo.context );
-          //}
         } else {
           // We decrease the timeout with the interval that has already elapsed since the last evaluation
           onInfo.timeout -= this.checkOnPeriod.timeout;
@@ -1682,15 +1674,10 @@ class JSENVM {
           // Store whether the condition was met, or the timeout expired
           const jsenOnStatus = ( conditionEval? this.jsenOnStatusCondition: this.jsenOnStatusTimeout );
           this._set( threadContext, JSENVM.wasOnConditionMetVariable, jsenOnStatus );
-          // NOTE: the "on", when true, execute atomically the next statement
-          // so to be atomic with evaluation of "on" statement
-          //++threadContext.blockContext.pc;
           // Increment pc one more if we are suspended at the end of a block
           if( threadContext.blockContext.pc == threadContext.blockContext.code.length-1 ) {
             ++threadContext.blockContext.pc;
           }
-          //this._step( threadContext );
-          //--threadContext.blockContext.pc;
         }
         return null;
       },
