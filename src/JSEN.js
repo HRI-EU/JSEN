@@ -679,6 +679,38 @@ class JSEN {
       },
     };
   }
+  /**
+   * Set a broadcasting synchronization signal
+   * @param {*} signalName name of the signal
+   * 
+   * @example
+   *   JSEN.setBroadcastSignal( 'actionDone' ),
+   * 
+   * @see <jsenvm>.isBroadcastSignal, JSEN.resetBroadcastSignal, JSEN.signalNotify, JSEN.signalInit, JSEN.signalWait, JSEN.on
+   */
+   static setBroadcastSignal = ( signalName )=> {
+    return {
+      name: 'setBroadcastSignal',
+      params: signalName,
+      toString: JSEN._toStringOneParams,
+    };
+  }
+  /**
+   * Reset a broadcasting synchronization signal
+   * @param {*} signalName name of the signal
+   * 
+   * @example
+   *   JSEN.resetBroadcastSignal( 'actionDone' ),
+   * 
+   * @see <jsenvm>.isBroadcastSignal, JSEN.setBroadcastSignal, JSEN.signalNotify, JSEN.signalInit, JSEN.signalWait, JSEN.on
+   */
+   static resetBroadcastSignal = ( signalName )=> {
+    return {
+      name: 'resetBroadcastSignal',
+      params: signalName,
+      toString: JSEN._toStringOneParams,
+    };
+  }
   /* -----------------------------------------------------------------
    * Private JSEN functions
    *-----------------------------------------------------------------*/

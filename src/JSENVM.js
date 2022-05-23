@@ -850,6 +850,9 @@ class JSENVM {
     }
     return codeLine;
   }
+  isBroadcastSignal( name ) {
+    return( JSENVM.boradcastSignal && JSENVM.boradcastSignal[name] );
+  }
   getDebugMessage() {
     // TODO Discuss if this is necessary and decide how it should work
     return '';
@@ -2033,6 +2036,18 @@ class JSENVM {
         params.onSatisfied = ()=> this.signalNameList[params.signalName] = false;
         this.statementMap['on']( threadContext, params );
       },
+      setBroadcastSignal: ( threadContext, params )=> {
+        if( !JSENVM.boradcastSignal ) {
+          JSENVM.boradcastSignal = {};
+        }
+        JSENVM.boradcastSignal[params] = true;
+      },
+      resetBroadcastSignal: ( threadContext, params )=> {
+        if( !JSENVM.boradcastSignal ) {
+          JSENVM.boradcastSignal = {};
+        }
+        JSENVM.boradcastSignal[params] = false;
+      }
     };
   }
 }
