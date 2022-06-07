@@ -26,6 +26,34 @@ The documentation is built using `jsdoc`. You can generate/udpate it by running 
 
 The generated documentation can be found in `doc/html`.
 
+JSEN, JSENVM, JZENVM, nJZENVM and the JSENThreadClass
+===================================
+
+- JSEN: is the main class implementing the JSEN Virtual Language. It defines all
+        virtual statements and serialization/deserialization functions.
+
+- JSENVM: is a powerful JSNE Virtual Machine that can:
+  - Execute JSEN code (JSENVM.run())
+  - Provide singleton implementation
+  - Define/execute/control concurrent JSEN threads (extensive API)
+  - Provide a programmatic debugger for JSEN threads (step, breakpoints, ...)
+  - Provide JSEN threads sources and execution status
+
+- JZENVM: a stip-down implementation of a JSEN Virtual Machine in 100 lines of code
+          able to run concurrent JSEN threads.
+          It is useful for understanding the basic JSEN principle. It has a limited
+          JSEN Virtual Language implementation. Among others, it is used to automate
+          JSEN test suite.
+
+- nJSENVM: a nano implementation of a JSEN Virtual Machine limited to the execution
+           of a single JSEN program and with a very limited Virtual Language set.
+           Its definitively the starting point to understand the JSEN concept.
+
+- JSENThreadClass: its a more advanced concept for JSEN code encapsulation.
+                   allow the implementation of active-objects in JSEN. Its 
+                   definitively the best way to encapsulate JSEN threads
+                   making them more independent and self-sufficient.
+
 JSENStudio
 ===================================
 
@@ -34,12 +62,23 @@ JSENStudio is an interactive visual debugger of JSEN code.
 <img src="JSENStudio/JSENStudio1.png" alt="JESNStudio screenshot 1">
 <img src="JSENStudio/JSENStudio2.png" alt="JESNStudio screenshot 2">
 
+JSEN Quick Tutorial
+===================================
+
 Examples
 ===================================
 
 This repository contains several examples, some are executable, some just illustrate the usage of JSEN/JSENVM.
 
 ### Executable:
+
+- JSEN/examples/simpleJSENExample.js
+
+  RUN in console: node simpleJSENExample.js
+
+  This simple example show the basic concept for defining and executing 
+  a JSEN simple example.
+
 - JSEN/examples/Benchmark/JSENBenchmark.js
 
   RUN in console: node JSENBenchmark.js
@@ -85,6 +124,14 @@ This repository contains several examples, some are executable, some just illust
   RUN in browser: file:///..your..repo..path.../JSEN/JSENStudio/index.html?
 
   This example executes JSEN/examples/JSENStudio/JSENExample2.js by default.
+
+- JSEN/examples/concurrentExample1.js
+
+  RUN in console: node concurrentExample1.js
+
+  This example shows how to execute several threads.
+
+
 
 ### Illustrative:
 
