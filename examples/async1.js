@@ -32,6 +32,10 @@
  *
  */
 
+// NOTE: this example is meant just to show
+//       the usage of JSEN in an application
+//       it can't be executed as it is
+
 const JSEN = require("../src/JSEN");
 const JSENVM = require("../src/JSENVM");
 
