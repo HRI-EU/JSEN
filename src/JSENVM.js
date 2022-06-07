@@ -34,7 +34,7 @@
 
 var module;
 if( module ) {
-  window.JSEN = require( './JSEN.js' );
+  globalThis.JSEN = require( './JSEN.js' );
 }
 
 /**

@@ -34,6 +34,10 @@
  *
  */
 
+// NOTE: this example is meant just to show
+//       the usage of JSEN in an application
+//       it can't be executed as it is
+
 class ExecuteDBActionsInJSEN extends JSENThreadClass {
   constructor( instanceName ) {
     super( instanceName );
@@ -42,7 +46,7 @@ class ExecuteDBActionsInJSEN extends JSENThreadClass {
     $L().registerNewInstanceOf(ReceptionistDB, {name: 'db'});
 
     // Init dbDone signal
-    this.signalInit( 'dbDone' );
+    JSENThreadClass.jvm.signalInit( 'dbDone' );
     // onEnd event handler for database functions
     const onEnd = ()=> this.signalNotify( 'dbDone' );
 
@@ -54,17 +58,17 @@ class ExecuteDBActionsInJSEN extends JSENThreadClass {
         
         // Create all tables
         ()=> $L('db').createAllTables( {onEnd} ),
-        this.signalWait( 'dbDone' ),
+        JSEN.signalWait( 'dbDone' ),
         ()=> console.log( 'Tables created' ),
 
         // Populate Persons Table from XLSX
         ()=> $L('db').populatePersonsTableFromXlsx( {onEnd} ),
-        this.signalWait( 'dbDone' ),
+        JSEN.signalWait( 'dbDone' ),
         ()=> console.log( 'Employees added' ),
 
         // Populate Visits Table from XLSX
         ()=> $L('db').populateVisitsTableFromXlsx( {onEnd} ),
-        this.signalWait( 'dbDone' ),
+        JSEN.signalWait( 'dbDone' ),
         ()=> console.log( 'Visits added' ),
 
         // End of script

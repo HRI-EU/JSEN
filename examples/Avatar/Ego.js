@@ -32,6 +32,10 @@
  *
  */
 
+// NOTE: this example is meant just to show
+//       the usage of JSEN in an application
+//       it can't be executed as it is
+
 class Ego extends JSENThreadClass {
   constructor( name, avatar, debugLevel ) {
     super( name+'Ego' );
@@ -123,43 +127,43 @@ class Ego extends JSENThreadClass {
       toDoLoop_isStepByStep: true,
       toDoLoop: [
         ()=> this.flag.isTodoLoopRunning = false,
-        //jsen_on( ()=> this.isSomethingToDo() ),
-        jsen_if( ()=> this.isSomethingToDo() ),
+        //JSEN.on( ()=> this.isSomethingToDo() ),
+        JSEN.if( ()=> this.isSomethingToDo() ),
         [
           ()=> this.flag.isTodoLoopRunning = true,
           [ "Avatar Control",
-            jsen_if( ()=> this.cmd.isSpeechToDo ),
+            JSEN.if( ()=> this.cmd.isSpeechToDo ),
             [
               ()=> this._saySentence( true ),
             ],
-            jsen_if( ()=> this.cmd.isMotionToDo ),
+            JSEN.if( ()=> this.cmd.isMotionToDo ),
             [
 
             ],
-            jsen_if( ()=> this.cmd.isEmotionToDo ),
+            JSEN.if( ()=> this.cmd.isEmotionToDo ),
             [
 
             ],
-            jsen_if( ()=> this.cmd.isGazeToDo ),
+            JSEN.if( ()=> this.cmd.isGazeToDo ),
             [
 
             ],
-            jsen_if( ()=> this.cmd.isShowingFaceToDo ),
+            JSEN.if( ()=> this.cmd.isShowingFaceToDo ),
             [
 
             ],
           ],
           [ "Button Control",
-            jsen_if( ()=> this.cmd.isDisplayButtonToDo ),
+            JSEN.if( ()=> this.cmd.isDisplayButtonToDo ),
             [
             ],
-            jsen_if( ()=> this.cmd.isButtonClickToDo ),
+            JSEN.if( ()=> this.cmd.isButtonClickToDo ),
             [
 
             ],
           ],
           [ "Screen Control",
-            jsen_if( ()=> this.cmd.isDisplaySlideToDo ),
+            JSEN.if( ()=> this.cmd.isDisplaySlideToDo ),
             [
 
             ],
@@ -170,47 +174,47 @@ class Ego extends JSENThreadClass {
       doneLoop_isStepByStep: true,
       doneLoop: [
         ()=> this.flag.isDoneLoopRunning = false,
-        //jsen_on( ()=> this.isSomethingDone() ),
-        jsen_if( ()=> this.isSomethingDone() ),
+        //JSEN.on( ()=> this.isSomethingDone() ),
+        JSEN.if( ()=> this.isSomethingDone() ),
         [
           ()=> this.flag.isDoneLoopRunning = true,
           [ "Avatar Control",
-            jsen_if( ()=> this.cmd.isSpeechDone ),
+            JSEN.if( ()=> this.cmd.isSpeechDone ),
             [
               ()=> this.bm.doSerialActionDone( this.cmd.isSpeechDone.mironName,
                                               this.cmd.isSpeechDone.mironType,
                                               1 ),
               ()=> this.cmd.isSpeechDone = null,
             ],
-            jsen_if( ()=> this.cmd.isMotionDone ),
+            JSEN.if( ()=> this.cmd.isMotionDone ),
             [
 
             ],
-            jsen_if( ()=> this.cmd.isEmotionDone ),
+            JSEN.if( ()=> this.cmd.isEmotionDone ),
             [
 
             ],
-            jsen_if( ()=> this.cmd.isGazeDone ),
+            JSEN.if( ()=> this.cmd.isGazeDone ),
             [
 
             ],
-            jsen_if( ()=> this.cmd.isShowingFaceDone ),
+            JSEN.if( ()=> this.cmd.isShowingFaceDone ),
             [
 
             ],
           ],
           [ "Button Control",
-            jsen_if( ()=> this.cmd.isDisplayButtonDone ),
+            JSEN.if( ()=> this.cmd.isDisplayButtonDone ),
             [
 
             ],
-            jsen_if( ()=> this.cmd.isButtonClickDone ),
+            JSEN.if( ()=> this.cmd.isButtonClickDone ),
             [
 
             ],
           ],
           [ "Screen Control",
-            jsen_if( ()=> this.cmd.isDisplaySlideDone ),
+            JSEN.if( ()=> this.cmd.isDisplaySlideDone ),
             [
 
             ],
@@ -221,42 +225,42 @@ class Ego extends JSENThreadClass {
       recognizedLoop_isStepByStep: true,
       recognizedLoop: [
         ()=> this.flag.isRecognizedLoopRunning = false,
-        jsen_on( ()=> this.isSomethingRecognized() && this.flag.isPerceptionAllowed ),
+        JSEN.on( ()=> this.isSomethingRecognized() && this.flag.isPerceptionAllowed ),
         ()=> this.flag.isRecognizedLoopRunning = true,
         [ "Avatar Control",
-          jsen_if( ()=> this.cmd.isSpeechRecognized ),
+          JSEN.if( ()=> this.cmd.isSpeechRecognized ),
           [
             ()=> this._recognizeSentence(),
           ],
-          jsen_if( ()=> this.cmd.isMotionRecognized ),
+          JSEN.if( ()=> this.cmd.isMotionRecognized ),
           [
 
           ],
-          jsen_if( ()=> this.cmd.isEmotionRecognized ),
+          JSEN.if( ()=> this.cmd.isEmotionRecognized ),
           [
 
           ],
-          jsen_if( ()=> this.cmd.isGazeRecognized ),
+          JSEN.if( ()=> this.cmd.isGazeRecognized ),
           [
 
           ],
-          jsen_if( ()=> this.cmd.isShowingFaceRecognized ),
+          JSEN.if( ()=> this.cmd.isShowingFaceRecognized ),
           [
 
           ],
         ],
         [ "Button Control",
-          jsen_if( ()=> this.cmd.isDisplayButtonRecognized ),
+          JSEN.if( ()=> this.cmd.isDisplayButtonRecognized ),
           [
 
           ],
-          jsen_if( ()=> this.cmd.isButtonClickRecognized ),
+          JSEN.if( ()=> this.cmd.isButtonClickRecognized ),
           [
 
           ],
         ],
         [ "Screen Control",
-          jsen_if( ()=> this.cmd.isDisplaySlideRecognized ),
+          JSEN.if( ()=> this.cmd.isDisplaySlideRecognized ),
           [
 
           ],
@@ -269,40 +273,40 @@ class Ego extends JSENThreadClass {
     //  mainLoop_isStepByStep: true,
     this.threadList['mainLoop'] = [
       //mainLoop: [
-        jsen_on( ()=> this.bm.isRunOneStepDone() ),
+        JSEN.on( ()=> this.bm.isRunOneStepDone() ),
         [
-          jsen_print( 'Ego - New Iteration' ),
-          //jsen_if( ()=> this.flag.isListeningRequired ),
+          JSEN.print( 'Ego - New Iteration' ),
+          //JSEN.if( ()=> this.flag.isListeningRequired ),
           //[
-          //  jsen_on( ()=> this.isSomethingRecognized() ),
+          //  JSEN.on( ()=> this.isSomethingRecognized() ),
           //  ()=> this.flag.isListeningRequired = false,
           //],
-          //jsen_print( 'Ego - Allow Perception' ),
+          //JSEN.print( 'Ego - Allow Perception' ),
           //()=> this.flag.isPerceptionAllowed = true,
-          //jsen_forceCheckOn(),
-          //jsen_on( ()=> ( !this.flag.isDoneLoopRunning ) &&
+          //JSEN.forceCheckOn(),
+          //JSEN.on( ()=> ( !this.flag.isDoneLoopRunning ) &&
           //              ( !this.flag.isRecognizedLoopRunning ) ),
-          jsen_forceCheckOn(),
-          jsen_on( ()=> ( !this.flag.isTodoLoopRunning ) &&
+          JSEN.forceCheckOn(),
+          JSEN.on( ()=> ( !this.flag.isTodoLoopRunning ) &&
                         ( !this.flag.isDoneLoopRunning ) &&
                         ( !this.flag.isRecognizedLoopRunning ||
                           !this.flag.isListeningRequired ) ),
           ()=> this.flag.isListeningRequired = false,
-          jsen_print( 'Ego - Make New Step' ),
+          JSEN.print( 'Ego - Make New Step' ),
           ()=> this.bm.runOneStep(),
           this.threadList.toDoLoop,
           this.threadList.doneLoop,
-          jsen_if( ()=> this.flag.isListeningRequired ),
+          JSEN.if( ()=> this.flag.isListeningRequired ),
           [
             ()=> this.flag.isPerceptionAllowed = true,
-            jsen_forceCheckOn(),
-            jsen_on( ()=> this.isSomethingRecognized() ),
+            JSEN.forceCheckOn(),
+            JSEN.on( ()=> this.isSomethingRecognized() ),
             ()=> this.flag.isListeningRequired = false,
           ],
-          //jsen_print( 'Ego - Allow Action' ),
+          //JSEN.print( 'Ego - Allow Action' ),
           //()=> this.flag.isActionAllowed = true,
-          //jsen_forceCheckOn(),
-          //jsen_on( ()=> !this.flag.isTodoLoopRunning ),
+          //JSEN.forceCheckOn(),
+          //JSEN.on( ()=> !this.flag.isTodoLoopRunning ),
         ],
       ];
   }

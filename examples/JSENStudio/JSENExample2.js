@@ -32,7 +32,6 @@
  *
  */
 
-
 // Set JSENStudio JSEN virtual machine
 const jvm = new JSENVM.getSingleton();
 JSENStudio_setJVM( jvm );

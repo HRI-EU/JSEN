@@ -131,9 +131,13 @@ aceEditor2.setValue( source2.join( '\n' ), -1 );
 aceEditor3.setValue( source3.join( '\n' ), -1 );
 
 // Start threads
-//jvm.startThread( threadId1 );
-//jvm.startThread( threadId2 );
-//jvm.startThread( threadId3 );
+function startThread( id ) {
+	jvm.startThread( id ); // Start thread
+}
+function stopThread( id ) {
+	jvm.stopThread( id ); // Stop thread
+	jvm.renewThreadId( id ); // Put thread in ready queue
+}
 
 // Function to get full source code (JSEN + context)
 function getThreadFullSource( threadId, threadName, index ) {

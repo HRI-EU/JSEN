@@ -62,6 +62,8 @@ let i1 = 0;
 let len1 = 3;
 let lastLine1 = -1;
 let selectionRunner1 = [
+	'This example make Ace line selection',
+	'from top to bottom',
 	jsen_loop(),
 	[
 		()=> selectEditorLine( aceEditor1, i1, lastLine1 ),
@@ -77,6 +79,8 @@ let i2 = 0;
 let len2 = 3;
 let lastLine2 = -1;
 let selectionRunner2 = [
+	'This example make Ace line selection',
+	'from bottom to top',
 	jsen_loop(),
 	[
 		()=> selectEditorLine( aceEditor2, i2, lastLine2 ),
@@ -92,6 +96,8 @@ let i3 = 0;
 let len3 = 3;
 let lastLine3 = 0;
 let selectionRunner3 = [
+	'This example randomly select',
+	'Ace editor lines',
 	jsen_loop(),
 	[
 		()=> i3 = Math.floor( Math.random()*len3 ),

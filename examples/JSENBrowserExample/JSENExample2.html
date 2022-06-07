@@ -36,7 +36,7 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>JSEN Example</title>
+		<title>JSEN Example 2</title>
 		<!--script type="application/javascript" src="./ace/1.4.5/src/ace.js"></script-->
 		<script type="application/javascript" src="https://ace.c9.io/build/src/ace.js"></script>
 		<script type="application/javascript" src="./JSENVM.js"></script>
@@ -47,18 +47,24 @@
 			}
 		</style>
 	<body style="background-color: #333333;">
-		<h1 style="text-align: center; color: red;;">JSEN Example</h1>
+		<h1 style="text-align: center; color: red;;">JSEN Example 2</h1>
 		<div  style="width:830px; height:200px;border-color:green;border-style:solid">
 		  <image src="./ball2.png" id="ball"  style="position:relative;width:40px; height:40px">
 		</div>
 		<table>
 		  <tr>
-		    <td><h3 style="color:white">thread1
-					<div style="width:400px; height:250px" id="aceEditor1"></div>
-		    <td><h3 style="color:white">thread2
-			        <div style="width:400px; height:250px" id="aceEditor2"></div>
-		    <td><h3 style="color:white">thread3
-			        <div style="width:400px; height:250px" id="aceEditor3"></div>
+		    <td><h3 style="color:white">thread1: 
+					<button onclick="startThread( 0 )">jvm.startThread( 0 )</button>
+					<button onclick="stopThread( 0 )">jvm.stopThread( 0 )+renew</button>
+					<div style="width:400px; height:250px; margin-top: 10px;" id="aceEditor1"></div>
+		    <td><h3 style="color:white">thread2:
+					<button onclick="startThread( 1 )">jvm.startThread( 1 )</button>
+					<button onclick="stopThread( 1 )">jvm.stopThread( 1 )+renew</button>
+					<div style="width:400px; height:250px; margin-top: 10px;" id="aceEditor2"></div>
+		    <td><h3 style="color:white">thread3:
+					<button onclick="startThread( 2 )">jvm.startThread( 2 )</button>
+					<button onclick="stopThread( 2 )">jvm.stopThread( 2 )+renew</button>
+					<div style="width:400px; height:250px; margin-top: 10px;" id="aceEditor3"></div>
 		</table>
 		<script type="application/javascript" src="./JSENExample2.js"></script>
 	</body>
