@@ -13,7 +13,6 @@ You can find a more comprensive description of JSEN if the following paper:
  Title: From JSON to JSEN through Virtual Languages
  URL: https://www.ronpub.com/OJWT_2021v8i1n01_Ceravola.pdf
 
-
 Installation 
 ===================================
 
@@ -25,6 +24,22 @@ Documentation
 The documentation is built using `jsdoc`. You can generate/udpate it by running `npm run docs`.
 
 The generated documentation can be found in `doc/html`.
+
+JSEN Quick Tutorial
+===================================
+
+In the folder JSEN/examples/tutorial there is a quick tutorial made by 2 files:
+
+- JSEN/examples/tutorial/tutorialJSEN-JavaScript.js
+- JSEN/examples/tutorial/tutorialJSEN-JSEN.js
+
+The tutorial is designed to be browsed by having the 2 files visible at
+the same time, side-by-side, alligned with line number.
+The tutorial is subdivided in sections, each section in one file correspond
+to the equivalent section in the other files (same line numbers).
+The tutorial is meant to introduce JSEN by showing the equivalence
+to JavaScript. This way easy the understanding of the JSEN sintax.
+
 
 JSEN, JSENVM, JZENVM, nJZENVM and the JSENThreadClass
 ===================================
@@ -61,9 +76,6 @@ JSENStudio is an interactive visual debugger of JSEN code.
 
 <img src="JSENStudio/JSENStudio1.png" alt="JESNStudio screenshot 1">
 <img src="JSENStudio/JSENStudio2.png" alt="JESNStudio screenshot 2">
-
-JSEN Quick Tutorial
-===================================
 
 Examples
 ===================================
@@ -130,8 +142,6 @@ This repository contains several examples, some are executable, some just illust
   RUN in console: node concurrentExample1.js
 
   This example shows how to execute several threads.
-
-
 
 ### Illustrative:
 
