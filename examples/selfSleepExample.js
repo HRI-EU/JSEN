@@ -43,14 +43,15 @@ const jsenTest = [
     // getSelfId returns the threadId of this running thread
     threadId = JSENVM.jvm.getSelfId();
     JSENVM.jvm.suspendThreadId( threadId );
-    console.log( '"jsenTest" thread suspended' );
+    console.log( '"jsenTest" thread suspended...' );
   },
-  JSEN.print( '"jsenTest" thread wokenup...' ),
+  JSEN.print( '"jsenTest" thread wokenup' ),
   JSEN.print( 'End code' ),
 ];
 
+// Here we will wakeup the thread after 10 seconds
+setTimeout( ()=> JSENVM.jvm.wakeupThreadId( threadId ), 10*1000 );
+
+// We start the thread here
 console.log( 'JSENVM.run output' );
 JSENVM.run( jsenTest );
-
-// Here we wakeup the thread after 10 seconds
-setTimeout( ()=> JSENVM.jvm.wakeupThreadId( threadId ), 10*1000 );
