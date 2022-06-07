@@ -48,7 +48,7 @@ class JSENVM {
   // Execute all (each argument is a jsen code)
   static run( /* var args, each a jsen code */ ) {
     // Create a new JSENVM
-    let jvm = new JSENVM();
+    let jvm = JSENVM.getSingleton();
     // For each parameter (each jsenCode)
     for ( const jsenCode of arguments ) {
       jvm.newThread( '', jsenCode );
@@ -89,6 +89,8 @@ class JSENVM {
         terminated: [],
       }
     };
+    // This is the currently executing thread context
+    let selfThreadContext = null;
 
     // List of join functions waiting for termitation of a list of threads
     this.threadJoinList = []; // { threadList:[], joinCallback:<func> }
@@ -146,6 +148,9 @@ class JSENVM {
 
   //   return JSENVM._singletonInstance;
   // }
+  getSelfId() {
+    return( this.selfThreadContext.id );
+  }
   getNextThreadId() {
     return this.thread.byId.length;
   }
@@ -1613,6 +1618,8 @@ class JSENVM {
   * JSENVM Firmware functions
   *-----------------------------------------------------------------*/
   _executeCodeFunction( codeStatement, threadContext ) {
+    // Set selfThreadContext (used in self())
+    this.selfThreadContext = threadContext;
     // Execute the line as function
     return codeStatement();
   }
@@ -2062,11 +2069,11 @@ class JSENVM {
 }
 
 JSENVM.getSingleton = function(checkOnTimeout) {
-  if (!JSENVM._singletonInstance) {
-    JSENVM._singletonInstance = new JSENVM(checkOnTimeout);
+  if (!JSENVM.jvm) {
+    JSENVM.jvm = new JSENVM(checkOnTimeout);
   }
 
-  return JSENVM._singletonInstance;
+  return JSENVM.jvm;
 }
 
 if( module ) {
