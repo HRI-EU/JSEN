@@ -102,7 +102,7 @@ This repository contains several examples, some are executable, some just illust
 
   RUN in console: node selfSleepExample.js
 
-  This example show how to get the thread id into a running JSEN thread.
+  This example show how to get own thread id into a running JSEN thread.
   The example shows how a thread can use its id to suspend itself.
 
 - JSEN/examples/Benchmark/JSENBenchmark.js
