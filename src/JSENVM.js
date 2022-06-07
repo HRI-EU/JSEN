@@ -49,18 +49,35 @@ class JSENVM {
   static run( /* var args, each a jsen code */ ) {
     // List of thread to remove after execution
     let threadIdList = [];
-    // Create a new JSENVM
-    let jvm = JSENVM.getSingleton();
     // For each parameter (each jsenCode)
     for ( const idx in arguments ) {
       const jsenCode = arguments[idx]
-      const id = jvm.newThread( `JSENVM.run${idx}`, jsenCode );
+      const id = JSENVM.jvm.newThread( `JSENVM.run${idx}`, jsenCode );
       threadIdList.push( id );
     }
     // Once terminated, remove created threads
-    jvm.addThreadJoin( threadIdList, ()=> jvm.removeThreadId() );
+    JSENVM.jvm.addThreadJoin( threadIdList, ()=> JSENVM.jvm.removeThreadId() );
     // Start threads
-    jvm.startThread( threadIdList );
+    JSENVM.jvm.startThread( threadIdList );
+  }
+  /**
+   * This function executes a JSEN statement in a valid JSEN thread
+   * 
+   * @param {*} jsenStatement a JSEN statement
+   * 
+   * Example:
+   *  // Each couple of JSEN statements do the same
+   *  const jsenCode = [
+   *    JSEN.print( 'Print this' ),
+   *    ()=> JSENVM.exec( JSEN.print( 'Print this' ) ),
+   *    JSEN.sleep( 5 ),
+   *    ()=> JSENVM.exec( JSEN.sleep( 5 ) ),
+   *  ];
+   */
+  static exec( jsenStatement ) {
+    if( JSENVM.jvm ) {
+      JSENVM.jvm._executeJSENStatement( jsenStatement );
+    }
   }
   /**
    * JSENVM Virtual Machine constructor
@@ -1356,10 +1373,13 @@ class JSENVM {
         this._log( 'pc: '+blockContext.pc, threadContext );
       }
 
+      // Set selfThreadContext (current thread context)
+      this.selfThreadContext = threadContext;
+
       // Execution of current thread statement
       switch( typeof( codeStatement ) ) {
         case 'function':  // Case of javascript code like: ()=> console.log( 'message' ),
-          execStatus = this._executeCodeFunction( codeStatement, threadContext );
+          execStatus = this._executeCodeFunction( codeStatement );
           break;
         case 'string':    // Case of comment like: "This is a comment",
         case 'undefined': // Case of comment like: ,
@@ -1367,10 +1387,10 @@ class JSENVM {
         case 'object':    // Case of block or JSEN.* function
           // If I find a code block, I treat it as a sub-context (for now, not the best way)
           if( Array.isArray( codeStatement ) ) {  // Case of block like: [ ... ],
-            execStatus = this._executeCodeBlock( codeStatement, threadContext );
+            execStatus = this._executeCodeBlock( codeStatement );
           } else {  // Case of jsen statement like: JSEN.print( 'message' ),
             // In this case we have an assembly instruction into an object (JSON data with call and params)
-            execStatus = this._executeJSENStatement( codeStatement, threadContext );
+            execStatus = this._executeJSENStatement( codeStatement );
           }
           break;
       }
@@ -1627,13 +1647,13 @@ class JSENVM {
   /* -----------------------------------------------------------------
   * JSENVM Firmware functions
   *-----------------------------------------------------------------*/
-  _executeCodeFunction( codeStatement, threadContext ) {
-    // Set selfThreadContext (used in self())
-    this.selfThreadContext = threadContext;
+  _executeCodeFunction( codeStatement ) {
     // Execute the line as function
     return codeStatement();
   }
-  _executeCodeBlock( codeStatement, threadContext ) {
+  _executeCodeBlock( codeStatement ) {
+    // Get current thread context
+    const threadContext = this.selfThreadContext;
     // Create a new block context
     const subBlockContext = this._getNewBlockContext( codeStatement, threadContext.blockContext );
     // If thread is in step by step ==> propagate debug info
@@ -1646,10 +1666,12 @@ class JSENVM {
 
     return null;
   }
-  _executeJSENStatement( codeStatement, threadContext ) {
+  _executeJSENStatement( jsenStatement ) {
+    // Get current thread context
+    const threadContext = this.selfThreadContext;
     // Extract codeStatement fields
-    const name = codeStatement.name;
-    const params = codeStatement.params;
+    const name = jsenStatement.name;
+    const params = jsenStatement.params;
 
     // Call assembler function
     this.statementMap[name]( threadContext, params );
@@ -2078,11 +2100,10 @@ class JSENVM {
   }
 }
 
+// Define JSENVM singleton
+JSENVM.jvm = new JSENVM();
+// Get singleton function
 JSENVM.getSingleton = function(checkOnTimeout) {
-  if (!JSENVM.jvm) {
-    JSENVM.jvm = new JSENVM(checkOnTimeout);
-  }
-
   return JSENVM.jvm;
 }
 
