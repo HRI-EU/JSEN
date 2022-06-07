@@ -45,6 +45,7 @@ This repository contains several examples, some are executable, some just illust
 
   This example shows 3 threads that controls, each of them, the selection of
   an Ace editor. You can see here how to start different threads.
+  Open the browser JavaScript console to see the output of the execution.
 
 - JSEN/examples/JSENBrowserExample/JSENExample2.js
 
@@ -52,6 +53,7 @@ This repository contains several examples, some are executable, some just illust
 
   This example shows 3 threads that animates a red ball into a div.
   You can see here how to start/stop/renew different threads.
+  Open the browser JavaScript console to see the output of the execution.
 
 - JSEN/examples/JSENStudio/JSENExample1.js
 
