@@ -1,4 +1,6 @@
-<img src="JSENLogo.PNG" alt="JESN">
+<div align="center">
+  <img src="JSENLogo.PNG" alt="JESN">
+</div>
 
 JSEN - JavaScript Executable Notation Project
 ====================================
