@@ -38,7 +38,7 @@ the same time, side-by-side, alligned with line number.
 The tutorial is subdivided in sections, each section in one file correspond
 to the equivalent section in the other files (same line numbers).
 The tutorial is meant to introduce JSEN by showing the equivalence
-to JavaScript. This way easy the understanding of the JSEN sintax.
+to JavaScript. This way simplify the understanding of the JSEN syntax.
 
 
 JSEN, JSENVM, JZENVM, nJZENVM and the JSENThreadClass
