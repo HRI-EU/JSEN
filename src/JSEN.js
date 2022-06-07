@@ -385,12 +385,18 @@ class JSEN {
    *     JSEN.print( 'We are in the loop' ),
    *   ],
    * 
+   *   This one is an infinite loop
+   *   JSEN.while(),
+   *   [
+   *     JSEN.print( 'We are in an infinite loop' ),
+   *   ],
+   * 
    * @see JSEN.continue, JSEN.break, JSEN.loop, JSEN.for, JSEN.foreach, JSEN.until
    */
   static while = ( condition )=> {
     return {
       name: 'while',
-      params: condition,
+      params: ( condition? condition: true ),
       toString: JSEN._toStringOneParams,
       isControlNextStatement: true,
     };
@@ -548,12 +554,18 @@ class JSEN {
    *   ],
    *   JSEN.until( ()=> i < 5 ),
    * 
+   *   This one is an infinite loop
+   *   [
+   *     JSEN.print( 'We are in an infinite loop' ),
+   *   ],
+   *   JSEN.until(),
+   * 
    * @see JSEN.continue, JSEN.break, JSEN.loop, JSEN.for, JSEN.foreach, JSEN.while
    */
   static until = ( condition )=> {
     return {
       name: 'until',
-      params: condition,
+      params: ( condition? condition: false ),
       toString: JSEN._toStringOneParams,
       //NOTE: Do not set 'isIterative: true' here
     }
