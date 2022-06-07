@@ -81,7 +81,7 @@ class JSENVM {
   static exec( jsenStatement ) {
     if( JSENVM.jvm ) {
       // If I find a code block, I treat it as a sub-context (for now, not the best way)
-      if( Array.isArray( codeStatement ) ) {  // Case of block like: [ ... ],
+      if( Array.isArray( jsenStatement ) ) {  // Case of block like: [ ... ],
         JSENVM.jvm._executeCodeBlock( jsenStatement );
       } else {  // Case of jsen statement like: JSEN.print( 'message' ),
         // In this case we have an assembly instruction into an object (JSON data with call and params)
