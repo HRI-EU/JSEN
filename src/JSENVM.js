@@ -47,13 +47,20 @@ class JSENVM {
 
   // Execute all (each argument is a jsen code)
   static run( /* var args, each a jsen code */ ) {
+    // List of thread to remove after execution
+    let threadIdList = [];
     // Create a new JSENVM
     let jvm = JSENVM.getSingleton();
     // For each parameter (each jsenCode)
-    for ( const jsenCode of arguments ) {
-      jvm.newThread( 'JSENVM.run', jsenCode );
+    for ( const idx in arguments ) {
+      const jsenCode = arguments[idx]
+      const id = jvm.newThread( `JSENVM.run${idx}`, jsenCode );
+      threadIdList.push( id );
     }
-    jvm.startThread( 'JSENVM.run' );
+    // Once terminated, remove created threads
+    jvm.addThreadJoin( threadIdList, ()=> jvm.removeThreadId() );
+    // Start threads
+    jvm.startThread( threadIdList );
   }
   /**
    * JSENVM Virtual Machine constructor
@@ -685,7 +692,7 @@ class JSENVM {
             this._moveThread( threadId, threadIdList, this.thread.byStatus.terminated );
             // If there are join callback registered
             if( this.threadJoinList.length ) {
-              this._checkAndCallThreadJoinCallback();
+              this._checkAndCallThreadJoinCallback( threadId );
             }
             found = true;
             break;
@@ -1132,10 +1139,11 @@ class JSENVM {
       }
     }
   }
-  _checkAndCallThreadJoinCallback() {
+  _checkAndCallThreadJoinCallback( threadId ) {
     // Since we remove called joinCallback, we use a new list for that
     // reassigning the list at end of the function
-    let newThreadJoinkList = [];
+    let newThreadJoinList = [];
+    let terminatedThreadIdList = [];
     // Check all registered join callback
     for( const joinInfo of this.threadJoinList ) {
       if( joinInfo.joinCallback ) {
@@ -1148,22 +1156,24 @@ class JSENVM {
             // then we can not call the join
             isAllTerminated = false;
             break;
+          } else {
+            terminatedThreadIdList.push( threadId );
           }
         }
         if( isAllTerminated ) {
           // If all threads are terminated ->
           // - we call the joinCallback
           // - we remove this callback from the list (we don't save in the new list)
-          joinInfo.joinCallback();
+          joinInfo.joinCallback( terminatedThreadIdList );
         } else {
           // If there are still thread running ->
           // - we keep the callback in the new list
-          newThreadJoinkList.push( joinInfo );
+          newThreadJoinList.push( joinInfo );
         }
       }
     }
     // Replace old list with new list (where called join are removed)
-    this.threadJoinList = newThreadJoinkList;
+    this.threadJoinList = newThreadJoinList;
   }
   _spawnRunAllFastThreads() {
     // TODO: think about this function
