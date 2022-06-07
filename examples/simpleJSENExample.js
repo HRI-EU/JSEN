@@ -32,8 +32,8 @@
  *
  */
 
-const JSEN = require( '../../src/JSEN.js' );
-const JZENVM = require( '../../src/JZENVM.js' );
+const JSEN = require( '../src/JSEN.js' );
+const JZENVM = require( '../src/JZENVM.js' );
 
 const jsenTest = [
   ()=> console.log( 'start' ),

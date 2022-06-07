@@ -32,8 +32,8 @@
  *
  */
 
-const JSEN = require( '../../src/JSEN.js');
-const JSENVM = require( '../../src/JSENVM.js' );
+const JSEN = require( '../src/JSEN.js');
+const JSENVM = require( '../src/JSENVM.js' );
 
 let number ;
 const printNumbers = [

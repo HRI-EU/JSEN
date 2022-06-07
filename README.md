@@ -155,6 +155,13 @@ This repository contains several examples, some are executable, some just illust
   Java, Matlab and Python. Some of them require further work to be completely
   supporting the JSEN virtual language.
 
+Test Suite
+===================================
+
+In the folder JSEN/test, there is a full test suite for JSEN and both JSENVM
+and JZENVM Virtual Machines. Its a useful reference to learn about the usage
+of JSEN. NOTE: the test suite for JSENVM uses JZENVM to automate the tests ;-)
+
 License
 ===================================
 
