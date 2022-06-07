@@ -35,19 +35,21 @@
 const JSEN = require( '../src/JSEN.js' );
 const JSENVM = require( '../src/JSENVM.js' );
 
+let threadId;
 const jsenTest = [
-  ()=> console.log( 'start' ),
-  JSEN.if( ()=> 10 > 1 ),
-    ()=> console.log( 'condition true' ),
-  ()=> console.log( 'Before sleep...' ),
-  JSEN.sleep( 1 ),
-  ()=> console.log( 'After sleep...' ),
+  ()=> console.log( 'JSEN thread started' ),
+  ()=> {
+    // getSelfId returns the threadId of this running thread
+    threadId = JSENVM.jvm.getSelfId();
+    JSENVM.jvm.suspendThreadId( threadId );
+    console.log( 'JSEN thread suspended' );
+  },
+  ()=> console.log( 'JSEN thread wokenup...' ),
   ()=> console.log( 'End code' ),
 ];
 
-console.log( 'JSEN.stringify output' );
-const jsenTestStr = JSEN.stringify( jsenTest, null, '  ' );
-console.log( jsenTestStr );
-
 console.log( 'JSENVM.run output' );
 JSENVM.run( jsenTest );
+
+// Here we wakeup the thread after 10 seconds
+setTimeout( ()=> JSENVM.jvm.wakeupThreadId( threadId ), 10*1000 );

@@ -1,5 +1,5 @@
 /*
- *  Simple JSEN example
+ *  Simple JZEN example
  *
  *  Copyright (c) Honda Research Institute Europe GmbH
  *
@@ -33,7 +33,7 @@
  */
 
 const JSEN = require( '../src/JSEN.js' );
-const JSENVM = require( '../src/JSENVM.js' );
+const JZENVM = require( '../src/JZENVM.js' );
 
 const jsenTest = [
   ()=> console.log( 'start' ),
@@ -49,5 +49,5 @@ console.log( 'JSEN.stringify output' );
 const jsenTestStr = JSEN.stringify( jsenTest, null, '  ' );
 console.log( jsenTestStr );
 
-console.log( 'JSENVM.run output' );
-JSENVM.run( jsenTest );
+console.log( 'JZENVM.run output' );
+JZENVM.run( jsenTest );
