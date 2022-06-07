@@ -51,9 +51,9 @@ class JSENVM {
     let jvm = JSENVM.getSingleton();
     // For each parameter (each jsenCode)
     for ( const jsenCode of arguments ) {
-      jvm.newThread( '', jsenCode );
+      jvm.newThread( 'JSENVM.run', jsenCode );
     }
-    jvm.startThread( '*' );
+    jvm.startThread( 'JSENVM.run' );
   }
   /**
    * JSENVM Virtual Machine constructor
