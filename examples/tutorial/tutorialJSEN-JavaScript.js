@@ -32,7 +32,10 @@
  *
  */
 
-
+// NOTE:
+// This file is meant to be read together with tutorialJSEN-JSEN.js
+// The both files should be browsed side-by-side
+// Each section here have the equivalent in the other file
 
 // -------------------------------------------------
 // JS: Run a function ------------------------------

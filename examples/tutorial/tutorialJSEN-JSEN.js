@@ -32,7 +32,10 @@
  *
  */
 
-const JSEN = require("../../src/JSEN");
+// NOTE:
+// This file is meant to be read together with tutorialJSEN-JavaScript.js
+// The both files should be browsed side-by-side
+// Each section here have the equivalent in the other file
 
 // ---------------------------------------------------
 // JSEN: Run a function ------------------------------
