@@ -7,11 +7,11 @@ JSEN - JavaScript Executable Notation Project
 
 JSEN is the counterpart of JSON. It extends the homoiconicity of JavaScript, giving the possibility to manipulate programs in a finer grain manner than what is currently possible.
 The JSEN library provides a set of functions to manipulate JSEN data structures that can be used to store executable statements or run them in a concurent multi-threding environment through the JSEN Virtual Machine.
-A description of all pure JSEN statements, the JSENThreadClass and the JSENVM API can be here in the repository.
+A description of all pure JSEN statements, the JSENThreadClass and the JSENVM API can be browsed here in the repository.
 
 You can find a more comprensive description of JSEN if the following paper:
- Title: From JSON to JSEN through Virtual Languages
- URL: https://www.ronpub.com/OJWT_2021v8i1n01_Ceravola.pdf
+<br> Title: From JSON to JSEN through Virtual Languages
+<br> URL: https://www.ronpub.com/OJWT_2021v8i1n01_Ceravola.pdf
 
 Installation 
 ===================================
@@ -170,7 +170,8 @@ Test Suite
 
 In the folder JSEN/test, there is a full test suite for JSEN and both JSENVM
 and JZENVM Virtual Machines. Its a useful reference to learn about the usage
-of JSEN. NOTE: the test suite for JSENVM uses JZENVM to automate the tests ;-)
+of JSEN.
+<br>NOTE: the test suite for JSENVM uses JZENVM to automate the tests ;-)
 
 License
 ===================================
