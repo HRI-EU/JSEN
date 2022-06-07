@@ -66,17 +66,27 @@ class JSENVM {
    * @param {*} jsenStatement a JSEN statement
    * 
    * Example:
-   *  // Each couple of JSEN statements do the same
+   *  // Each group of JSEN statements do the same
    *  const jsenCode = [
+   *    // Group 1
    *    JSEN.print( 'Print this' ),
    *    ()=> JSENVM.exec( JSEN.print( 'Print this' ) ),
+   *    // Group 2
    *    JSEN.sleep( 5 ),
-   *    ()=> JSENVM.exec( JSEN.sleep( 5 ) ),
+   *    JSEN.print( 'After sleep' ),
+   *    ()=> JSENVM.exec( [ JSEN.sleep( 5 ),
+   *                        JSEN.print( 'After sleep' ) ] ),
    *  ];
    */
   static exec( jsenStatement ) {
     if( JSENVM.jvm ) {
-      JSENVM.jvm._executeJSENStatement( jsenStatement );
+      // If I find a code block, I treat it as a sub-context (for now, not the best way)
+      if( Array.isArray( codeStatement ) ) {  // Case of block like: [ ... ],
+        JSENVM.jvm._executeCodeBlock( jsenStatement );
+      } else {  // Case of jsen statement like: JSEN.print( 'message' ),
+        // In this case we have an assembly instruction into an object (JSON data with call and params)
+        JSENVM.jvm._executeJSENStatement( jsenStatement );
+      }
     }
   }
   /**
