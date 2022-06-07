@@ -1777,11 +1777,20 @@ class JSENVM {
 
         return null;
       },
-      // Basic unconditional loop statement
+      // Basic loop statement (unconditional or defined number of iterations)
       loop: ( threadContext, params )=> {
-        // Implement the loop as a while true
-        params = true;
-        this.statementMap.while( threadContext, params );
+        if( params == undefined ) {
+          // Implement the loop as a while true
+          params = true;
+          this.statementMap.while( threadContext, params );
+        } else  {
+          // Implement the loop as a number of iterations
+          params = {
+            iterator: '__i',
+            lower: params,
+          }
+          this.statementMap.for( threadContext, params );
+        }
 
         return null;
       },

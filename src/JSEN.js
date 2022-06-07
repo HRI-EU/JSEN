@@ -332,11 +332,17 @@ class JSEN {
    *     ()=> ++i,
    *   ],
    * 
+   *   JSEN.loop( 10 ),
+   *   [
+   *     JSEN.print( 'We loop for 10 times' ),
+   *   ],
+   * 
    * @see JSEN.break
    */
-  static loop = ()=> {
+  static loop = ( loopCount )=> {
     return {
       name: 'loop',
+      params: loopCount,
       toString: JSEN._toStringNoParams,
       isControlNextStatement: true,
     };
