@@ -157,6 +157,12 @@ This repository contains several examples, some are executable, some just illust
 
   This example shows how to execute several threads.
 
+- JSEN/examples/execExample.js
+
+  RUN in console: node execExample.js
+
+  Demonstrate usage of JSENVM.exec().
+
 ### Illustrative:
 
 - JSEN/examples/async1.js
