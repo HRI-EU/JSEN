@@ -5,7 +5,7 @@
 JSEN - JavaScript Executable Notation Project
 ====================================
 
-JSEN is the counterpart of JSON. Where JSON encapsulate data, JSEN encapsulate code, moreover JSON can encapsulate JSEN and JSEN can encapsulate JSON. Primarely JSEN extends the homoiconicity of JavaScript, giving the possibility to create, execute and manipulate programs in a finer grain manner than what is currently possible with JavaScript.
+JSEN is the counterpart of JSON. Where JSON encapsulate data, JSEN encapsulate code, moreover JSON can encapsulate JSEN and JSEN can encapsulate JSON in a sort of Yin-Yang paradigm. Primarely JSEN extends the homoiconicity of JavaScript, giving the possibility to create, execute and manipulate programs in a finer grain manner than what is currently possible with JavaScript.
 The JSEN object define a Virtual Language, providing a set of functions to manipulate JSEN data structures that can be used to store executable statements or run them in a concurent multi-threding environment through a JSEN Virtual Machine (JSENVM, JZENVM, nJZENVM ).
 A description of all pure JSEN statements, the JSENThreadClass and the JSENVM API can be found here in this repository. Several examples and test are included here as part of the documentation.
 
