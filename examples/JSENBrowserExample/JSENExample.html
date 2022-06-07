@@ -47,15 +47,20 @@
 			}
 		</style>
 	<body style="background-color: #333333;">
-		<h1 style="text-align: center; color: red;;">JSEN Example</h1>
+		<h1 style="text-align: center; color: red;">JSEN Example</h1>
+		<h3 style="text-align: center; color: yellowgreen;">
+		This example shows 3 JSEN threads running on the browser.<br>
+		Each of them selects the line of the respective Ace aceEditor in a different way.<br>
+		Just have a look at the code...
+		</h3>
 		<table>
 		  <tr>
-		    <td><h3 style="color:white">aceEditor1
-					<div style="width:300px; height:280px" id="aceEditor1"></div>
-		    <td><h3 style="color:white">aceEditor2
-			        <div style="width:300px; height:280px" id="aceEditor2"></div>
-		    <td><h3 style="color:white">aceEditor3
-			        <div style="width:300px; height:280px" id="aceEditor3"></div>
+		    <td><h3 style="color:white; font-weight: lighter;">aceEditor1 - selection incrementally
+					<div style="width:300px; height:280px; margin-top: 10px;" id="aceEditor1"></div>
+		    <td><h3 style="color:white; font-weight: lighter;">aceEditor2 - selection decrementally
+			        <div style="width:300px; height:280px; margin-top: 10px;" id="aceEditor2"></div>
+		    <td><h3 style="color:white; font-weight: lighter;">aceEditor3  - random selection
+			        <div style="width:300px; height:280px; margin-top: 10px;" id="aceEditor3"></div>
 		</table>
 		<script type="application/javascript" src="./JSENExample.js"></script>
 	</body>
