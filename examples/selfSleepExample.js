@@ -37,15 +37,16 @@ const JSENVM = require( '../src/JSENVM.js' );
 
 let threadId;
 const jsenTest = [
-  ()=> console.log( 'JSEN thread started' ),
+  JSEN.print( 'Start code' ),
+  JSEN.print( '"jsenTest" thread started' ),
   ()=> {
     // getSelfId returns the threadId of this running thread
     threadId = JSENVM.jvm.getSelfId();
     JSENVM.jvm.suspendThreadId( threadId );
-    console.log( 'JSEN thread suspended' );
+    console.log( '"jsenTest" thread suspended' );
   },
-  ()=> console.log( 'JSEN thread wokenup...' ),
-  ()=> console.log( 'End code' ),
+  JSEN.print( '"jsenTest" thread wokenup...' ),
+  JSEN.print( 'End code' ),
 ];
 
 console.log( 'JSENVM.run output' );
