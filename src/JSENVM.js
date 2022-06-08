@@ -73,13 +73,29 @@ class JSENVM {
    *    ()=> JSENVM.exec( JSEN.print( 'Print this' ) ),
    *    // Group 2
    *    JSEN.sleep( 5 ),
-   *    ()=> JSENVM.exec( JSEN.sleep( 5 ) ),
+   *    JSEN.print( 'After sleep' ),
+   *    ()=> JSENVM.exec( [ JSEN.sleep( 5 ),
+   *                        JSEN.print( 'After sleep' ) ] ),
    *  ];
    */
-  static exec( jsenStatement ) {
+  static exec( codeStatement ) {
     if( JSENVM.jvm ) {
-        // Execute a single JSEN statement
-        JSENVM.jvm._executeJSENStatement( jsenStatement );
+      switch( typeof( codeStatement ) ) {
+        case 'function':  // Case of javascript code like: ()=> console.log( 'message' ),
+          execStatus = this._executeCodeFunction( codeStatement );
+          break;
+        case 'string':    // Case of comment like: "This is a comment",
+        case 'undefined': // Case of comment like: ,
+          break;
+        case 'object':    // Case of block or JSEN.* function
+          // If I find a code block, I treat it as a sub-context (for now, not the best way)
+          if( Array.isArray( codeStatement ) ) {  // Case of block like: [ ... ],
+            execStatus = this._executeCodeBlock( codeStatement );
+          } else {  // Case of jsen statement like: JSEN.print( 'message' ),
+            // In this case we have an assembly instruction into an object (JSON data with call and params)
+            execStatus = this._executeJSENStatement( codeStatement );
+          }
+          break;
       }
     }
   }

@@ -45,7 +45,8 @@ const jsenTest = [
   // The both couple of statements do the same
   JSEN.sleep( 2 ),
   JSEN.print( 'After sleep' ),
-  ()=> JSENVM.exec( JSEN.sleep( 2 ) ),
+  ()=> JSENVM.exec( [ JSEN.sleep( 2 ),
+                      JSEN.print( 'After sleep' ) ] ),
   // End thread
   JSEN.print( 'End code' ),
 ];
