@@ -78,7 +78,7 @@ class JSENVM {
    *                        JSEN.print( 'After sleep' ) ] ),
    *  ];
    */
-  static exec( codeStatement ) {
+   static exec( codeStatement ) {
     // TODO: check debug information in case this function 
     //       is called like in the example above.
     //       Because the lines in codeStatement have not been indexed
@@ -87,13 +87,13 @@ class JSENVM {
     // Statement execution result
     let execStatus = null;
     // Get current thread context
-    const threadContext = this.selfThreadContext;
+    const threadContext = JSENVM.jvm.selfThreadContext;
     // If we have a jvm instance
     if( JSENVM.jvm && threadContext ) {
       // Check the type of statement
       switch( typeof( codeStatement ) ) {
         case 'function':  // Case of javascript code like: ()=> console.log( 'message' ),
-          execStatus = this._executeCodeFunction( codeStatement, threadContext );
+          execStatus = JSENVM.jvm._executeCodeFunction( codeStatement, threadContext );
           break;
         case 'string':    // Case of comment like: "This is a comment",
         case 'undefined': // Case of comment like: ,
@@ -101,10 +101,10 @@ class JSENVM {
         case 'object':    // Case of block or JSEN.* function
           // If I find a code block, I treat it as a sub-context (for now, not the best way)
           if( Array.isArray( codeStatement ) ) {  // Case of block like: [ ... ],
-            execStatus = this._executeCodeBlock( codeStatement, threadContext );
+            execStatus = JSENVM.jvm._executeCodeBlock( codeStatement, threadContext );
           } else {  // Case of jsen statement like: JSEN.print( 'message' ),
             // In this case we have an assembly instruction into an object (JSON data with call and params)
-            execStatus = this._executeJSENStatement( codeStatement, threadContext );
+            execStatus = JSENVM.jvm._executeJSENStatement( codeStatement, threadContext );
           }
           break;
       }

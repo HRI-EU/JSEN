@@ -72,7 +72,8 @@ JSEN, JSENVM, JZENVM, nJZENVM and the JSENThreadClass
 JSENStudio
 ===================================
 
-JSENStudio is an interactive visual debugger of JSEN code.
+JSENStudio is an interactive visual debugger for JSEN code. It can visualize
+threas sources, show execution line trace and display/plot thread status.
 
 <img src="JSENStudio/JSENStudio1.png" alt="JESNStudio screenshot 1">
 <img src="JSENStudio/JSENStudio2.png" alt="JESNStudio screenshot 2">
