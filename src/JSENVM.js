@@ -61,7 +61,7 @@ class JSENVM {
     JSENVM.jvm.startThread( threadIdList );
   }
   /**
-   * This function executes a JSEN statement in a valid JSEN thread
+   * This function executes JSEN code in a valid JSEN thread
    * 
    * @param {*} jsenStatement a JSEN statement
    * 
@@ -79,10 +79,16 @@ class JSENVM {
    *  ];
    */
   static exec( codeStatement ) {
-    if( JSENVM.jvm ) {
+    // Statement execution result
+    let execStatus = null;
+    // Get current thread context
+    const threadContext = this.selfThreadContext;
+    // If we have a jvm instance
+    if( JSENVM.jvm && threadContext ) {
+      // Check the type of statement
       switch( typeof( codeStatement ) ) {
         case 'function':  // Case of javascript code like: ()=> console.log( 'message' ),
-          execStatus = this._executeCodeFunction( codeStatement );
+          execStatus = this._executeCodeFunction( codeStatement, threadContext );
           break;
         case 'string':    // Case of comment like: "This is a comment",
         case 'undefined': // Case of comment like: ,
@@ -90,14 +96,15 @@ class JSENVM {
         case 'object':    // Case of block or JSEN.* function
           // If I find a code block, I treat it as a sub-context (for now, not the best way)
           if( Array.isArray( codeStatement ) ) {  // Case of block like: [ ... ],
-            execStatus = this._executeCodeBlock( codeStatement );
+            execStatus = this._executeCodeBlock( codeStatement, threadContext );
           } else {  // Case of jsen statement like: JSEN.print( 'message' ),
             // In this case we have an assembly instruction into an object (JSON data with call and params)
-            execStatus = this._executeJSENStatement( codeStatement );
+            execStatus = this._executeJSENStatement( codeStatement, threadContext );
           }
           break;
       }
     }
+    return( execStatus );
   }
   /**
    * JSENVM Virtual Machine constructor
@@ -1397,23 +1404,7 @@ class JSENVM {
       this.selfThreadContext = threadContext;
 
       // Execution of current thread statement
-      switch( typeof( codeStatement ) ) {
-        case 'function':  // Case of javascript code like: ()=> console.log( 'message' ),
-          execStatus = this._executeCodeFunction( codeStatement );
-          break;
-        case 'string':    // Case of comment like: "This is a comment",
-        case 'undefined': // Case of comment like: ,
-          break;
-        case 'object':    // Case of block or JSEN.* function
-          // If I find a code block, I treat it as a sub-context (for now, not the best way)
-          if( Array.isArray( codeStatement ) ) {  // Case of block like: [ ... ],
-            execStatus = this._executeCodeBlock( codeStatement );
-          } else {  // Case of jsen statement like: JSEN.print( 'message' ),
-            // In this case we have an assembly instruction into an object (JSON data with call and params)
-            execStatus = this._executeJSENStatement( codeStatement );
-          }
-          break;
-      }
+      execStatus = JSENVM.exec( codeStatement );
 
       // Move pc to next statement in context of codeStatement
       ++blockContext.pc;
@@ -1667,38 +1658,32 @@ class JSENVM {
   /* -----------------------------------------------------------------
   * JSENVM Firmware functions
   *-----------------------------------------------------------------*/
-  _executeCodeFunction( codeStatement ) {
+  _executeCodeFunction( codeStatement, threadContext ) {
     // Execute the line as function
     return codeStatement();
   }
-  _executeCodeBlock( codeStatement ) {
-    // Get current thread context
-    const threadContext = this.selfThreadContext;
-    if( threadContext ) {
-      // Create a new block context
-      const subBlockContext = this._getNewBlockContext( codeStatement, threadContext.blockContext );
-      // If thread is in step by step ==> propagate debug info
-      if( this.isThreadStepByStep( threadContext.id ) ) {
-        const lineIndex = threadContext.codeLinesMap.indexOf( codeStatement );
-        threadContext['lineNumber'] = lineIndex+1;
-      }
-      // Replace current block context with sub-context
-      threadContext.blockContext = subBlockContext;
+  _executeCodeBlock( codeStatement, threadContext ) {
+    // Create a new block context
+    const subBlockContext = this._getNewBlockContext( codeStatement, threadContext.blockContext );
+    // If thread is in step by step ==> propagate debug info
+    if( this.isThreadStepByStep( threadContext.id ) ) {
+      const lineIndex = threadContext.codeLinesMap.indexOf( codeStatement );
+      threadContext['lineNumber'] = lineIndex+1;
     }
+    // Replace current block context with sub-context
+    threadContext.blockContext = subBlockContext;
 
-    return null;
+    return( null );
   }
-  _executeJSENStatement( jsenStatement ) {
-    // Get current thread context
-    const threadContext = this.selfThreadContext;
-    if( threadContext ) {
-      // Extract codeStatement fields
-      const name = jsenStatement.name;
-      const params = jsenStatement.params;
-  
-      // Call assembler function
-      this.statementMap[name]( threadContext, params );
-    }
+  _executeJSENStatement( jsenStatement, threadContext ) {
+    // Extract codeStatement fields
+    const name = jsenStatement.name;
+    const params = jsenStatement.params;
+
+    // Call assembler function
+    this.statementMap[name]( threadContext, params );
+
+    return( null );
   }
   /* -----------------------------------------------------------------
    * JSENVM Assembler functions
