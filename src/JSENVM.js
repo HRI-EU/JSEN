@@ -79,6 +79,11 @@ class JSENVM {
    *  ];
    */
   static exec( codeStatement ) {
+    // TODO: check debug information in case this function 
+    //       is called like in the example above.
+    //       Because the lines in codeStatement have not been indexed
+    //       by the debug information, for instance
+
     // Statement execution result
     let execStatus = null;
     // Get current thread context
