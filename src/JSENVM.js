@@ -73,18 +73,12 @@ class JSENVM {
    *    ()=> JSENVM.exec( JSEN.print( 'Print this' ) ),
    *    // Group 2
    *    JSEN.sleep( 5 ),
-   *    JSEN.print( 'After sleep' ),
-   *    ()=> JSENVM.exec( [ JSEN.sleep( 5 ),
-   *                        JSEN.print( 'After sleep' ) ] ),
+   *    ()=> JSENVM.exec( JSEN.sleep( 5 ) ),
    *  ];
    */
   static exec( jsenStatement ) {
     if( JSENVM.jvm ) {
-      // If I find a code block, I treat it as a sub-context (for now, not the best way)
-      if( Array.isArray( jsenStatement ) ) {  // Case of block like: [ ... ],
-        JSENVM.jvm._executeCodeBlock( jsenStatement );
-      } else {  // Case of jsen statement like: JSEN.print( 'message' ),
-        // In this case we have an assembly instruction into an object (JSON data with call and params)
+        // Execute a single JSEN statement
         JSENVM.jvm._executeJSENStatement( jsenStatement );
       }
     }
@@ -1664,27 +1658,31 @@ class JSENVM {
   _executeCodeBlock( codeStatement ) {
     // Get current thread context
     const threadContext = this.selfThreadContext;
-    // Create a new block context
-    const subBlockContext = this._getNewBlockContext( codeStatement, threadContext.blockContext );
-    // If thread is in step by step ==> propagate debug info
-    if( this.isThreadStepByStep( threadContext.id ) ) {
-      const lineIndex = threadContext.codeLinesMap.indexOf( codeStatement );
-      threadContext['lineNumber'] = lineIndex+1;
+    if( threadContext ) {
+      // Create a new block context
+      const subBlockContext = this._getNewBlockContext( codeStatement, threadContext.blockContext );
+      // If thread is in step by step ==> propagate debug info
+      if( this.isThreadStepByStep( threadContext.id ) ) {
+        const lineIndex = threadContext.codeLinesMap.indexOf( codeStatement );
+        threadContext['lineNumber'] = lineIndex+1;
+      }
+      // Replace current block context with sub-context
+      threadContext.blockContext = subBlockContext;
     }
-    // Replace current block context with sub-context
-    threadContext.blockContext = subBlockContext;
 
     return null;
   }
   _executeJSENStatement( jsenStatement ) {
     // Get current thread context
     const threadContext = this.selfThreadContext;
-    // Extract codeStatement fields
-    const name = jsenStatement.name;
-    const params = jsenStatement.params;
-
-    // Call assembler function
-    this.statementMap[name]( threadContext, params );
+    if( threadContext ) {
+      // Extract codeStatement fields
+      const name = jsenStatement.name;
+      const params = jsenStatement.params;
+  
+      // Call assembler function
+      this.statementMap[name]( threadContext, params );
+    }
   }
   /* -----------------------------------------------------------------
    * JSENVM Assembler functions
