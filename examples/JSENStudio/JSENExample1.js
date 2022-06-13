@@ -32,9 +32,21 @@
  *
  */
 
+// NOTE: Output is generated in JavaScript console
+
+// Set JSENStudio to a new instance of a JSEN Virtual Machine
 const jvm = new JSENVM();
 JSENStudio_setJVM( jvm );
 
+// Restore opened source editors positions
+// NOTE: this string can be obtained by calling SENStudio_getWinStat()
+const winStat = `{"codeDiv_1":{"offsetTop":45,"offsetLeft":53},
+                  "codeDiv_2":{"offsetTop":262,"offsetLeft":154},
+                  "codeDiv_3":{"offsetTop":96,"offsetLeft":550},
+                  "codeDiv_4":{"offsetTop":404,"offsetLeft":503}}`;
+JSENStudio_setWinStat( winStat );
+
+// Simple test printing strings
 const jsenTest = [
   ()=> console.log( 'start' ),
   JSEN.if( ()=> 10 > 1 ),
@@ -45,6 +57,7 @@ const jsenTest = [
   ()=> console.log( 'End code' ),
 ];
 
+// Simple test printing numbers
 let number ;
 const printNumbers = [
   JSEN.for( 'i', 0, 20 ),
@@ -54,6 +67,7 @@ const printNumbers = [
   ],
 ];
 
+// Simple test printing upcase letters
 let upLetter = 'A'.charCodeAt( 0 );
 const printUpLetters = [
   JSEN.for( 'i', 0, 26 ),
@@ -63,6 +77,7 @@ const printUpLetters = [
   ],
 ];
 
+// Simple test printing lowcase letters
 let lowLetter = 'a'.charCodeAt( 0 );
 const printLowLetters = [
   JSEN.for( 'i', 0, 26 ),
@@ -72,11 +87,14 @@ const printLowLetters = [
   ],
 ];
 
+// Create all threads
 jvm.newThread( 'test', jsenTest );
-jvm.pauseThread( 'test' );
 jvm.newThread( 'printNumbers', printNumbers );
-jvm.pauseThread( 'printNumbers' );
 jvm.newThread( 'printUpLetters', printUpLetters );
-jvm.pauseThread( 'printUpLetters' );
 jvm.newThread( 'printLowLetters', printLowLetters );
+
+// Put all threads in Step-by-Step queue
+jvm.pauseThread( 'test' );
+jvm.pauseThread( 'printNumbers' );
+jvm.pauseThread( 'printUpLetters' );
 jvm.pauseThread( 'printLowLetters' );

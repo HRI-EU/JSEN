@@ -134,7 +134,7 @@ This repository contains several examples, some are executable, some just illust
 
   RUN in browser: file:///..your..repo..path.../JSEN/JSENStudio/index.html?jsenSrc=../examples/JSENStudio/JSENExample1.js
 
-  This example shows the execution of 3 different threads each doing something different.
+  This example shows the execution of 4 different threads each doing something different.
   It demonstrate how the JSEN Studio debugger works. To start the example click on the 
   play button in the JSEN Studio VCR control icons. To stop, click the stop button.
   To step (once threads are stopped), double click the play button.
@@ -150,7 +150,7 @@ This repository contains several examples, some are executable, some just illust
 
   RUN in browser: file:///..your..repo..path.../JSEN/JSENStudio/index.html?
 
-  This example executes JSEN/examples/JSENStudio/JSENExample2.js by default.
+  This example executes JSEN/examples/JSENStudio/JSENExample1.js by default.
 
 - JSEN/examples/concurrentExample1.js
 

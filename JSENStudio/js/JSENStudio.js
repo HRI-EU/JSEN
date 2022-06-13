@@ -60,10 +60,8 @@ let repeatAutoStepPreviousPeriod = 0;
 let isAutoStop = true;
 // JSENStudio JSEN vm
 let JSENS_jvm = null;
-
-// Info relative to JSENStudio/JSENExample2.js
-// Studio info from _saveAllThreadCodeDivPosition()
-const studioInfo = '{"codeDiv_5":{"offsetTop":99,"offsetLeft":39},"codeDiv_6":{"offsetTop":293,"offsetLeft":33},"codeDiv_1":{"offsetTop":36,"offsetLeft":503},"codeDiv_2":{"offsetTop":296,"offsetLeft":523},"codeDiv_3":{"offsetTop":38,"offsetLeft":1013},"codeDiv_4":{"offsetTop":320,"offsetLeft":1028}}';
+// Buffer for WinStat information
+let winStatBuffer = '{}';
 
 // Colors representing each thread status
 const threadStatusColorVector = {
@@ -89,7 +87,7 @@ function main() {
   const urlParams = new URLSearchParams( queryString );
   // Check if jsenSrc is specified
   let jsenSrc = urlParams.get( 'jsenSrc' );
-  jsenSrc = ( jsenSrc? jsenSrc: '../examples/JSENStudio/JSENExample2.js' );
+  jsenSrc = ( jsenSrc? jsenSrc: '../examples/JSENStudio/JSENExample1.js' );
   const as = urlParams.get( 'isAutoStart' );
   if( as != undefined ) {
     isAutoStart = ( as == 'true'? true: false );
@@ -104,7 +102,9 @@ function main() {
     if( isAutoStart ) {
       toggleRepeatStep();
     }
-    _restoreAllThreadCodeDivPosition( studioInfo );
+
+    // Restore window position if available
+    _restoreAllThreadCodeDivPosition( winStatBuffer );
 
     setLeftMenuOpen(true);
   };
@@ -114,6 +114,12 @@ function main() {
 }
 function JSENStudio_setJVM( jvm ) {
   JSENS_jvm = jvm;
+}
+function JSENStudio_getWinStat() {
+  return( _saveAllThreadCodeDivPosition() );
+}
+function JSENStudio_setWinStat( winStat ) {
+  winStatBuffer = winStat;
 }
 /******************************************
  * Public Thread Functions

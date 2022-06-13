@@ -32,9 +32,21 @@
  *
  */
 
-// Set JSENStudio JSEN virtual machine
+// NOTE: Output is generated in JavaScript console
+
+// Set JSENStudio to the singleton JSEN Virtual Machine
 const jvm = new JSENVM.getSingleton();
 JSENStudio_setJVM( jvm );
+
+// Restore opened source editors positions
+// NOTE: this string can be obtained by calling SENStudio_getWinStat()
+const winStat = `{"codeDiv_5":{"offsetTop":31,"offsetLeft":40},
+                 "codeDiv_6":{"offsetTop":160,"offsetLeft":7},
+                 "codeDiv_1":{"offsetTop":184,"offsetLeft":479},
+                 "codeDiv_2":{"offsetTop":336,"offsetLeft":442},
+                 "codeDiv_3":{"offsetTop":39,"offsetLeft":830},
+                 "codeDiv_4":{"offsetTop":176,"offsetLeft":834}}`;
+JSENStudio_setWinStat( winStat );
 
 // Basic class for all Agents
 class Agent extends JSENThreadClass {
@@ -56,6 +68,7 @@ class Agent extends JSENThreadClass {
   }
 }
 
+// Example jsen class for Bob
 class Bob extends Agent {
   constructor( instanceName ) {
     super( instanceName );
@@ -70,6 +83,7 @@ class Bob extends Agent {
   }
 }
 
+// Example jsen class for Agent1
 class Agent1 extends Agent {
   constructor( instanceName ) {
     super( instanceName );
@@ -87,6 +101,7 @@ class Agent1 extends Agent {
   }
 }
 
+// Example jsen class for Agent2
 class Agent2 extends Agent {
   constructor( instanceName ) {
     super( instanceName );
@@ -107,13 +122,14 @@ class Agent2 extends Agent {
   }
 }
 
-// Actor list
-const actorList = {
+// Active object list
+const actObjList = {
   'B': new Bob( 'Bob' ),
   'S': new Agent1( 'Steven' ),
   'A': new Agent2( 'Alex' ),
 };
-// Start all actor threads
-for( const a in actorList ) {
-  actorList[a].start();
+
+// Start all active objects
+for( const a in actObjList ) {
+  actObjList[a].start();
 }
