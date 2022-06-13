@@ -91,13 +91,11 @@ class JSENThreadClass {
           const thread = threadList[threadName];
           if( typeof( thread ) === 'object' ) {
             // Check if the thread is enabled (default: true)
-            if( ( threadList[threadName+'_isEnabled'] ) &&
-                ( threadList[threadName+'_isEnabled'] == false ) ) {
+            if( threadList[threadName+'_isEnabled'] === false ) {
               console.log( '-[ Skip: '+threadName+' ]-----------------');
               continue;
             }
-            const isStepByStep = ( ( threadList[threadName+'_isStepByStep'] ) &&
-                                   ( threadList[threadName+'_isStepByStep'] == true ) );
+            const isStepByStep = ( threadList[threadName+'_isStepByStep'] === true );
             // Chekc if thread has a period
             var period = 1;
             if( threadList[threadName+'_period'] ) {
