@@ -336,7 +336,7 @@ function _addThreadCodeDiv( threadId ) {
       const threadCodeDivHTML = '<div class="threadCode" id="'+threadHTMLIdDiv+'" draggable="true">'+
                                 '<div class="threadCodeHeader" id="'+threadHTMLIdHead+'" '+
                                   'style="background-color: '+threadStatusColorVector[status]+'" '+
-                                  'ondblclick="_removeCodeDiv(\''+threadHTMLIdDiv+'\')"'+
+                                  'ondblclick="_removeThreadCodeDiv(\''+threadHTMLIdDiv+'\')"'+
                                   '>'+threadInfo.name+'</div>'+
                                 //'<table class="treadCodeTable" onclick="_showCodeInEditor(\''+threadIdNr+'\')">'+
                                 '<table class="treadCodeTable">'+
