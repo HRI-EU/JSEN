@@ -454,7 +454,10 @@ function _getThreadStatus( threadId ) {
   }
   return status;
 }
-function _updateAllThreadsInfo( status ) {
+function _updateAllThreadsInfo( status, isOnLine ) {
+  // isOnline == true ==> status coming from JSEN execution
+  // isOnline == false ==> status coming from click on time in timetable
+  isOnLine = ( isOnLine == undefined? true: isOnLine );
   const queueVector = {
     'fast': 'F',
     'slow': 'S',
@@ -529,43 +532,51 @@ function _updateAllThreadsInfo( status ) {
     // Update threadCode Div
     _updateThreadCodeDiv( threadInfo );
 
-    // Update Threads Switching
-    if( !inputNewQueue[threadInfo.name] ) {
-      inputNewQueue[threadInfo.name] = true;
-      //Example line: <input type="checkbox" name="Tom.loadingCheck">[fast] Tom.loadingCheck</input><br>
-      html = '<input type="checkbox" name="'+threadInfo.name+'"><label>['+threadInfo.queue+'] '+threadInfo.name+'</label></input><br>'
-      $('#threadQueueList').append( html );
-    }
-
-    // Update timeline
-    if( $('#timeRow_'+threadHTMLId+' td').length == 0 ) {
-      html = '<tr id="timeRow_'+threadHTMLId+'" onclick="_addThreadCodeDiv(\''+threadInfo.id+'\')">'+
-             '<th class="fixTh">&nbsp;&nbsp'+threadInfo.name+'</th>';
-      const numbOfTd = $('#timeRow td').length;
-      for( let i = 1; i < numbOfTd; ++i ) {
-        html += '<td>&nbsp;&nbsp;</td>'
+    // Update only if data is onLine with JSEN execution
+    // instead if update is executed by onclick of timetable, then its off-line
+    // and therefore we don't update the timeline
+    if( isOnLine ) {
+      // Update Threads Switching
+      if( !inputNewQueue[threadInfo.name] ) {
+        inputNewQueue[threadInfo.name] = true;
+        //Example line: <input type="checkbox" name="Tom.loadingCheck">[fast] Tom.loadingCheck</input><br>
+        html = '<input type="checkbox" name="'+threadInfo.name+'"><label>['+threadInfo.queue+'] '+threadInfo.name+'</label></input><br>'
+        $('#threadQueueList').append( html );
       }
-      html += '</tr>';
-      $('#statusTimeline tbody').append( html );
+
+      // Update timeline
+      if( $('#timeRow_'+threadHTMLId+' td').length == 0 ) {
+        html = '<tr id="timeRow_'+threadHTMLId+'" onclick="_addThreadCodeDiv(\''+threadInfo.id+'\')">'+
+              '<th class="fixTh">&nbsp;&nbsp'+threadInfo.name+'</th>';
+        const numbOfTd = $('#timeRow td').length;
+        for( let i = 1; i < numbOfTd; ++i ) {
+          html += '<td>&nbsp;&nbsp;</td>'
+        }
+        html += '</tr>';
+        $('#statusTimeline tbody').append( html );
+      }
+      $('#timeRow_'+threadHTMLId)
+        .append($('<td>',{'style': 'background-color:'+statusColor, 'title': threadInfo.name})
+        .append('&nbsp;'));
     }
-    $('#timeRow_'+threadHTMLId)
-    .append($('<td>',{'style': 'background-color:'+statusColor, 'title': threadInfo.name})
-    .append('&nbsp;'));
 
     // Make sure that the menu are updated with content
     $('.collapsible').click();
     $('.collapsible').click();
   }
 
-  // Add timestamp in timeline
-  if( status.length > 0 ) {
-    isTimeLineTimeSet = true;
-    const timeStr = _padNumber( status[0].timeStamp.getHours(), 2, '0' )+':'+
-                    _padNumber( status[0].timeStamp.getMinutes(), 2, '0' )+':'+
-                    _padNumber( status[0].timeStamp.getSeconds(), 2, '0' )+'.'+
-                    _padNumber( status[0].timeStamp.getMilliseconds(), 4, '0' );
-    $('#timeRow').append( '<td id="timeCell"><p style="margin:0px" id=timeRowValue>'+timeStr );
-
+  if( isOnLine ) {
+    // Add timestamp in timeline
+    if( status.length > 0 ) {
+      isTimeLineTimeSet = true;
+      const stateIndex = stateRecordHistory.length-1;
+      const timeStr = _padNumber( status[0].timeStamp.getHours(), 2, '0' )+':'+
+                      _padNumber( status[0].timeStamp.getMinutes(), 2, '0' )+':'+
+                      _padNumber( status[0].timeStamp.getSeconds(), 2, '0' )+'.'+
+                      _padNumber( status[0].timeStamp.getMilliseconds(), 4, '0' );
+      $('#timeRow').append( '<td id="timeCell"><p style="margin:0px" id=timeRowValue'+
+                            ' onclick="_updateAllThreadsInfo( stateRecordHistory['+stateIndex+'], false )">'+timeStr );
+    }
   }
   // Stop autoStep if no thread running
   if( ( runningThreadCount == 0 ) && isAutoStop ) {
