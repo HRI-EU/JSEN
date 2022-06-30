@@ -78,6 +78,9 @@ threas sources, show execution line trace and display/plot thread status.
 <img src="JSENStudio/JSENStudio1.png" alt="JESNStudio screenshot 1">
 <img src="JSENStudio/JSENStudio2.png" alt="JESNStudio screenshot 2">
 
+Usage of JSEN Studio
+<img src="JSENStudio/JSENHelp.PNG" alt="JESNStudio Help Page">
+
 Examples
 ===================================
 
