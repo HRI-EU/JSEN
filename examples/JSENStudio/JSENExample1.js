@@ -35,7 +35,7 @@
 // NOTE: Output is generated in JavaScript console
 
 // Set JSENStudio to a new instance of a JSEN Virtual Machine
-const jvm = new JSENVM();
+const jvm = new JSENVM.getSingleton();
 JSENStudio_setJVM( jvm );
 
 // Restore opened source editors positions

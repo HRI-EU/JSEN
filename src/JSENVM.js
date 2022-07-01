@@ -78,7 +78,7 @@ class JSENVM {
    *                        JSEN.print( 'After sleep' ) ] ),
    *  ];
    */
-   static exec( codeStatement ) {
+   static exec( codeStatement, jvmInstance ) {
     // TODO: check debug information in case this function 
     //       is called like in the example above.
     //       Because the lines in codeStatement have not been indexed
@@ -87,7 +87,7 @@ class JSENVM {
     // Statement execution result
     let execStatus = null;
     // Get current thread context
-    const threadContext = JSENVM.jvm.selfThreadContext;
+    const threadContext = ( jvmInstance? jvmInstance.selfThreadContext: JSENVM.jvm.selfThreadContext );
     // If we have a jvm instance
     if( JSENVM.jvm && threadContext ) {
       // Check the type of statement
@@ -1409,7 +1409,7 @@ class JSENVM {
       this.selfThreadContext = threadContext;
 
       // Execution of current thread statement
-      execStatus = JSENVM.exec( codeStatement );
+      execStatus = JSENVM.exec( codeStatement, this );
 
       // Move pc to next statement in context of codeStatement
       ++blockContext.pc;
