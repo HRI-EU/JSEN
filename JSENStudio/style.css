@@ -323,3 +323,12 @@ body {
   text-align: left;
   font-weight: normal;
 }
+
+#timeNotes {
+  color: aqua;
+}
+
+.timeNoteText {
+  writing-mode: vertical-lr;
+  text-orientation: sideways;
+}

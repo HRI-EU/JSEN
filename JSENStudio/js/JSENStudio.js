@@ -593,6 +593,11 @@ function _updateAllThreadsInfo( status, isOnLine ) {
   }
 
   if( isOnLine ) {
+    // Add note cell
+    $('#timeRow_notes')
+        .append($('<td>',{'style': 'color: aqua'})
+        .append('<div class="timeNoteText" contenteditable>&nbsp;</div>'));
+
     // Add timestamp in timeline
     if( status.length > 0 ) {
       isTimeLineTimeSet = true;
