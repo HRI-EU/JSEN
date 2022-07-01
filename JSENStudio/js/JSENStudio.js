@@ -49,7 +49,9 @@
 let myLayout;
 // Record of past machine states
 let stateRecordHistory = [];
+let stateHistoryIndex = null;
 let threadLineNumberList = {};
+
 // Auto start mode
 let isAutoStart = false;
 // Auto step mode
@@ -125,6 +127,7 @@ function JSENStudio_setWinStat( winStat ) {
  * Public Thread Functions
  ******************************************/
 function stepMachine() {
+  unhighlightHistoryIndex();
   JSENS_jvm.step('*');
   updateAllThreadsInfo( JSENS_jvm );
 }
@@ -144,6 +147,27 @@ function updateAllThreadsInfo( jvm ) {
     stateRecordHistory.push( status );
   }
   _updateAllThreadsInfo( status );
+}
+function setHistory( index ) {
+  if( index != null ) {
+    unhighlightHistoryIndex();
+    if( index >= stateRecordHistory.length ) {
+      index = stateRecordHistory.length-1;
+    }
+    if( index < 0 ) {
+      index = 0;
+    }
+    stateHistoryIndex = index;
+    _updateAllThreadsInfo( stateRecordHistory[index], false );
+  }
+}
+function forwardHistory() {
+  const newIndex = ( stateHistoryIndex == null? 0: stateHistoryIndex+1 );
+  setHistory( newIndex );
+}
+function backwardHistory() {
+  const newIndex = ( stateHistoryIndex == null? stateRecordHistory.length-1: stateHistoryIndex-1 );
+  setHistory( newIndex );
 }
 function highlightThreadExecutedLine( threadInfo ) {
   let toExecuteLineNumber = threadInfo.lineNumber+2; // +1 because we have '[' at beggining of source
@@ -190,12 +214,19 @@ function showRightEditor() {
   $('.ui-layout-resizer-east').click();
 }
 function startRepeatStep() {
-  repeatAutoStep = setTimeout( doRepeatStep, repeatAutoStepPeriod );
-}
-function toggleRepeatStep() {
   if( !repeatAutoStep ) {
     repeatAutoStep = setTimeout( doRepeatStep, repeatAutoStepPeriod );
     stepMachine();
+  }
+}
+function stopRepeatStep()
+{
+  clearTimeout( repeatAutoStep );
+  repeatAutoStep = null;
+}
+function toggleRepeatStep() {
+  if( !repeatAutoStep ) {
+    startRepeatStep()
   } else {
     stopRepeatStep();
   }
@@ -205,11 +236,6 @@ function doRepeatStep() {
     repeatAutoStep = setTimeout( doRepeatStep, repeatAutoStepPeriod );
     stepMachine();
   }
-}
-function stopRepeatStep()
-{
-  clearTimeout( repeatAutoStep );
-  repeatAutoStep = null;
 }
 /******************************************
  * Private GUI Functions
@@ -226,6 +252,7 @@ function _setupJSENStudio( jvm )
 }
 function _setupTimelineButton( jvm ) {
   $('.cleanTimelineButton')[0].onclick = function() {
+    stateHistoryIndex = null;
     $('#statusTimeline tbody').empty();
     //$('#statusTimeline tbody').append( '<th id="timeRow"><td>' );
     $('#statusTimeline tbody').append( '<tr id="timeRow"><th id="timeCell" class="fixTh">' );
@@ -569,15 +596,19 @@ function _updateAllThreadsInfo( status, isOnLine ) {
     // Add timestamp in timeline
     if( status.length > 0 ) {
       isTimeLineTimeSet = true;
-      const stateIndex = stateRecordHistory.length-1;
+      stateHistoryIndex = stateRecordHistory.length-1;
       const timeStr = _padNumber( status[0].timeStamp.getHours(), 2, '0' )+':'+
                       _padNumber( status[0].timeStamp.getMinutes(), 2, '0' )+':'+
                       _padNumber( status[0].timeStamp.getSeconds(), 2, '0' )+'.'+
                       _padNumber( status[0].timeStamp.getMilliseconds(), 4, '0' );
-      $('#timeRow').append( '<td id="timeCell"><p style="margin:0px" id=timeRowValue'+
-                            ' onclick="_updateAllThreadsInfo( stateRecordHistory['+stateIndex+'], false )">'+timeStr );
+      $('#timeRow').append( '<td id="timeCell"><p style="margin:0px" class="timeRowValue" id="timeRowValue'+stateHistoryIndex+'"'+
+                            ' onclick="setHistory( '+stateHistoryIndex+' )">'+timeStr );
     }
   }
+
+  // Highlight current state history
+  $( `#timeRowValue${stateHistoryIndex}` ).css( 'font-weight', 'bold' );
+
   // Stop autoStep if no thread running
   if( ( runningThreadCount == 0 ) && isAutoStop ) {
     stopRepeatStep();
@@ -586,6 +617,12 @@ function _updateAllThreadsInfo( status, isOnLine ) {
 /******************************************
  * Low-Level Private Functions
  ******************************************/
+function unhighlightHistoryIndex() {
+  // Un-highlight previous state history
+  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
+    $( `#timeRowValue${stateHistoryIndex}` ).css( 'font-weight', 'lighter' );
+  }
+}
 function _initThreadLineNumberList( threadId ) {
   threadLineNumberList[threadId] = {
     highlightedToExecuteLine: -1,

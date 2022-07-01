@@ -108,13 +108,46 @@ body {
   z-index: 10;
 }
 
-#timeRowValue {
+.vcrButton {
+  overflow: hidden;
+  height: 40px;
+  width: 40px;
+  display: inline-block;
+}
+.vcrBack {
+  position: relative;
+  left: 0px;
+  height: 100%;
+}
+.vcrStep {
+  position: relative;
+  left: -44px;
+  height: 100%;
+}
+.vcrPlay {
+  position: relative;
+  left: -89px;
+  height: 100%;
+}
+.vcrPause {
+  position: relative;
+  left: -133px;
+  height: 100%;
+}
+.vcrForward {
+  position: relative;
+  left: -179px;
+  height: 100%;
+}
+
+.timeRowValue {
   writing-mode: vertical-lr;
   text-orientation: sideways;
   height: 100px;
 }
 #timeCell {
   width: 17px;
+  font-weight: lighter;
 }
 
 .heatmap {
