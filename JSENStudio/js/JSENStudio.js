@@ -123,6 +123,9 @@ function JSENStudio_getWinStat() {
 function JSENStudio_setWinStat( winStat ) {
   winStatBuffer = winStat;
 }
+function JSENStudio_stopStepByStep() {
+  stopRepeatStep();
+}
 /******************************************
  * Public Thread Functions
  ******************************************/

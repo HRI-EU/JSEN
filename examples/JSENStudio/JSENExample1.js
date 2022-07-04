@@ -98,3 +98,6 @@ jvm.pauseThread( 'test' );
 jvm.pauseThread( 'printNumbers' );
 jvm.pauseThread( 'printUpLetters' );
 jvm.pauseThread( 'printLowLetters' );
+
+// Example of breakpoint
+jvm.setBreakpoint( 'test', 7, JSENStudio_stopStepByStep );

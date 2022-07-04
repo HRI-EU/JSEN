@@ -576,7 +576,7 @@ class JSENVM {
   step( nameOrId ) {
     this._stepWrapper( nameOrId, false );
   }
-  setBreakpoint( nameOrId, condition, action ) {
+  setBreakpoint( nameOrId, conditionOrLineNumber, action ) {
     // Id of the break point (together with nameOrId)
     let breakpointId = -1;
     // Default thread is the full virtual machine
@@ -595,7 +595,7 @@ class JSENVM {
     if( threadId !== undefined ) {
       // Create breakpoint info
       const bpInfo = {
-        condition: condition,
+        condition: conditionOrLineNumber,
         action: action,
       };
       // If there are no breakpoint for the thread id, create the list
@@ -1405,6 +1405,14 @@ class JSENVM {
         this._log( 'pc: '+blockContext.pc, threadContext );
       }
 
+      // Check all breakpoint conditions
+      if( this.breakpointListCounter > 0 ) {
+        const isBreakpointTrue = this._checkAllBreakpoint( threadContext );
+        if( isBreakpointTrue ) {
+          return;
+        }
+      }
+
       // Set selfThreadContext (current thread context)
       this.selfThreadContext = threadContext;
 
@@ -1422,11 +1430,6 @@ class JSENVM {
         this.stopThreadId( threadContext.id );
       }
     }
-
-    // Check all breakpoint conditions
-    if( this.breakpointListCounter > 0 ) {
-      this._checkAllBreakpoint( threadContext );
-    }
   }
   _switchToCallerContext( threadContext ) {
     // If we are not in root context ==> we change block context
@@ -1438,23 +1441,38 @@ class JSENVM {
     return( threadContext.blockContext );
   }
   _checkAllBreakpoint( threadContext ) {
+    let isBreakpointTrue = false;
     // Check first virtual machine breakpoint (thread independent)
     const vmBreakpoint = this.breakpointList[ '*' ];
     if( vmBreakpoint && ( vmBreakpoint.length > 0 ) ) {
-      this._checkBreakpointList( vmBreakpoint, '*', threadContext );
+      const result = this._checkBreakpointList( vmBreakpoint, '*', threadContext );
+      isBreakpointTrue = isBreakpointTrue || result;
     }
     // Check for thread specific breakpoints
     const threadBreakpoint = this.breakpointList[ threadContext.id ];
     if( threadBreakpoint && ( threadBreakpoint.length > 0 ) ) {
-      this._checkBreakpointList( threadBreakpoint, threadContext.id, threadContext );
+      const result = this._checkBreakpointList( threadBreakpoint, threadContext.id, threadContext );
+      isBreakpointTrue = isBreakpointTrue || result;
     }
+    return( isBreakpointTrue );
   }
   _checkBreakpointList( bpList, threadId, threadContext ) {
+    let isBreakpointTrue = false;
     // Get threadId
     for( const bpInfo of bpList ) {
-      const condition = ( bpInfo.condition? bpInfo.condition: true );
-      if( condition() ) {
-        this._logDebugger( threadContext, 'Breakpoint condition \''+condition.toString()+'\' met' );
+      // Check condition type
+      let isConditionTrue = false;
+      switch( typeof( bpInfo.condition ) ) {
+        case 'function': // Case of condition in a function
+          isConditionTrue = bpInfo.condition();
+          break;
+        case 'number':   // Case condition is the line number
+          isConditionTrue = ( bpInfo.condition == threadContext.lineNumber+1 );
+          break;
+      }
+      if( isConditionTrue ) {
+        const strCond = bpInfo.condition.toString();
+        this._logDebugger( threadContext, `Breakpoint condition \'${strCond}\' met` );
         if( bpInfo.action ) {
           bpInfo.action();
         }
@@ -1464,8 +1482,10 @@ class JSENVM {
         const breakpointIndex = bpList.indexOf( bpInfo );
         bpList.splice( breakpointIndex, 1 );
         --this.breakpointListCounter;
+        isBreakpointTrue = true;
       }
     }
+    return( isBreakpointTrue );
   }
   _moveThread( threadId, fromThreadList, toThreadList ) {
     // We add the thread to the new list
@@ -1648,7 +1668,7 @@ class JSENVM {
     return result;
   }
   // TODO: review this function!!!
-  _logDebugger( threadContext, codeStatement, lineNr ) {
+  _logDebugger( threadContext, codeStatement ) {
     if( codeStatement === undefined ) {
       if( threadContext && !threadContext.blockContext.callerContext )
         console.log( 'Debugger: end of current block' );
@@ -1656,8 +1676,8 @@ class JSENVM {
         console.log( 'Debugger: no threads in running status' );
     } else {
       // If we have a parent context, we show the big picture line number
-      var line = ( lineNr === undefined ) ? "###" : lineNr;
-      console.log( 'Debugger ' + threadContext.name + ':' + line + ' : ' + codeStatement );
+      var line = ( threadContext.lineNumber === undefined ) ? "###" : threadContext.lineNumber;
+      console.log( 'Debugger ' + threadContext.name + ':' + (line+1) + ' : ' + codeStatement );
     }
   }
   /* -----------------------------------------------------------------
