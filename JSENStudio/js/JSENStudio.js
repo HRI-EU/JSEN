@@ -111,8 +111,9 @@ function main() {
     setLeftMenuOpen(true);
   };
 
-  // Load JSEN source file and then setup the studio
-  loadScript( jsenSrc, onScriptLoaded, false );
+  // Load all JSEN source file and then setup the studio
+  const srcList = jsenSrc.split( ',' );
+  loadScriptList( srcList, onScriptLoaded, false );
 }
 function JSENStudio_setJVM( jvm ) {
   JSENS_jvm = jvm;
@@ -238,6 +239,18 @@ function doRepeatStep() {
   if( repeatAutoStep ) {
     repeatAutoStep = setTimeout( doRepeatStep, repeatAutoStepPeriod );
     stepMachine();
+  }
+}
+function highlightHistoryIndex() {
+  // Un-highlight previous state history
+  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
+    $( `#timeRowValue${stateHistoryIndex}` ).addClass( 'timeCellSelected' );
+  }
+}
+function unhighlightHistoryIndex() {
+  // Un-highlight previous state history
+  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
+    $( `#timeRowValue${stateHistoryIndex}` ).removeClass( 'timeCellSelected' );
   }
 }
 /******************************************
@@ -625,18 +638,6 @@ function _updateAllThreadsInfo( status, isOnLine ) {
 /******************************************
  * Low-Level Private Functions
  ******************************************/
-function highlightHistoryIndex() {
-  // Un-highlight previous state history
-  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-    $( `#timeRowValue${stateHistoryIndex}` ).addClass( 'timeCellSelected' );
-  }
-}
-function unhighlightHistoryIndex() {
-  // Un-highlight previous state history
-  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-    $( `#timeRowValue${stateHistoryIndex}` ).removeClass( 'timeCellSelected' );
-  }
-}
 function _initThreadLineNumberList( threadId ) {
   threadLineNumberList[threadId] = {
     highlightedToExecuteLine: -1,

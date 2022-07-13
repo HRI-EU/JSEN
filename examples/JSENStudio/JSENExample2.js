@@ -33,20 +33,7 @@
  */
 
 // NOTE: Output is generated in JavaScript console
-
-// Set JSENStudio to the singleton JSEN Virtual Machine
-const jvm = new JSENVM.getSingleton();
-JSENStudio_setJVM( jvm );
-
-// Restore opened source editors positions
-// NOTE: this string can be obtained by calling SENStudio_getWinStat()
-const winStat = `{"codeDiv_5":{"offsetTop":31,"offsetLeft":40},
-                 "codeDiv_6":{"offsetTop":160,"offsetLeft":7},
-                 "codeDiv_1":{"offsetTop":184,"offsetLeft":479},
-                 "codeDiv_2":{"offsetTop":336,"offsetLeft":442},
-                 "codeDiv_3":{"offsetTop":39,"offsetLeft":830},
-                 "codeDiv_4":{"offsetTop":176,"offsetLeft":834}}`;
-JSENStudio_setWinStat( winStat );
+// NOTE: Setup of JSENStudio in this sript is done in JSENExample2Setup.js
 
 // Basic class for all Agents
 class Agent extends JSENThreadClass {

@@ -142,12 +142,13 @@ This repository contains several examples, some are executable, some just illust
   play button in the JSEN Studio VCR control icons. To stop, click the stop button.
   To step (once threads are stopped), double click the play button.
 
-- JSEN/examples/JSENStudio/JSENExample2.js
+- JSEN/examples/JSENStudio/JSENExample2.js & JSENExample2Setup.js
 
-  RUN in browser: file:///..your..repo..path.../JSEN/JSENStudio/index.html?jsenSrc=../examples/JSENStudio/JSENExample2.js
+  RUN in browser: file:///..your..repo..path.../JSEN/JSENStudio/index.html?jsenSrc=../examples/JSENStudio/JSENExample2Setup.js,../examples/JSENStudio/JSENExample2.js
 
   This example shows threads synchronized with each other. It shows usage of 
-  signalInit/Notify/Wait and sleep.
+  signalInit/Notify/Wait and sleep. It also shows how to load more scripts
+  in the JSENStudio (...?jsenSrc=script1,script2,script3,...)
 
 - JSEN/JSENStudio/index.html
 
