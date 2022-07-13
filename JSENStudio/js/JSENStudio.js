@@ -615,7 +615,7 @@ function _updateAllThreadsInfo( status, isOnLine ) {
   }
 
   // Highlight current state history
-  $( `#timeRowValue${stateHistoryIndex}` ).css( 'font-weight', 'bold' );
+  highlightHistoryIndex();
 
   // Stop autoStep if no thread running
   if( ( runningThreadCount == 0 ) && isAutoStop ) {
@@ -625,10 +625,16 @@ function _updateAllThreadsInfo( status, isOnLine ) {
 /******************************************
  * Low-Level Private Functions
  ******************************************/
+function highlightHistoryIndex() {
+  // Un-highlight previous state history
+  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
+    $( `#timeRowValue${stateHistoryIndex}` ).addClass( 'timeCellSelected' );
+  }
+}
 function unhighlightHistoryIndex() {
   // Un-highlight previous state history
   if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-    $( `#timeRowValue${stateHistoryIndex}` ).css( 'font-weight', 'lighter' );
+    $( `#timeRowValue${stateHistoryIndex}` ).removeClass( 'timeCellSelected' );
   }
 }
 function _initThreadLineNumberList( threadId ) {

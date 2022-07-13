@@ -149,6 +149,10 @@ body {
   width: 17px;
   font-weight: lighter;
 }
+.timeCellSelected {
+  color: white;
+  font-weight: normal;
+}
 
 .heatmap {
   padding-top: 70px;
