@@ -144,11 +144,12 @@ This repository contains several examples, some are executable, some just illust
 
 - JSEN/examples/JSENStudio/JSENExample2.js & JSENExample2Setup.js
 
-  RUN in browser: file:///..your..repo..path.../JSEN/JSENStudio/index.html?jsenSrc=../examples/JSENStudio/JSENExample2Setup.js,../examples/JSENStudio/JSENExample2.js
+  RUN in browser: file:///..your..repo..path.../JSEN/JSENStudio/index.html?jsenSrc=../examples/JSENStudio/JSENExample2Setup.js,JSENExample2.js
 
   This example shows threads synchronized with each other. It shows usage of 
   signalInit/Notify/Wait and sleep. It also shows how to load more scripts
-  in the JSENStudio (...?jsenSrc=script1,script2,script3,...)
+  in the JSENStudio (...?jsenSrc=script1,script2,script3,... NOTE: script without
+  path will use a previously specified script path)
 
 - JSEN/JSENStudio/index.html
 
