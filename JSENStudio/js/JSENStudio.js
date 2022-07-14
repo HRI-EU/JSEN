@@ -113,7 +113,13 @@ function main() {
 
   // Load all JSEN source file and then setup the studio
   const srcList = jsenSrc.split( ',' );
-  loadScriptList( srcList, onScriptLoaded, false );
+  if( srcList.length ) {
+    _processScrList( srcList );
+    loadScriptList( srcList, onScriptLoaded, false );
+  } else {
+    onScriptLoaded();
+  }
+
 }
 function JSENStudio_setJVM( jvm ) {
   JSENS_jvm = jvm;
@@ -638,6 +644,33 @@ function _updateAllThreadsInfo( status, isOnLine ) {
 /******************************************
  * Low-Level Private Functions
  ******************************************/
+function _processScrList( srcList ) {
+  if( srcList.length ) {
+    const getPath = function( filePathName ) {
+      let path = '';
+      const idx = filePathName.lastIndexOf( '/' );
+      if( idx != -1 ) {
+        path = filePathName.substring( 0, idx+1 );
+      }
+      return( path );
+    }
+    let prevPath = null;
+    for( let i = 0; i < srcList.length; ++i ) {
+      const src = srcList[i];
+      const path = getPath( src );
+      if( !prevPath && path ) {
+        prevPath = path;
+      } else {
+        if( !path && prevPath ) {
+          srcList[i] = prevPath+src;
+        }
+        if( path ) {
+          prevPath = path;
+        }
+      }
+    }
+  }
+}
 function _initThreadLineNumberList( threadId ) {
   threadLineNumberList[threadId] = {
     highlightedToExecuteLine: -1,
