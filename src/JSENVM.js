@@ -207,6 +207,9 @@ class JSENVM {
   getSelfId() {
     return( this.selfThreadContext.id );
   }
+  getSelfName() {
+    return( this.selfThreadContext.name );
+  }
   getNextThreadId() {
     return this.thread.byId.length;
   }
