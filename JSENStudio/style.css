@@ -323,6 +323,7 @@ body {
 .fixTh {
   position: sticky;
   left: 0;
+  padding-left: 10px;
   background: black;
   text-align: left;
   font-weight: normal;

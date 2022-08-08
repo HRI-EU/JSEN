@@ -480,6 +480,7 @@ function _selectThreadToQueue( newQueue ) {
   }
   if( threadList.length > 0 ) {
     _setThreadToQueue( newQueue, threadList, JSENS_jvm );
+    unhighlightHistoryIndex();
   }
   // Update info (for debug messages)
   updateAllThreadsInfo( JSENS_jvm );
@@ -595,7 +596,7 @@ function _updateAllThreadsInfo( status, isOnLine ) {
       // Update timeline
       if( $('#timeRow_'+threadHTMLId+' td').length == 0 ) {
         html = '<tr id="timeRow_'+threadHTMLId+'" onclick="_addThreadCodeDiv(\''+threadInfo.id+'\')">'+
-              '<th class="fixTh">&nbsp;&nbsp'+threadInfo.name+'</th>';
+              '<th class="fixTh">'+threadInfo.name+'</th>';
         const numbOfTd = $('#timeRow td').length;
         for( let i = 1; i < numbOfTd; ++i ) {
           html += '<td>&nbsp;&nbsp;</td>'
