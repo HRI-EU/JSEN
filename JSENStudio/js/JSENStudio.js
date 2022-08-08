@@ -119,7 +119,6 @@ function main() {
   } else {
     onScriptLoaded();
   }
-
 }
 function JSENStudio_setJVM( jvm ) {
   JSENS_jvm = jvm;
