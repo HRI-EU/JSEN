@@ -838,10 +838,13 @@ function _setupUI()
 
   // OnResize function
   const onResize = ()=> {
+    const browserHeight = window.innerHeight;
     // Resize here any other object
     centerDiv[0].style['height'] = '100%';
     westDiv[0].style['height'] = '100%';
-    southDivTop = southDiv.offset().top;
+    const southDivHeight = parseInt( southDiv[0].style['height'] );
+    southDivTop = browserHeight-southDivHeight;
+    southDiv[0].style['top'] = southDivTop+'px';
   };
   // Toggler customization setting
   const toggleButtonsWest	= '<div class="btnClose-west"></div>'

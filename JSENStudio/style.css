@@ -33,7 +33,8 @@
  */
  
 body { 
-  font: 14px helvetica neue, helvetica, arial, sans-serif; 
+  font: 14px helvetica neue, helvetica, arial, sans-serif;
+  background: gray;
 }
 
 .ui-layout-pane {
