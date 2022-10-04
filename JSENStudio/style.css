@@ -43,6 +43,7 @@ body {
 .ui-layout-west {
   background: rgb(25, 25, 25);
   overflow-y: scroll;
+  height: 100%;
   z-index: 100;
 }
 
@@ -52,6 +53,7 @@ body {
 
 .ui-layout-center {
   background: rgb(43, 43, 43);
+  height: 100%;
   padding: 0;
 }
 

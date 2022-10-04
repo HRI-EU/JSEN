@@ -831,6 +831,18 @@ function _setThreadToQueueSimulated( newQueue, threadList ) {
 // Excecute after DOM is loaded
 function _setupUI()
 {
+  const southDiv = $('.ui-layout-south');
+  const centerDiv = $('.ui-layout-center');
+  const westDiv = $('.ui-layout-west');
+  let southDivTop = 0;
+
+  // OnResize function
+  const onResize = ()=> {
+    // Resize here any other object
+    centerDiv[0].style['height'] = '100%';
+    westDiv[0].style['height'] = '100%';
+    southDivTop = southDiv.offset().top;
+  };
   // Toggler customization setting
   const toggleButtonsWest	= '<div class="btnClose-west"></div>'
                         + '<div class="btnOpen-west"></div>';
@@ -870,10 +882,7 @@ function _setupUI()
     ,	east__togglerLength_open:     70
     ,	east__togglerContent_closed:	toggleButtonsEast
     ,	east__togglerContent_open:		toggleButtonsEast
-    , onresize: function ()
-        {
-          // Resize here any other object
-        }
+    , onresize: onResize
     }
   );
 
@@ -898,6 +907,26 @@ function _setupUI()
 		.find(".btnOpen-east")	.click( {width:eastRegionWidth}, maximizeEast  ).attr("title", "Open").end();
 
 	myLayout.close("east");
+
+  // Allow mouse drag to scroll control center horizontally
+  
+  southDiv[0].style['z-index'] = 200;
+  onResize();
+  
+  southDiv.bind( 'mousedown', function (event) {
+    $(document).bind( 'mousemove', function (event) {
+      // Move south div
+      const divTop = southDiv.offset().top
+      const d = event.pageY-divTop;
+      const newTop = d+divTop;
+      if( newTop >= southDivTop ) {
+        southDiv.css( 'top', newTop+'px' );
+      }
+    });
+  });
+  $(window).bind( 'mouseup', function (e) {
+    $(document).unbind( 'mousemove' );
+});
 }
 
 
