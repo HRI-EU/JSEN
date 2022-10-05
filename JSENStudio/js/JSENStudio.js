@@ -65,6 +65,8 @@ let isAutoStop = true;
 let JSENS_jvm = null;
 // Buffer for WinStat information
 let winStatBuffer = '{}';
+// Flag to update div heights one main() is over
+let isMainOver = false;
 
 // Colors representing each thread status
 const threadStatusColorVector = {
@@ -115,7 +117,7 @@ function main() {
     _restoreAllThreadCodeDivPosition( winStatBuffer );
     setLeftMenuOpen(true);
     // Give a bit of time and set the size of the divs
-    setTimeout( ()=> _onResize( true ), 1*1000 );
+    setTimeout( ()=>{ isMainOver = true; _onResize(); }, 1*1000 );
   };
 
   // Load all JSEN source file and then setup the studio
@@ -935,12 +937,12 @@ function _setupUI()
   });
 }
 // OnResize function
-function _onResize( doForceHeight ) {
+function _onResize() {
   const southDiv = $('.ui-layout-south');
   const centerDiv = $('.ui-layout-center');
   const westDiv = $('.ui-layout-west');
   const browserHeight = window.innerHeight;
-  if( doForceHeight ) {
+  if( isMainOver ) {
     // Resize here any other object
     centerDiv[0].style['height'] = '100%';
     westDiv[0].style['height'] = '100%';
