@@ -111,6 +111,12 @@ body {
   z-index: 10;
 }
 
+.button_slide {
+  margin-top: -30px;
+  background: #555;
+  margin-left: -15px;
+  margin-right: 6px;
+}
 .vcrButton {
   overflow: hidden;
   height: 40px;

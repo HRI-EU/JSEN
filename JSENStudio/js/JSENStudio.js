@@ -54,6 +54,7 @@ let threadLineNumberList = {};
 
 // Auto start mode
 let isAutoStart = false;
+let autoStartTimer = null;
 // Auto step mode
 let repeatAutoStep = null;
 let repeatAutoStepPeriod = 300;
@@ -102,7 +103,12 @@ function main() {
   const onScriptLoaded = function() {
     _setupJSENStudio( JSENS_jvm );
     if( isAutoStart ) {
-      toggleRepeatStep();
+      // Wait 5 seconds and then start
+      autoStartTimer = setTimeout( ()=> {
+        toggleRepeatStep();
+        // Clear autostart timer
+        autoStartTimer = null;
+      }, 5*1000 );
     }
 
     // Restore window position if available
@@ -230,6 +236,12 @@ function startRepeatStep() {
 }
 function stopRepeatStep()
 {
+  // If we stop before the autoStart => clean the autostart timer
+  if( autoStartTimer ) {
+    clearTimeout( autoStartTimer );
+    autoStartTimer = null;
+  }
+  // Clear the repeat timer
   clearTimeout( repeatAutoStep );
   repeatAutoStep = null;
 }
@@ -916,7 +928,8 @@ function _setupUI()
   southDiv[0].style['z-index'] = 200;
   onResize();
   
-  southDiv.bind( 'mousedown', function (event) {
+  const slideDiv = $( '.button_slide' );
+  slideDiv.bind( 'mousedown', function (event) {
     $(document).bind( 'mousemove', function (event) {
       // Move south div
       const divTop = southDiv.offset().top
