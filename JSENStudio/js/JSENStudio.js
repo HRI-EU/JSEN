@@ -113,8 +113,9 @@ function main() {
 
     // Restore window position if available
     _restoreAllThreadCodeDivPosition( winStatBuffer );
-
     setLeftMenuOpen(true);
+    // Give a bit of time and set the size of the divs
+    setTimeout( ()=> _onResize( true ), 1*1000 );
   };
 
   // Load all JSEN source file and then setup the studio
@@ -839,6 +840,7 @@ function _setThreadToQueueSimulated( newQueue, threadList ) {
 // =============================
 // Behavior when Document Ready
 // =============================
+let southDivTop = 0;
 
 // Excecute after DOM is loaded
 function _setupUI()
@@ -846,18 +848,6 @@ function _setupUI()
   const southDiv = $('.ui-layout-south');
   const centerDiv = $('.ui-layout-center');
   const westDiv = $('.ui-layout-west');
-  let southDivTop = 0;
-
-  // OnResize function
-  const onResize = ()=> {
-    const browserHeight = window.innerHeight;
-    // Resize here any other object
-    centerDiv[0].style['height'] = '100%';
-    westDiv[0].style['height'] = '100%';
-    const southDivHeight = parseInt( southDiv[0].style['height'] );
-    southDivTop = browserHeight-southDivHeight;
-    southDiv[0].style['top'] = southDivTop+'px';
-  };
   // Toggler customization setting
   const toggleButtonsWest	= '<div class="btnClose-west"></div>'
                         + '<div class="btnOpen-west"></div>';
@@ -897,7 +887,7 @@ function _setupUI()
     ,	east__togglerLength_open:     70
     ,	east__togglerContent_closed:	toggleButtonsEast
     ,	east__togglerContent_open:		toggleButtonsEast
-    , onresize: onResize
+    , onresize: ()=> _onResize()
     }
   );
 
@@ -926,7 +916,7 @@ function _setupUI()
   // Allow mouse drag to scroll control center horizontally
   
   southDiv[0].style['z-index'] = 200;
-  onResize();
+  _onResize();
   
   const slideDiv = $( '.button_slide' );
   slideDiv.bind( 'mousedown', function (event) {
@@ -942,9 +932,23 @@ function _setupUI()
   });
   $(window).bind( 'mouseup', function (e) {
     $(document).unbind( 'mousemove' );
-});
+  });
 }
-
+// OnResize function
+function _onResize( doForceHeight ) {
+  const southDiv = $('.ui-layout-south');
+  const centerDiv = $('.ui-layout-center');
+  const westDiv = $('.ui-layout-west');
+  const browserHeight = window.innerHeight;
+  if( doForceHeight ) {
+    // Resize here any other object
+    centerDiv[0].style['height'] = '100%';
+    westDiv[0].style['height'] = '100%';
+  }
+  const southDivHeight = parseInt( southDiv[0].style['height'] );
+  southDivTop = browserHeight-southDivHeight;
+  southDiv[0].style['top'] = southDivTop+'px';
+};
 
 // ===============================
 // Behavior function declarations
