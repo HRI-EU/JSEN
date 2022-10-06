@@ -62,6 +62,7 @@ class Bob extends Agent {
 
     this.threadList['main_isStepByStep'] = true;
     this.threadList['main'] = [
+      ()=> _testGPlot(),
       ()=> console.log( 'Bob start' ),
       ()=> this.sendMessage( 'load setup1' ),
       JSEN.signalNotify( 'start1' ),

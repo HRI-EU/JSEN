@@ -54,6 +54,7 @@ let threadLineNumberList = {};
 
 // Auto start mode
 let isAutoStart = false;
+const autoStartDelay =  3; // seconds
 let autoStartTimer = null;
 // Auto step mode
 let repeatAutoStep = null;
@@ -67,6 +68,8 @@ let JSENS_jvm = null;
 let winStatBuffer = '{}';
 // Flag to update div heights one main() is over
 let isMainOver = false;
+// Plot library
+const gp = new GPlot( document.body );
 
 // Colors representing each thread status
 const threadStatusColorVector = {
@@ -110,7 +113,7 @@ function main() {
         toggleRepeatStep();
         // Clear autostart timer
         autoStartTimer = null;
-      }, 5*1000 );
+      }, autoStartDelay*1000 );
     }
 
     // Restore window position if available
@@ -318,44 +321,7 @@ function _setupSpeedSlider( jvm ) {
   }
 }
 function _setupDragElement( htmlElement ) {
-  let positionX1 = 0;
-  let positionY1 = 0;
-  let positionX2 = 0;
-  let positionY2 = 0;
-  htmlElement.onmousedown = __dragMouseDown;
-
-  function __dragMouseDown( event ) {
-    event = event || window.event;
-    event.preventDefault();
-
-    // get the mouse cursor position at startup:
-    positionX2 = event.clientX;
-    positionY2 = event.clientY;
-
-    document.onmouseup = __closeDrag;
-    // call a function whenever the cursor moves:
-    document.onmousemove = __mouseDrag;
-  }
-
-  function __mouseDrag( event ) {
-    event = event || window.event;
-    event.preventDefault();
-    // calculate the new cursor position:
-    positionX1 = positionX2 - event.clientX;
-    positionY1 = positionY2 - event.clientY;
-    positionX2 = event.clientX;
-    positionY2 = event.clientY;
-    // set the element's new position:
-    htmlElement.style.top = (htmlElement.offsetTop - positionY1) + "px";
-    htmlElement.style.left = (htmlElement.offsetLeft - positionX1) + "px";
-  }
-
-  function __closeDrag() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-    _saveAllThreadCodeDivPosition();
-  }
+  setDragElement( htmlElement, _saveAllThreadCodeDivPosition );
 }
 function _setupCollapsibleThreadsMenu()
 {

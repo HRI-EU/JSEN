@@ -116,6 +116,7 @@ body {
   background: #555;
   margin-left: -15px;
   margin-right: 6px;
+  cursor: grab;
 }
 .vcrButton {
   overflow: hidden;
