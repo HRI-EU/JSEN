@@ -267,7 +267,6 @@ function _testGPlot( x, y ) {
   function onLoaded() {
     const data = [
       ['Year', 'Sales', 'Expenses'],
-      ['2004',  1000,      400],
     ];
     gp.plot( 'Test', data );
 
@@ -278,6 +277,7 @@ function _testGPlot( x, y ) {
     gp.plotPosition( x, y );
   
     const moreData = [
+      ['2004',  1000,     400],
       ['2005',  100,      200],
       ['2006',  300,      100],
       ['2007',  150,      240],

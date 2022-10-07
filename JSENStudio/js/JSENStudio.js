@@ -70,8 +70,9 @@ let winStatBuffer = '{}';
 let isMainOver = false;
 // Plot library
 const gp = new GPlot( document.body );
-// Breakpoint condition list
+// Breakpoint on line and condition list
 let breakpointConditionList = [];
+let breakpointLineList = {};
 
 // Colors representing each thread status
 const threadStatusColorVector = {
@@ -290,18 +291,51 @@ function _getThredIdFromDivId( threadHTMLIdDiv ) {
 function _getDivIdFromThreadId( threadId ) {
   return( 'codeDiv_'+ threadId );
 }
-function _togleBreakpoint( el, threadId, lineNumber ) {
-  const className = el.className;
+function _toogleLineBreakpoint( el, threadId, lineNumber ) {
+  const key = `${threadId}_${lineNumber}`;
+  // Get breakpoint info if exisist
+  let bpInfo = breakpointLineList[key];
+  // Check if breakpoint do not exists
+  const isNewKey = ( bpInfo == null );
+  // If not exist create new info
+  if( isNewKey ) {
+    bpInfo = { el, checked: true };
+    breakpointLineList[key] = bpInfo;
+  }
+  // Get class name 
+  const className = bpInfo.el.className;
+  // Toogle class name
   if( className.endsWith( 'Off' ) ) {
-    el.className = 'breakpointOn';
+    bpInfo.el.className = 'lineBreakpointOn';
     JSENS_jvm.setBreakpoint( threadId, lineNumber, stopRepeatStep );
+    bpInfo.checked = true;
   } else {
-    el.className = 'breakpointOff';
+    bpInfo.el.className = 'lineBreakpointOff';
     JSENS_jvm.clearBreakpoint( threadId, lineNumber, stopRepeatStep );
+    bpInfo.checked = false;
+  }
+  if( isNewKey ) {
+    const threadName = JSENS_jvm.getThreadName( threadId );
+    // Make breakpoint visible
+    html = '<tr onclick="_addThreadCodeDiv(\''+threadId+'\')">'+
+              '<td><input class="conditionBreakpoint'+key+'"'+
+                         'type="checkbox" '+
+                         'onclick="_toogleLineBreakpoint(this,'+threadId+','+lineNumber+')" '+
+                         'name="Line_'+key+'" checked>'+
+                threadName+'</input></td>'+
+              '<td>('+threadId+')</td>'+
+              '<td>'+lineNumber+'</td>'+
+            '</tr>';
+    $('#breakCondtionTable tbody').append( html );
+  } else {
+    const el = $('.conditionBreakpoint'+key)[0];
+    if( el ) {
+      el.checked = bpInfo.checked;
+    }
   }
 }
-function _conditionBreakpoint( el, threadId ) {
-  const condition = prompt( 'Condition' );
+function _addConditionBreakpoint( el, threadId ) {
+  const condition = prompt( 'Add condition breakpoint' );
   if( condition ) {
     // Create breakpoint
     const key = threadId;
@@ -314,8 +348,9 @@ function _conditionBreakpoint( el, threadId ) {
     const threadName = JSENS_jvm.getThreadName( threadId );
     // Make breakpoint visible
     html = '<tr onclick="_addThreadCodeDiv(\''+threadId+'\')">'+
-              '<td><input type="checkbox" '+
-                         'onclick="_updateConditionBreakpoint(this,'+bpIdx+')" '+
+              '<td><input class="conditionBreakpoint"'+
+                         'type="checkbox" '+
+                         'onclick="_toogleConditionBreakpoint(this,'+bpIdx+')" '+
                          'name="Cond_'+bpIdx+'" checked>'+
                 threadName+'</input></td>'+
               '<td>('+threadId+')</td>'+
@@ -324,7 +359,7 @@ function _conditionBreakpoint( el, threadId ) {
     $('#breakCondtionTable tbody').append( html );
   }
 }
-function _updateConditionBreakpoint( el, bpIdx ) {
+function _toogleConditionBreakpoint( el, bpIdx ) {
   bpInfo = breakpointConditionList[bpIdx];
   if( bpInfo ) {
     if( el.checked ) {
@@ -336,7 +371,7 @@ function _updateConditionBreakpoint( el, bpIdx ) {
     }
   }
 }
-function _removeAllCondBreakpoints() {
+function _removeAllBreakpoints() {
   let elList = $('#breakCondtionTable input');
   // Remove all breackpoints still enabled
   for( let i = 0; i < elList.length; ++i ) {
@@ -350,8 +385,9 @@ function _removeAllCondBreakpoints() {
   for( let i = 2; i < elList.length; ++ i ) {
     elList[i].remove();
   }
-  // Clear breakpoint indo
+  // Clear breakpoint list
   breakpointConditionList = [];
+  breakpointLineList = {};
 }
 function _setSourceWindowMaxHeight( div ) {
   const dn = $('.ui-layout-north')[0];
@@ -819,13 +855,13 @@ function _getHTMLFormattedCodeLine( threadHTMLIdDiv, lineNumber, stringLine ) {
   const lineId = 'codeRow_'+threadHTMLIdDiv+'_'+lineNumber;
   const threadId = _getThredIdFromDivId( threadHTMLIdDiv );
   return '<tr id="'+lineId+'">'+
-         '<td class="breakpointOff" '+
-            'onclick="_togleBreakpoint(this,'+threadId+','+lineNumber+')"'+
+         '<td class="lineBreakpointOff" '+
+            'ondblclick="_toogleLineBreakpoint(this,'+threadId+','+lineNumber+')"'+
             '>&nbsp'+
          '<td '+
             '>'+_padNumber( lineNumber, 2 )+': '+
          '<code '+
-            'ondblclick="_conditionBreakpoint(this,'+threadId+')"'+
+            'ondblclick="_addConditionBreakpoint(this,'+threadId+')"'+
             '>'+stringLine+'</code>';
 }
 function _setSlowPeriod( period, jvm ) {

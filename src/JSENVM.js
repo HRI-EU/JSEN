@@ -630,6 +630,12 @@ class JSENVM {
       --this.breakpointListCounter;
     }
   }
+  clearAllConditionalBreakpoint() {
+    this._clearAllBreakpointOfType( 'function' );
+  }
+  clearAllLineBreakpoint() {
+    this._clearAllBreakpointOfType( 'number' );
+  }
   get( variableName ) {
     // The null represent the global context (JSENVM instance)
     return this._get( null, variableName );
@@ -1496,6 +1502,23 @@ class JSENVM {
       this._logWarning( 'No thread found: '+nameOrId );
     }
     return( info );
+  }
+  _clearAllBreakpointOfType( type ) {
+    let deleteInfo = [];
+    for( const threadId in this.breakpointList ) {
+      // Get breakpoint index if existing
+      for( let idx = 0; idx < this.breakpointList[ threadId ].length; ++idx ) {
+        const bpInfo = this.breakpointList[ threadId ][idx];
+        if( typeof( bpInfo.condition ) == type ) {
+          deleteInfo.push( { threadId, idx } );
+        }
+      }
+    }
+    for( let i = deleteInfo.length-1; i >= 0; --i ) {
+      const info = deleteInfo[i];
+      this.breakpointList[info.threadId].splice( info.idx, 1 );
+      --this.breakpointListCounter;
+    }
   }
   _checkAllBreakpoint( threadContext ) {
     let isBreakpointTrue = false;

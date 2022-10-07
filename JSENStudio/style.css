@@ -89,10 +89,10 @@ body {
   cursor: all-scroll;
   top: 0;
 }
-.breakpointOn {
+.lineBreakpointOn {
   background-color: indianred;
 }
-.breakpointOff {
+.lineBreakpointOff {
   background-color: rgb(70, 70, 70);
 }
 
