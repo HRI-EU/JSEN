@@ -350,7 +350,9 @@ function _setupCollapsibleThreadsMenu()
 function _setCodeLineColor( threadId, lineNumber, color ) {
   const threadHTMLIdDiv = 'codeDiv_'+threadId;
   const lineHTMLId = 'codeRow_'+threadHTMLIdDiv+'_'+lineNumber;
-  $( '#'+lineHTMLId ).css( 'background-color', color );
+  const line = $( '#'+lineHTMLId );
+  line.css( 'background-color', color );
+  line[0].scrollIntoView( false );
 }
 function _setThreadToQueue( newQueue, threadList, jvm ) {
   if( !jvm )

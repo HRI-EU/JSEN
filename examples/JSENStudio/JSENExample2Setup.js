@@ -45,6 +45,6 @@ const winStat = `{"codeDiv_5":{"offsetTop":31,"offsetLeft":40},
                   "codeDiv_2":{"offsetTop":336,"offsetLeft":442},
                   "codeDiv_3":{"offsetTop":39,"offsetLeft":830},
                   "codeDiv_4":{"offsetTop":176,"offsetLeft":834},
-                  "codeDiv_6":{"offsetTop":-1,"offsetLeft":157}}`;
+                  "codeDiv_6":{"offsetTop":190,"offsetLeft":26}}`;
 JSENStudio_setWinStat( winStat );
 
