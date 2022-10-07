@@ -69,6 +69,7 @@ body {
   font-family: monospace;
   overflow-y: scroll;
   box-shadow: 4px 5px 14px black;
+  padding-bottom: 5px;
 }
 
 .treadCodeTable {

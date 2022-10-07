@@ -348,11 +348,20 @@ function _setupCollapsibleThreadsMenu()
   }
 }
 function _setCodeLineColor( threadId, lineNumber, color ) {
-  const threadHTMLIdDiv = 'codeDiv_'+threadId;
-  const lineHTMLId = 'codeRow_'+threadHTMLIdDiv+'_'+lineNumber;
-  const line = $( '#'+lineHTMLId );
+  const getLine = ( id, n )=> {
+    const threadHTMLIdDiv = 'codeDiv_'+id;
+    const lineHTMLId = 'codeRow_'+threadHTMLIdDiv+'_'+n;
+    const line = $( '#'+lineHTMLId );
+    return( line );
+  };
+  const line = getLine( threadId, lineNumber );
   line.css( 'background-color', color );
-  line[0].scrollIntoView( false );
+  let lineToScroll = line;
+  const nextLine = getLine( threadId, lineNumber+1 );
+  if( nextLine ) {
+    lineToScroll = nextLine[0];
+  }
+  lineToScroll.scrollIntoView( false );
 }
 function _setThreadToQueue( newQueue, threadList, jvm ) {
   if( !jvm )
