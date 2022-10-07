@@ -281,6 +281,23 @@ function unhighlightHistoryIndex() {
 /******************************************
  * Private GUI Functions
  ******************************************/
+function _getThredIdFromDivId( threadHTMLIdDiv ) {
+  const idx = 'codeDiv_'.length;
+  return( threadHTMLIdDiv.substring( idx ) );
+}
+function _getDivIdFromThreadId( threadId ) {
+  return( 'codeDiv_'+ threadId );
+}
+function _togleBreakpoint( el, threadId, lineNumber ) {
+  const className = el.className;
+  if( className.endsWith( 'Off' ) ) {
+    el.className = 'breakpointOn';
+    JSENS_jvm.setBreakpoint( threadId, lineNumber, stopRepeatStep );
+  } else {
+    el.className = 'breakpointOff';
+    JSENS_jvm.clearBreakpoint( threadId, lineNumber, stopRepeatStep );
+  }
+}
 function _setSourceWindowMaxHeight( div ) {
   const dn = $('.ui-layout-north')[0];
   const dc = document.body;
@@ -352,7 +369,7 @@ function _setupCollapsibleThreadsMenu()
 }
 function _setCodeLineColor( threadId, lineNumber, color ) {
   const getLine = ( id, n )=> {
-    const threadHTMLIdDiv = 'codeDiv_'+id;
+    const threadHTMLIdDiv = _getDivIdFromThreadId( id );
     const lineHTMLId = 'codeRow_'+threadHTMLIdDiv+'_'+n;
     const line = $( '#'+lineHTMLId );
     return( line );
@@ -377,7 +394,7 @@ function _addThreadCodeDiv( threadId ) {
   // Only StepByStep threads can be visualized
   if( isThreadWithDebugInfo( threadIdNr ) ) {
     const status = _getThreadStatus( threadIdNr );
-    const threadHTMLIdDiv = 'codeDiv_'+threadIdNr;
+    const threadHTMLIdDiv = _getDivIdFromThreadId( threadIdNr );
     if( $('#'+threadHTMLIdDiv).length == 0 ) {
       const threadHTMLIdHead = 'codeHead_'+threadIdNr;
       // The next function uses the threadLineNumberList for calculating the line number;
@@ -386,7 +403,7 @@ function _addThreadCodeDiv( threadId ) {
       const threadCodeDivHTML = '<div class="threadCode" id="'+threadHTMLIdDiv+'" draggable="true">'+
                                   '<table class="treadCodeTable">'+
                                     '<tr class="threadCodeRowHeader">'+
-                                      '<th class="threadCodeHeader" id="'+threadHTMLIdHead+'"'+
+                                      '<th colspan="2" class="threadCodeHeader" id="'+threadHTMLIdHead+'"'+
                                         'ondblclick="_removeThreadCodeDiv(\''+threadHTMLIdDiv+'\')"'+
                                         'style="background-color: '+threadStatusColorVector[status]+';">'+
                                         threadInfo.name+
@@ -446,7 +463,7 @@ function _restoreAllThreadCodeDivPosition( strData ) {
     let data = JSON.parse( strData );
     for( const threadDivId in data ) {
       //TODO: make a serious way to get the thread name: maybe thanks to the prev func?
-      const threadId = threadDivId.substring( 'codeDiv_'.length );
+      const threadId = _getThredIdFromDivId( threadDivId );
       _addThreadCodeDiv( threadId );
       _restoreThreadCodeDivPosition( threadDivId, strData );
     }
@@ -721,7 +738,7 @@ function _getInnerCode( threadCode ) {
   return innerCode;
 }
 function _getFormattedThreadCode( threadId ) {
-  const threadHTMLIdDiv = 'codeDiv_'+ threadId;
+  const threadHTMLIdDiv = _getDivIdFromThreadId( threadId );
   const threadSourceCode = _getThreadSourceCode( threadId, JSENS_jvm );
 
   let source = '';
@@ -744,8 +761,12 @@ function _getThreadSourceCode( threadId, jvm ) {
   }
 }
 function _getHTMLFormattedCodeLine( threadHTMLIdDiv, lineNumber, stringLine ) {
-  return '<tr id="codeRow_'+threadHTMLIdDiv+'_'+lineNumber+'"><td>'+
-         _padNumber( lineNumber, 2 )+': '+
+  const lineId = 'codeRow_'+threadHTMLIdDiv+'_'+lineNumber;
+  const threadId = _getThredIdFromDivId( threadHTMLIdDiv );
+  return '<tr id="'+lineId+'">'+
+         '<td class="breakpointOff" '+
+             'onclick="_togleBreakpoint(this,'+threadId+','+lineNumber+')">&nbsp'+
+         '<td>'+_padNumber( lineNumber, 2 )+': '+
          '<code>'+stringLine+'</code>';
 }
 function _setSlowPeriod( period, jvm ) {

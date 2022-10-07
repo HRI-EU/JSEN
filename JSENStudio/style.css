@@ -89,6 +89,12 @@ body {
   cursor: all-scroll;
   top: 0;
 }
+.breakpointOn {
+  background-color: indianred;
+}
+.breakpointOff {
+  background-color: rgb(70, 70, 70);
+}
 
 .ui-layout-center > .wrapper {
   padding: 10px;

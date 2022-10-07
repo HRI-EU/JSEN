@@ -186,6 +186,8 @@ class JSENVM {
     this.breakpointList = {};
     // Faster way to know how many breakpoint we have
     this.breakpointListCounter = 0;
+    // Breakpoint id
+    this.breakpointId = 0;
 
     // List of user variables managed via set()/get() or JSEN.set()/JSEN.get()
     this.globalVariableList = {};
@@ -582,38 +584,36 @@ class JSENVM {
   setBreakpoint( nameOrId, conditionOrLineNumber, action ) {
     // Id of the break point (together with nameOrId)
     let breakpointId = -1;
-    // Default thread is the full virtual machine
-    let threadId = '*';
-    // If a specific thread id is provided
-    if( nameOrId != '*' ) {
-      // Get thread id
-      const threadData = this.getThreadNameId( nameOrId );
-      if( threadData.id !== -1 ) {
-        threadId = threadData.id;
-      } else {
-        threadId = undefined;
-      }
-    }
-    // If thread id is defined
-    if( threadId !== undefined ) {
+    // Check if breakpoint already exists
+    let info = this._getBreakpointIndex( nameOrId, conditionOrLineNumber );
+    if( info.idx >= 0 ) {
+      const bpInfo = this.breakpointList[ info.threadId ][info.idx];
+      // Update action
+      bpInfo.action = action;
+      breakpointId = bpInfo.id;
+    } else {
+      // Get a new id
+      breakpointId = this.breakpointId++;
       // Create breakpoint info
       const bpInfo = {
         condition: conditionOrLineNumber,
         action: action,
+        id: breakpointId,
       };
-      // If there are no breakpoint for the thread id, create the list
-      if( this.breakpointList[ threadId ] === undefined ) {
-        this.breakpointList[ threadId ] = [];
-      }
       // Add break point to the list
-      breakpointId = this.breakpointList[ threadId ].length;
-      this.breakpointList[ threadId ].push( bpInfo );
+      this.breakpointList[ info.threadId ].push( bpInfo );
       ++this.breakpointListCounter;
-    } else {
-      this._logWarning( 'No thread found: '+nameOrId );
     }
     // Return breakpoint id (unique per threadId)
-    return breakpointId;
+    return( breakpointId );
+  }
+  clearBreakpoint( nameOrId, conditionOrLineNumber ) {
+    // Check if breakpoint already exists
+    let info = this._getBreakpointIndex( nameOrId, conditionOrLineNumber );
+    if( info.idx >= 0 ) {
+      this.breakpointList[ info.threadId ].splice( info.idx, 1 );
+      --this.breakpointListCounter;
+    }
   }
   get( variableName ) {
     // The null represent the global context (JSENVM instance)
@@ -1442,6 +1442,42 @@ class JSENVM {
     }
     // Return context
     return( threadContext.blockContext );
+  }
+  _getBreakpointIndex( nameOrId, conditionOrLineNumber ) {
+    // Breakpoint info index
+    let info = { threadId: null, idx: -1 };
+    // Default thread is the full virtual machine
+    let threadId = '*';
+    // If a specific thread id is provided
+    if( nameOrId != '*' ) {
+      // Get thread id
+      const threadData = this.getThreadNameId( nameOrId );
+      if( threadData.id !== -1 ) {
+        threadId = threadData.id;
+      } else {
+        threadId = undefined;
+      }
+    }
+    // If thread id is defined
+    if( threadId !== undefined ) {
+      info.threadId = threadId;
+      // If there are no breakpoint for the thread id, create the list
+      if( this.breakpointList[ threadId ] === undefined ) {
+        this.breakpointList[ threadId ] = [];
+      }
+
+      // Get breakpoint index if existing
+      for( let idx = 0; idx < this.breakpointList[ threadId ].length; ++idx ) {
+        const bpInfo = this.breakpointList[ threadId ][idx];
+        if( bpInfo.condition == conditionOrLineNumber ) {
+          info = { threadId, idx };
+          break;
+        }
+      }
+    } else {
+      this._logWarning( 'No thread found: '+nameOrId );
+    }
+    return( info );
   }
   _checkAllBreakpoint( threadContext ) {
     let isBreakpointTrue = false;
