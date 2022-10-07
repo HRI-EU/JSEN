@@ -87,17 +87,7 @@ body {
   position: sticky;
   cursor: all-scroll;
   top: 0;
-  threadCodeHeader
 }
-/* .threadCodeHeader {
-  color: black;
-  padding: 10px;
-  cursor: move;
-  text-align: center;
-  z-index: 10;
-  background-color: #2196F3;
-  position: fixed;
-} */
 
 .ui-layout-center > .wrapper {
   padding: 10px;
