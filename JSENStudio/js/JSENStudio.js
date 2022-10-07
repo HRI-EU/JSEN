@@ -369,17 +369,6 @@ function _addThreadCodeDiv( threadId ) {
       // The next function uses the threadLineNumberList for calculating the line number;
       const threadCode = _getFormattedThreadCode( threadIdNr );
       const threadInfo = _getThreadInfoRecord( threadIdNr );
-
-      // const threadCodeDivHTML = '<div class="threadCode" id="'+threadHTMLIdDiv+'" draggable="true">'+
-      //                           '<div class="threadCodeHeader" id="'+threadHTMLIdHead+'" '+
-      //                             'style="background-color: '+threadStatusColorVector[status]+'" '+
-      //                             'ondblclick="_removeThreadCodeDiv(\''+threadHTMLIdDiv+'\')"'+
-      //                             '>'+threadInfo.name+'</div>'+
-      //                           //'<table class="treadCodeTable" onclick="_showCodeInEditor(\''+threadIdNr+'\')">'+
-      //                           '<table class="treadCodeTable">'+
-      //                           threadCode+
-      //                           '</table>'+
-      //                           '</div>';
       const threadCodeDivHTML = '<div class="threadCode" id="'+threadHTMLIdDiv+'" draggable="true">'+
                                   '<table class="treadCodeTable">'+
                                     '<tr class="threadCodeRowHeader">'+
