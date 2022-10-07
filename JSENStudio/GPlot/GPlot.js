@@ -263,14 +263,19 @@ class GPlot {
   }
 }
 
-function _testGPlot() {
+function _testGPlot( x, y ) {
   function onLoaded() {
     const data = [
       ['Year', 'Sales', 'Expenses'],
       ['2004',  1000,      400],
     ];
     gp.plot( 'Test', data );
-    gp.plotPosition( 900, 500 );
+
+    if( !x && !y ) {
+      x = 400;
+      y = 100;
+    }
+    gp.plotPosition( x, y );
   
     const moreData = [
       ['2005',  100,      200],
