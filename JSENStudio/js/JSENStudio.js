@@ -282,7 +282,7 @@ function unhighlightHistoryIndex() {
 function _setSourceWindowMaxHeight( div ) {
   const dc = $('.ui-layout-center')[0];
   const ds = $('.ui-layout-south')[0];
-  const maxHeight = dc.clientHeight - ds.clientHeight;
+  const maxHeight = Math.max( 300, dc.clientHeight - ds.clientHeight );
   if( div.clientHeight > maxHeight ) {
     div.style['height'] = `${maxHeight-50}px`;
   }
