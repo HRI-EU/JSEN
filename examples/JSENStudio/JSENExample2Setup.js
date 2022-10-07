@@ -40,11 +40,11 @@ JSENStudio_setJVM( jvm );
 
 // Restore opened source editors positions
 // NOTE: this string can be obtained by calling SENStudio_getWinStat()
-const winStat = `{"codeDiv_5":{"offsetTop":31,"offsetLeft":40},
+const winStat = `{"codeDiv_5":{"offsetTop":21,"offsetLeft":469},
                   "codeDiv_1":{"offsetTop":184,"offsetLeft":479},
                   "codeDiv_2":{"offsetTop":336,"offsetLeft":442},
                   "codeDiv_3":{"offsetTop":39,"offsetLeft":830},
                   "codeDiv_4":{"offsetTop":176,"offsetLeft":834},
-                  "codeDiv_6":{"offsetTop":190,"offsetLeft":26}}`;
+                  "codeDiv_6":{"offsetTop":12,"offsetLeft":21}}`;
 JSENStudio_setWinStat( winStat );
 

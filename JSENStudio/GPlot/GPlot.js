@@ -270,7 +270,7 @@ function _testGPlot() {
       ['2004',  1000,      400],
     ];
     gp.plot( 'Test', data );
-    gp.plotPosition( 400, 600 );
+    gp.plotPosition( 900, 500 );
   
     const moreData = [
       ['2005',  100,      200],
