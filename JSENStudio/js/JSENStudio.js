@@ -107,6 +107,10 @@ function main() {
 
   const onScriptLoaded = function() {
     _setupJSENStudio( JSENS_jvm );
+
+    // Restore window position if available
+    _restoreAllThreadCodeDivPosition( winStatBuffer );
+
     if( isAutoStart ) {
       // Wait 5 seconds and then start
       autoStartTimer = setTimeout( ()=> {
@@ -116,8 +120,6 @@ function main() {
       }, autoStartDelay*1000 );
     }
 
-    // Restore window position if available
-    _restoreAllThreadCodeDivPosition( winStatBuffer );
     setLeftMenuOpen(true);
     // Give a bit of time and set the size of the divs
     setTimeout( ()=>{ isMainOver = true; _onResize(); }, 1*1000 );
@@ -280,9 +282,10 @@ function unhighlightHistoryIndex() {
  * Private GUI Functions
  ******************************************/
 function _setSourceWindowMaxHeight( div ) {
-  const dc = $('.ui-layout-center')[0];
+  const dn = $('.ui-layout-north')[0];
+  const dc = document.body;
   const ds = $('.ui-layout-south')[0];
-  const maxHeight = Math.max( 300, dc.clientHeight - ds.clientHeight );
+  const maxHeight = Math.max( 300, dc.clientHeight - ds.clientHeight - dn.clientHeight );
   if( div.clientHeight > maxHeight ) {
     div.style['height'] = `${maxHeight-50}px`;
   }
