@@ -615,6 +615,21 @@ class JSENVM {
       --this.breakpointListCounter;
     }
   }
+  clearBreakpointById( threadId, breakpointId ) {
+    let bpIdx = -1;
+    // Find breakpoint index if existing
+    for( let idx = 0; idx < this.breakpointList[ threadId ].length; ++idx ) {
+      const bpInfo = this.breakpointList[ threadId ][idx];
+      if( bpInfo.id == breakpointId ) {
+        bpIdx = idx; 
+        break;
+      }
+    }
+    if( bpIdx >= 0 ) {
+      this.breakpointList[ threadId ].splice( bpIdx, 1 );
+      --this.breakpointListCounter;
+    }
+  }
   get( variableName ) {
     // The null represent the global context (JSENVM instance)
     return this._get( null, variableName );
@@ -653,6 +668,9 @@ class JSENVM {
   /* -----------------------------------------------------------------
    * JSENVM Public Low-Level API functions
    *-----------------------------------------------------------------*/
+  getThreadName( id ) {
+    return( this.getThreadNameId( id ).name );
+  }
   getThreadNameId( nameOrId ) {
     // Intitialize result
     let threadData = { id: -1, name: '' };
@@ -1510,14 +1528,12 @@ class JSENVM {
           break;
       }
       if( isConditionTrue ) {
-        const strCond = bpInfo.condition.toString();
-        this._logDebugger( threadContext, `Breakpoint condition \'${strCond}\' met` );
+        this._logDebugger( threadContext, `Breakpoint condition met` );
         if( bpInfo.action ) {
           bpInfo.action();
         }
-        this.pauseThread( threadId );
-        // Once the breakpoint condition is met and the execution is paused,
-        // and we remove the breakpoint
+        // Once a breakpoint condition is met and its action is executed,
+        // them we remove the breakpoint to avoit it keeps conditioning the execution
         const breakpointIndex = bpList.indexOf( bpInfo );
         bpList.splice( breakpointIndex, 1 );
         --this.breakpointListCounter;

@@ -70,6 +70,8 @@ let winStatBuffer = '{}';
 let isMainOver = false;
 // Plot library
 const gp = new GPlot( document.body );
+// Breakpoint condition list
+let breakpointConditionList = [];
 
 // Colors representing each thread status
 const threadStatusColorVector = {
@@ -297,6 +299,59 @@ function _togleBreakpoint( el, threadId, lineNumber ) {
     el.className = 'breakpointOff';
     JSENS_jvm.clearBreakpoint( threadId, lineNumber, stopRepeatStep );
   }
+}
+function _conditionBreakpoint( el, threadId ) {
+  const condition = prompt( 'Condition' );
+  if( condition ) {
+    // Create breakpoint
+    const key = threadId;
+    const condFn = ()=> eval( condition );
+    const bId = JSENS_jvm.setBreakpoint( threadId, condFn, stopRepeatStep );
+
+    // Store breakpoint
+    const bpIdx = breakpointConditionList.length;
+    breakpointConditionList.push( { threadId, condition, breakpointId: bId } );
+    const threadName = JSENS_jvm.getThreadName( threadId );
+    // Make breakpoint visible
+    html = '<tr onclick="_addThreadCodeDiv(\''+threadId+'\')">'+
+              '<td><input type="checkbox" '+
+                         'onclick="_updateConditionBreakpoint(this,'+bpIdx+')" '+
+                         'name="Cond_'+bpIdx+'" checked>'+
+                threadName+'</input></td>'+
+              '<td>('+threadId+')</td>'+
+              '<td>'+condition+'</td>'+
+            '</tr>';
+    $('#breakCondtionTable tbody').append( html );
+  }
+}
+function _updateConditionBreakpoint( el, bpIdx ) {
+  bpInfo = breakpointConditionList[bpIdx];
+  if( bpInfo ) {
+    if( el.checked ) {
+      const condFn = ()=> eval( bpImfo.condition );
+      const bId = JSENS_jvm.setBreakpoint( bpInfo.threadId, condFn, stopRepeatStep );
+      bpIdx.breakpointId = bId;
+    } else {
+      JSENS_jvm.clearBreakpointById( bpInfo.threadId, bpInfo.breakpointId );
+    }
+  }
+}
+function _removeAllCondBreakpoints() {
+  let elList = $('#breakCondtionTable input');
+  // Remove all breackpoints still enabled
+  for( let i = 0; i < elList.length; ++i ) {
+    const el = elList[i];
+    if( el.checked ) {
+      el.click(); // Trigger click to unckeck and remove condition
+    }
+  }
+  // Remove all breakpoint from UI
+  elList = $('#breakCondtionTable tr');
+  for( let i = 2; i < elList.length; ++ i ) {
+    elList[i].remove();
+  }
+  // Clear breakpoint indo
+  breakpointConditionList = [];
 }
 function _setSourceWindowMaxHeight( div ) {
   const dn = $('.ui-layout-north')[0];
@@ -765,9 +820,13 @@ function _getHTMLFormattedCodeLine( threadHTMLIdDiv, lineNumber, stringLine ) {
   const threadId = _getThredIdFromDivId( threadHTMLIdDiv );
   return '<tr id="'+lineId+'">'+
          '<td class="breakpointOff" '+
-             'onclick="_togleBreakpoint(this,'+threadId+','+lineNumber+')">&nbsp'+
-         '<td>'+_padNumber( lineNumber, 2 )+': '+
-         '<code>'+stringLine+'</code>';
+            'onclick="_togleBreakpoint(this,'+threadId+','+lineNumber+')"'+
+            '>&nbsp'+
+         '<td '+
+            '>'+_padNumber( lineNumber, 2 )+': '+
+         '<code '+
+            'ondblclick="_conditionBreakpoint(this,'+threadId+')"'+
+            '>'+stringLine+'</code>';
 }
 function _setSlowPeriod( period, jvm ) {
   if( !jvm )
