@@ -72,17 +72,32 @@ body {
 }
 
 .treadCodeTable {
-  margin: 10px;
+  margin-top: -1px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 10px;
 }
 
+.threadCodeRowHeader {
+  height: 30px;
+  text-align: center;
+  color: black;
+}
 .threadCodeHeader {
+  position: sticky;
+  cursor: all-scroll;
+  top: 0;
+  threadCodeHeader
+}
+/* .threadCodeHeader {
   color: black;
   padding: 10px;
   cursor: move;
   text-align: center;
   z-index: 10;
   background-color: #2196F3;
-}
+  position: fixed;
+} */
 
 .ui-layout-center > .wrapper {
   padding: 10px;
@@ -205,7 +220,7 @@ body {
   display: inline;
 }
 
-#ckEditor {
+/* #ckEditor {
   position: relative;
   top: 0;
   left: 0;
@@ -219,7 +234,7 @@ body {
   left: 0;
   height: 100%;
   width: 100%;
-}
+} */
 
 ::-webkit-scrollbar {
   display: none;

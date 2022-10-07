@@ -279,6 +279,14 @@ function unhighlightHistoryIndex() {
 /******************************************
  * Private GUI Functions
  ******************************************/
+function _setSourceWindowMaxHeight( div ) {
+  const dc = $('.ui-layout-center')[0];
+  const ds = $('.ui-layout-south')[0];
+  const maxHeight = dc.clientHeight - ds.clientHeight;
+  if( div.clientHeight > maxHeight ) {
+    div.style['height'] = `${maxHeight-50}px`;
+  }
+}
 function _setupJSENStudio( jvm )
 {
   // Call this to update threads
@@ -362,15 +370,27 @@ function _addThreadCodeDiv( threadId ) {
       const threadCode = _getFormattedThreadCode( threadIdNr );
       const threadInfo = _getThreadInfoRecord( threadIdNr );
 
+      // const threadCodeDivHTML = '<div class="threadCode" id="'+threadHTMLIdDiv+'" draggable="true">'+
+      //                           '<div class="threadCodeHeader" id="'+threadHTMLIdHead+'" '+
+      //                             'style="background-color: '+threadStatusColorVector[status]+'" '+
+      //                             'ondblclick="_removeThreadCodeDiv(\''+threadHTMLIdDiv+'\')"'+
+      //                             '>'+threadInfo.name+'</div>'+
+      //                           //'<table class="treadCodeTable" onclick="_showCodeInEditor(\''+threadIdNr+'\')">'+
+      //                           '<table class="treadCodeTable">'+
+      //                           threadCode+
+      //                           '</table>'+
+      //                           '</div>';
       const threadCodeDivHTML = '<div class="threadCode" id="'+threadHTMLIdDiv+'" draggable="true">'+
-                                '<div class="threadCodeHeader" id="'+threadHTMLIdHead+'" '+
-                                  'style="background-color: '+threadStatusColorVector[status]+'" '+
-                                  'ondblclick="_removeThreadCodeDiv(\''+threadHTMLIdDiv+'\')"'+
-                                  '>'+threadInfo.name+'</div>'+
-                                //'<table class="treadCodeTable" onclick="_showCodeInEditor(\''+threadIdNr+'\')">'+
-                                '<table class="treadCodeTable">'+
-                                threadCode+
-                                '</table>'+
+                                  '<table class="treadCodeTable">'+
+                                    '<tr class="threadCodeRowHeader">'+
+                                      '<th class="threadCodeHeader" id="'+threadHTMLIdHead+'"'+
+                                        'ondblclick="_removeThreadCodeDiv(\''+threadHTMLIdDiv+'\')"'+
+                                        'style="background-color: '+threadStatusColorVector[status]+';">'+
+                                        threadInfo.name+
+                                      '</th>'+
+                                    '</tr>'+
+                                    threadCode+
+                                  '</table>'+
                                 '</div>';
       $('#diagram').append( threadCodeDivHTML );
       const threadCodeDiv = $('#'+threadHTMLIdDiv)[0];
@@ -378,9 +398,10 @@ function _addThreadCodeDiv( threadId ) {
       _restoreThreadCodeDivPosition( threadHTMLIdDiv );
       // Init the struct that will keep track of selected lines in the code
       _initThreadLineNumberList( threadIdNr );
-
+      // Set max height
+      _setSourceWindowMaxHeight( threadCodeDiv );
+      // Select current line
       highlightThreadExecutedLine( threadInfo );
-
       // Run Lightweight JS Syntax Highlighter
       highlightAll();
     }
