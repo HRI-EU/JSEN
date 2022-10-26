@@ -68,8 +68,6 @@ let JSENS_jvm = null;
 let winStatBuffer = '{}';
 // Flag to update div heights one main() is over
 let isMainOver = false;
-// Plot library
-const gp = new GPlot( document.body );
 // Breakpoint on line and condition list
 let breakpointConditionList = [];
 let breakpointLineList = {};
