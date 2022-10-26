@@ -270,7 +270,9 @@ function doRepeatStep() {
 function highlightHistoryIndex() {
   // Un-highlight previous state history
   if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-    $( `#timeRowValue${stateHistoryIndex}` ).addClass( 'timeCellSelected' );
+    const timeEl = $( `#timeRowValue${stateHistoryIndex}` );
+    timeEl.addClass( 'timeCellSelected' );
+    timeEl[0].scrollIntoView( false );
   }
 }
 function unhighlightHistoryIndex() {
