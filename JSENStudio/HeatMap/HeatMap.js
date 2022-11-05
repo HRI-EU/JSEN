@@ -21,6 +21,7 @@ class HeatMap {
       noteRowEl: null,                /* Note row element */
       isNotesEnabled: isNotesEnabled, /* Enable/disable notes */
       maxTimestepCount: 0,            /* Maximum number of timestamp, after that slide */
+      selectedTimestepIndex: -1,      /* Index of currently selected timestep */
       signalList: {},                 /* List of signals */
       valueMap: {                     /* Map values to colors */
         'undefined': 'black',
@@ -75,13 +76,20 @@ class HeatMap {
   }
   setHighlightTimestep( name, index, status ) {
     const hInfo = this.heatmapList[name];
-    if( hInfo ) {
-      const signalEl = hInfo.timeRowEl.childNodes[index+2];
-      if( signalEl ) {
+    if( hInfo && index >= 0 ) {
+      const timeEl = hInfo.timeRowEl.childNodes[index+2];
+      if( timeEl ) {
+        const timeLabelEl = timeEl.childNodes[0];
         if( status ) {
-          signalEl.childNodes[0].classList.add( 'heatmapTimeCellSelected' );
+          if( hInfo.selectedTimestepIndex != -1 ) {
+            this.setHighlightTimestep( name, hInfo.selectedTimestepIndex, false )
+          }
+          timeLabelEl.classList.add( 'heatmapTimeCellSelected' );
+          hInfo.selectedTimestepIndex = index;
+          timeLabelEl.scrollIntoView( false );
         } else {
-          signalEl.childNodes[0].classList.remove( 'heatmapTimeCellSelected' );
+          hInfo.selectedTimestepIndex = -1;
+          timeLabelEl.classList.remove( 'heatmapTimeCellSelected' );
         }
       }
     }
@@ -92,6 +100,18 @@ class HeatMap {
     }
   }
   addSignal( name, sname ) {
+    const hInfo = this.heatmapList[name];
+    if( hInfo && !hInfo.signalList[sname] ) {
+      this.setSignal( name, sname );
+
+      // Allign signal values to current time
+      const count = this.getTimestepCount( name );
+      for( let i = 0; i < count ; ++i ) {
+        this.addSignalValue( name, sname );
+      }
+    }
+  }
+  setSignal( name, sname ) {
     const hInfo = this.heatmapList[name];
     if( hInfo && !hInfo.signalList[sname] ) {
       // <tr id="${this.id}SRow_${sname}" class="heatmapRow">
@@ -115,23 +135,26 @@ class HeatMap {
       hInfo.signalList[sname] = {
         element: signalRowEl,
       };
-
-      // Allign signal values to current time
-      const count = this.getTimestepCount( name );
-      for( let i = 0; i < count ; ++i ) {
-        this.addSignalValue( name, sname );
-      }
     }
   }
   addTimestep( name, timeValue ) {
     const hInfo = this.heatmapList[name];
     if( hInfo ) {
+      // Default value for timeValue is timestamp
+      if( ( timeValue == undefined ) || ( timeValue == null ) ) {
+        const d = new Date();
+        timeValue = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
+      }
+
       const timeIndex = hInfo.timeRowEl.childElementCount-1;
       // <th><p class="heatmapTimeRowValue">1421
       const timeEl = document.createElement( 'th' );
       timeEl.innerHTML = `<p class="heatmapTimeRowValue">${timeValue}`;
       timeEl.onclick = ( event )=> this._onEvent( 'TimestepClick', event, timeIndex, timeValue );
       hInfo.timeRowEl.appendChild( timeEl );
+
+      this.setHighlightTimestep( name, timeIndex, true );
+
       if( hInfo.isNotesEnabled ) {
         // <td><div class="heatmapTimeNoteText" contenteditable>Start</div>
         const noteEl = document.createElement( 'td' );
@@ -145,6 +168,9 @@ class HeatMap {
           if( hInfo.isNotesEnabled ) {
             hInfo.noteRowEl.childNodes[2].remove();
           }
+          if( hInfo.selectedTimestepIndex != -1 ) {
+            --hInfo.selectedTimestepIndex;
+          }
         }
       }
     }
@@ -152,6 +178,7 @@ class HeatMap {
   addSignalValue( name, sname, value, tip ) {
     const hInfo = this.heatmapList[name];
     if( hInfo ) {
+      this.setSignal( name, sname );
       const signalInfo = hInfo.signalList[sname];
       if( signalInfo ) {
         const signalRowEl = signalInfo.element;
@@ -186,11 +213,6 @@ class HeatMap {
   addSignalValueList( name, timeValue, nameList, valueList, tipList ) {
     const hInfo = this.heatmapList[name];
     if( hInfo ) {
-      // Default value for timeValue is timestamp
-      if( ( timeValue == undefined ) || ( timeValue == null ) ) {
-        const d = new Date();
-        timeValue = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
-      }
       // Add a new timeCell
       this.addTimestep( name, timeValue );
 
@@ -202,6 +224,28 @@ class HeatMap {
         const tip = ( tipList? tipList[i]: undefined )
         this.addSignalValue( name, sname, value, tip );
       }
+    }
+  }
+  clear( name ) {
+    const hInfo = this.heatmapList[name];
+    if( hInfo ) {
+      const clearEl = ( el, startIdx )=> {
+        const tElCount = el.childElementCount;
+        for( let i = startIdx; i <= tElCount; ++i ) {
+          const child = el.childNodes[startIdx];
+          if( child ) {
+            child.remove();
+          }
+        }
+      };
+      clearEl( hInfo.timeRowEl, 2 );
+      clearEl( hInfo.noteRowEl, 2 );
+
+      const nameList = Object.keys( hInfo.signalList );
+      for( const sname of nameList ) {
+        clearEl( hInfo.signalList[sname].element, 1 );
+      }
+      hInfo.selectedTimestepIndex = -1;
     }
   }
   getColorMap( range, colorList ) {

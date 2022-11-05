@@ -176,7 +176,7 @@ body {
   font-weight: normal;
 }
 
-.heatmap {
+#heatmap {
   padding-top: 70px;
   width: 100%;
 }

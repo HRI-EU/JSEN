@@ -84,8 +84,6 @@ const threadStatusList = [ 'ready', 'running', 'suspended', 'terminated' ];
 
 // TimeLine
 const timeLine = new HeatMap( 'heatmap' );
-timeLine.create( 'TimeLine' );
-timeLine.setValueMap( threadStatusColorVector );
 
 // Register the main to be executed onLoadDone
 $(document).ready( main );
@@ -94,6 +92,11 @@ $(document).ready( main );
 function main() {
   // Setup HTML User Interface
   _setupUI();
+
+  // TimeLine
+  timeLine.create( 'TimeLine' );
+  timeLine.setValueMap( 'TimeLine', threadStatusColorVector );
+  timeLine.addEventListener( 'TimeLine', 'TimestepClick', (e,i)=> setHistory( i ) );
 
   // Get URL parameters
   const queryString = window.location.search;
@@ -156,7 +159,7 @@ function JSENStudio_stopStepByStep() {
  * Public Thread Functions
  ******************************************/
 function stepMachine() {
-  unhighlightHistoryIndex();
+  //unhighlightHistoryIndex();
   JSENS_jvm.step('*');
   updateAllThreadsInfo( JSENS_jvm );
 }
@@ -179,7 +182,7 @@ function updateAllThreadsInfo( jvm ) {
 }
 function setHistory( index ) {
   if( index != null ) {
-    unhighlightHistoryIndex();
+    //unhighlightHistoryIndex();
     if( index >= stateRecordHistory.length ) {
       index = stateRecordHistory.length-1;
     }
@@ -187,7 +190,7 @@ function setHistory( index ) {
       index = 0;
     }
     stateHistoryIndex = index;
-    _updateAllThreadsInfo( stateRecordHistory[index], false );
+    _updateAllThreadsInfo( stateRecordHistory[index], false, index );
   }
 }
 function forwardHistory() {
@@ -272,20 +275,20 @@ function doRepeatStep() {
     stepMachine();
   }
 }
-function highlightHistoryIndex() {
-  // Un-highlight previous state history
-  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-    const timeEl = $( `#timeRowValue${stateHistoryIndex}` );
-    timeEl.addClass( 'timeCellSelected' );
-    timeEl[0].scrollIntoView( false );
-  }
-}
-function unhighlightHistoryIndex() {
-  // Un-highlight previous state history
-  if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-    $( `#timeRowValue${stateHistoryIndex}` ).removeClass( 'timeCellSelected' );
-  }
-}
+// function highlightHistoryIndex() {
+//   // Un-highlight previous state history
+//   if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
+//     const timeEl = $( `#timeRowValue${stateHistoryIndex}` );
+//     timeEl.addClass( 'timeCellSelected' );
+//     timeEl[0].scrollIntoView( false );
+//   }
+// }
+// function unhighlightHistoryIndex() {
+//   // Un-highlight previous state history
+//   if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
+//     $( `#timeRowValue${stateHistoryIndex}` ).removeClass( 'timeCellSelected' );
+//   }
+// }
 /******************************************
  * Private GUI Functions
  ******************************************/
@@ -598,7 +601,7 @@ function _selectThreadToQueue( newQueue ) {
   }
   if( threadList.length > 0 ) {
     _setThreadToQueue( newQueue, threadList, JSENS_jvm );
-    unhighlightHistoryIndex();
+    //unhighlightHistoryIndex();
   }
   // Update info (for debug messages)
   updateAllThreadsInfo( JSENS_jvm );
@@ -621,7 +624,7 @@ function _getThreadStatus( threadId ) {
   }
   return status;
 }
-function _updateAllThreadsInfo( status, isOnLine ) {
+function _updateAllThreadsInfo( status, isOnLine, index ) {
   // isOnline == true ==> status coming from JSEN execution
   // isOnline == false ==> status coming from click on time in timetable
   isOnLine = ( isOnLine == undefined? true: isOnLine );
@@ -645,6 +648,32 @@ function _updateAllThreadsInfo( status, isOnLine ) {
   $('#suspendedTable tbody').empty();
   $('#terminatedTable tbody').empty();
   $('#threadQueueList').empty();
+
+  if( isOnLine ) {
+    // // Add note cell
+    // $('#timeRow_notes')
+    //     .append($('<td>',{'style': 'color: aqua'})
+    //     .append('<div class="timeNoteText" contenteditable>&nbsp;</div>'));
+
+    // // Add timestamp in timeline
+    // if( status.length > 0 ) {
+    //   isTimeLineTimeSet = true;
+    //   stateHistoryIndex = stateRecordHistory.length-1;
+    //   const timeStr = _padNumber( status[0].timeStamp.getHours(), 2, '0' )+':'+
+    //                   _padNumber( status[0].timeStamp.getMinutes(), 2, '0' )+':'+
+    //                   _padNumber( status[0].timeStamp.getSeconds(), 2, '0' )+'.'+
+    //                   _padNumber( status[0].timeStamp.getMilliseconds(), 4, '0' );
+    //   $('#timeRow').append( '<td id="timeCell"><p style="margin:0px" class="timeRowValue" id="timeRowValue'+stateHistoryIndex+'"'+
+    //                         ' onclick="setHistory( '+stateHistoryIndex+' )">'+timeStr );
+    // }
+    if( status.length ) {
+      isTimeLineTimeSet = true;
+      stateHistoryIndex = stateRecordHistory.length-1;
+      timeLine.addTimestep( 'TimeLine' );
+    }
+  } else {
+    timeLine.setHighlightTimestep( 'TimeLine', index, true );
+  }
 
   // loop over data
   for( const threadInfo of status ) {
@@ -712,19 +741,20 @@ function _updateAllThreadsInfo( status, isOnLine ) {
       }
 
       // Update timeline
-      if( $('#timeRow_'+threadHTMLId+' td').length == 0 ) {
-        html = '<tr id="timeRow_'+threadHTMLId+'" onclick="_addThreadCodeDiv(\''+threadInfo.id+'\')">'+
-              '<th class="fixTh">'+threadInfo.name+'</th>';
-        const numbOfTd = $('#timeRow td').length;
-        for( let i = 1; i < numbOfTd; ++i ) {
-          html += '<td>&nbsp;&nbsp;</td>'
-        }
-        html += '</tr>';
-        $('#statusTimeline tbody').append( html );
-      }
-      $('#timeRow_'+threadHTMLId)
-        .append($('<td>',{'style': 'background-color:'+statusColor, 'title': threadInfo.name})
-        .append('&nbsp;'));
+      // if( $('#timeRow_'+threadHTMLId+' td').length == 0 ) {
+      //   html = '<tr id="timeRow_'+threadHTMLId+'" onclick="_addThreadCodeDiv(\''+threadInfo.id+'\')">'+
+      //         '<th class="fixTh">'+threadInfo.name+'</th>';
+      //   const numbOfTd = $('#timeRow td').length;
+      //   for( let i = 1; i < numbOfTd; ++i ) {
+      //     html += '<td>&nbsp;&nbsp;</td>'
+      //   }
+      //   html += '</tr>';
+      //   $('#statusTimeline tbody').append( html );
+      // }
+      // $('#timeRow_'+threadHTMLId)
+      //   .append($('<td>',{'style': 'background-color:'+statusColor, 'title': threadInfo.name})
+      //   .append('&nbsp;'));
+      timeLine.addSignalValue( 'TimeLine', threadInfo.name, threadInfo.status );
     }
 
     // Make sure that the menu are updated with content
@@ -732,27 +762,8 @@ function _updateAllThreadsInfo( status, isOnLine ) {
     $('.collapsible').click();
   }
 
-  if( isOnLine ) {
-    // Add note cell
-    $('#timeRow_notes')
-        .append($('<td>',{'style': 'color: aqua'})
-        .append('<div class="timeNoteText" contenteditable>&nbsp;</div>'));
-
-    // Add timestamp in timeline
-    if( status.length > 0 ) {
-      isTimeLineTimeSet = true;
-      stateHistoryIndex = stateRecordHistory.length-1;
-      const timeStr = _padNumber( status[0].timeStamp.getHours(), 2, '0' )+':'+
-                      _padNumber( status[0].timeStamp.getMinutes(), 2, '0' )+':'+
-                      _padNumber( status[0].timeStamp.getSeconds(), 2, '0' )+'.'+
-                      _padNumber( status[0].timeStamp.getMilliseconds(), 4, '0' );
-      $('#timeRow').append( '<td id="timeCell"><p style="margin:0px" class="timeRowValue" id="timeRowValue'+stateHistoryIndex+'"'+
-                            ' onclick="setHistory( '+stateHistoryIndex+' )">'+timeStr );
-    }
-  }
-
   // Highlight current state history
-  highlightHistoryIndex();
+  //highlightHistoryIndex();
 
   // Stop autoStep if no thread running
   if( ( runningThreadCount == 0 ) && isAutoStop ) {
