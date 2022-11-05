@@ -419,9 +419,10 @@ function _setupJSENStudio( jvm )
 function _setupTimelineButton( jvm ) {
   $('.cleanTimelineButton')[0].onclick = function() {
     stateHistoryIndex = null;
-    $('#statusTimeline tbody').empty();
-    //$('#statusTimeline tbody').append( '<th id="timeRow"><td>' );
-    $('#statusTimeline tbody').append( '<tr id="timeRow"><th id="timeCell" class="fixTh">' );
+    // $('#statusTimeline tbody').empty();
+    // //$('#statusTimeline tbody').append( '<th id="timeRow"><td>' );
+    // $('#statusTimeline tbody').append( '<tr id="timeRow"><th id="timeCell" class="fixTh">' );
+    timeLine.clear( 'TimeLine' );
     //TODO: move the next call (restoring code divs in a decent place)
     updateAllThreadsInfo( jvm );
   }
