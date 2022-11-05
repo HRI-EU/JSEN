@@ -19,7 +19,6 @@
 }
 .heatmapFixTh {
   position: sticky;
-  width: 5em;
   left: 0;
   background: black;
 }
