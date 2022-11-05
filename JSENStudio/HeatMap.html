@@ -1,0 +1,484 @@
+<html>
+  <head>
+    <style>
+      body { 
+        font: 14px helvetica neue, helvetica, arial, sans-serif;
+        background: rgb(43, 43, 43);
+      }
+      /* HeatMap Style */
+      #heatmap {
+        width: 100%;
+      }
+      .heatmapTimeCell {
+        font-weight: lighter;
+      }
+      .heatmapSignalName {
+        color: lightgray;           /* font color for signal names */
+        padding-right: 5px;        /* distance between signal names and start of heatmap */
+        text-align: right;
+      }
+      .heatmapRow {
+        height: 10px;                 /* height for valueCell */
+      }
+      .heatmamValueCell {
+        width: 3px;                  /* width for valueCell */
+        padding: 0px;
+      }
+      .heatmapFixTh {
+        position: sticky;
+      }
+      .heatmapTimeRowValue {
+        color: lightskyblue;        /* font color for time in timeline */
+        writing-mode: vertical-lr;
+        text-orientation: sideways;
+        margin: 0px;
+        padding-top: 10px;            /* distance between top and first digit of times */
+        padding-bottom: 10px;         /* distance between heatmap and last digit of times */
+      }
+      .heatmapTimeNotes {
+        color: yellow;
+      }
+      .heatmapTimeNoteText {
+        background-color: rgba(119, 119, 119, 0.25);
+        color: yellow;
+        writing-mode: vertical-lr;
+        text-orientation: sideways;
+      }
+      /* Set this class to show selected/current time */
+      .heatmapTimeCellSelected {
+        color: white;
+        font-weight: normal;
+      }
+      /* tooltip from: https://www.w3schools.com/css/css_tooltip.asp */
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: rgba(0,0,0,0.7);
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        top: -30px;
+        left: 105%;
+        margin-left: -20px;
+        padding: 5px;
+
+        /* Effects */
+        transition: opacity 1s;
+      }
+      .tooltip .tooltiptext::after {
+        content: " ";
+        position: absolute;
+        top: 100%; /* At the bottom of the tooltip */
+        left: 15%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: rgba(0,0,0,0.7) transparent transparent transparent;
+      }
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="heatmap">
+      <!--table id="heatmapTimeline">
+        <tr id="heatmapTimeRow">
+          <th class="heatmapFixTh heatmapTimeCell">
+          <th><p class="heatmapTimeRowValue">1420
+          <th><p class="heatmapTimeRowValue">1421
+          <th><p class="heatmapTimeRowValue">1422
+          <th><p class="heatmapTimeRowValue heatmapTimeCellSelected">1423
+          <th><p class="heatmapTimeRowValue">1424
+          <th><p class="heatmapTimeRowValue">1425</th>
+        <tr id="heatmapNRow_Notes" class="heatmapRow">
+          <td class="heatmapFixTh heatmapTimeNotes">Notes
+            <td><div class="heatmapTimeNoteText" contenteditable>Start</div>
+            <td><div class="heatmapTimeNoteText" contenteditable>&nbsp;</div>
+            <td><div class="heatmapTimeNoteText" contenteditable>Check</div>
+            <td><div class="heatmapTimeNoteText" contenteditable>&nbsp;</div>
+            <td><div class="heatmapTimeNoteText" contenteditable>&nbsp;</div>
+            <td><div class="heatmapTimeNoteText" contenteditable>&nbsp;</div>
+        <tr id="heatmapSRow_Tom_loadingCheck" class="heatmapRow">
+          <td class="heatmapSignalName">Tom.loadingCheck
+            <td class="heatmamValueCell" style="background-color: rgb(207, 225, 143);">
+            <td class="heatmamValueCell" style="background-color: rgb(154, 181, 154);">
+            <td class="heatmamValueCell" style="background-color: rgb(144, 173, 181);">
+            <td class="heatmamValueCell" style="background-color: rgb(207, 225, 143);">
+            <td class="heatmamValueCell" style="background-color: rgb(154, 181, 154);">
+            <td class="heatmamValueCell" style="background-color: rgb(144, 173, 181);">
+        <tr id="heatmapSRow_Alex_loadingCheck" class="heatmapRow">
+          <td class="heatmapSignalName">Alex.loadingCheck
+            <td class="heatmamValueCell" style="background-color: rgb(199, 166, 166);">
+            <td class="heatmamValueCell" style="background-color: rgb(236, 133, 133);">
+            <td class="heatmamValueCell" style="background-color: rgb(151, 151, 183);">
+            <td class="heatmamValueCell" style="background-color: rgb(207, 225, 143);">
+            <td class="heatmamValueCell" style="background-color: rgb(154, 181, 154);">
+            <td class="heatmamValueCell" style="background-color: rgb(144, 173, 181);">
+        <tr id="heatmapSRow_Meisy_loadingCheck" class="heatmapRow">
+          <td class="heatmapSignalName">Meisy.loadingCheck
+            <td class="heatmamValueCell" style="background-color: rgb(223, 190, 147);">
+            <td class="heatmamValueCell" style="background-color: rgb(220, 186, 235);">
+            <td class="heatmamValueCell" style="background-color: rgb(176, 208, 165);">
+            <td class="heatmamValueCell" style="background-color: rgb(223, 190, 147);">
+            <td class="heatmamValueCell" style="background-color: rgb(220, 186, 235);">
+            <td class="heatmamValueCell" style="background-color: rgb(176, 208, 165);">
+        <tr id="heatmapSRow_Tom_loadingCheck" class="heatmapRow">
+          <td class="heatmapSignalName">Tom.loadingCheck
+            <td class="heatmamValueCell" style="background-color: rgb(207, 225, 143);">
+            <td class="heatmamValueCell" style="background-color: rgb(154, 181, 154);">
+            <td class="heatmamValueCell" style="background-color: rgb(144, 173, 181);">
+            <td class="heatmamValueCell" style="background-color: rgb(199, 166, 166);">
+            <td class="heatmamValueCell" style="background-color: rgb(236, 133, 133);">
+            <td class="heatmamValueCell" style="background-color: rgb(151, 151, 183);">
+      </table-->
+    </div>
+    <script>
+      class HeatMap {
+        constructor( containerId ) {
+          this.containerId = containerId;
+          this.heatmapList = {};
+        }
+        create( name, isNotesEnabled ) {
+          isNotesEnabled = ( isNotesEnabled == undefined? true: isNotesEnabled );
+          const hInfo = {
+            id: name,                       /* HeatMap unique name */
+            containerEl: null,              /* Container element */
+            tableEl: null,                  /* Table element */
+            tableBodyEl: null,              /* Table body element */
+            timeRowEl: null,                /* Time row element */
+            noteRowEl: null,                /* Note row element */
+            isNotesEnabled: isNotesEnabled, /* Enable/disable notes */
+            maxTimestepCount: 0,            /* Maximum number of timestamp, after that slide */
+            signalList: {},                 /* List of signals */
+            valueMap: {                     /* Map values to colors */
+              'undefined': 'black',
+            },
+          };
+          this.heatmapList[name] = hInfo;
+
+          hInfo.containerEl = document.getElementById( this.containerId );
+          hInfo.tableEl = document.createElement( 'table' );
+          hInfo.tableEl.id = `${hInfo.id}Timeline`
+          hInfo.tableEl.innerHTML = `<tr class="${hInfo.id}TimeRow">
+                                        <th class="heatmapFixTh heatmapTimeCell">`+
+                  ( isNotesEnabled? `<tr class="heatmapRow ${hInfo.id}NRow_Notes">
+                                        <td class="heatmapFixTh heatmapTimeNotes">Notes`: '' );
+          hInfo.containerEl.appendChild( hInfo.tableEl );
+          hInfo.tableBodyEl = hInfo.tableEl.getElementsByTagName( 'tbody' )[0];
+          hInfo.timeRowEl = hInfo.tableEl.getElementsByClassName( hInfo.id+'TimeRow' )[0];
+          hInfo.noteRowEl = hInfo.tableEl.getElementsByClassName( hInfo.id+'NRow_Notes' )[0];
+        }
+        setProperty( name, pName, pValue ) {
+          const hInfo = this.heatmapList[name];
+          if( hInfo ) {
+            switch( pName.toLowerCase() ) {
+              case 'maxtimestepcount':
+                hInfo.maxTimestepCount = pValue;   
+                break;
+            }
+          }
+        }
+        getTimestepCount( name ) {
+          const hInfo = this.heatmapList[name];
+          if( hInfo ) {
+            return( hInfo.timeRowEl.childElementCount-1 );
+          } else {
+            return( 0 );
+          }
+        }
+        setValueMap( name, map ) {
+          const hInfo = this.heatmapList[name];
+          if( hInfo ) {
+            hInfo.valueMap = map;
+            if( typeof( map ) == 'object' ) {
+              hInfo.valueMap['undefined'] = 'black';
+            }
+          }
+        }
+        addSignalList( name, nameList ) {
+          for( const sname of nameList ) {
+            this.addSignal( name, sname );
+          }
+        }
+        addSignal( name, sname ) {
+          const hInfo = this.heatmapList[name];
+          if( hInfo && !hInfo.signalList[sname] ) {
+            // <tr id="${this.id}SRow_${sname}" class="heatmapRow">
+            const signalRowEl = document.createElement( 'tr' );
+            // Prepare signalId from name in element id
+            const elname = sname.replaceAll( ' ', '_' ).replaceAll( '-', '_' );
+            signalRowEl.id = `${this.id}SRow_${elname}`;
+
+            signalRowEl.className = 'heatmapRow';
+            // <td class="heatmapSignalName">${sname}`;
+            const signalLabel = document.createElement( 'td' );
+            signalLabel.className = 'heatmapSignalName';
+            signalLabel.innerHTML = sname;
+            // Append all
+            signalRowEl.appendChild( signalLabel );
+            hInfo.tableBodyEl.appendChild( signalRowEl );
+  
+            // Update signal info
+            hInfo.signalList[sname] = {
+              element: signalRowEl,
+            };
+  
+            // Allign signal values to current time
+            const count = this.getTimestepCount( name );
+            for( let i = 0; i < count ; ++i ) {
+              this.addSignalValue( name, sname );
+            }
+          }
+        }
+        addTimestep( name, timeValue ) {
+          const hInfo = this.heatmapList[name];
+          if( hInfo ) {
+            // <th><p class="heatmapTimeRowValue">1421
+            const timeEl = document.createElement( 'th' );
+            timeEl.innerHTML = `<p class="heatmapTimeRowValue">${timeValue}`;
+            hInfo.timeRowEl.appendChild( timeEl );
+            if( hInfo.isNotesEnabled ) {
+              // <td><div class="heatmapTimeNoteText" contenteditable>Start</div>
+              const noteEl = document.createElement( 'td' );
+              noteEl.innerHTML = `<div class="heatmapTimeNoteText" contenteditable>&nbsp;</div>`;
+              hInfo.noteRowEl.appendChild( noteEl );
+            }
+
+            if( hInfo.maxTimestepCount ) {
+              if( hInfo.timeRowEl.childElementCount-1 > hInfo.maxTimestepCount ) {
+                hInfo.timeRowEl.childNodes[2].remove();
+                if( hInfo.isNotesEnabled ) {
+                  hInfo.noteRowEl.childNodes[2].remove();
+                }
+              }
+            }
+          }
+        }
+        addSignalValue( name, sname, value, tip ) {
+          const hInfo = this.heatmapList[name];
+          if( hInfo ) {
+            const signalInfo = hInfo.signalList[sname];
+            if( signalInfo ) {
+              const signalRowEl = signalInfo.element;
+              // <td class="heatmamValueCell" style="background-color: rgb(207, 225, 143);">
+              const valueEl = document.createElement( 'td' );
+              valueEl.className = 'heatmamValueCell';
+              // Get value mapped
+              let cValue = ( typeof( hInfo.valueMap ) == 'object'? 
+                             hInfo.valueMap[value]: hInfo.valueMap( value ) );
+              if( !cValue ) {
+                cValue = 'black';
+              }
+              // Set value
+              valueEl.style['background-color'] = cValue;
+
+              // Get tooltip value
+              const tipValue = ( tip? tip: value );
+              valueEl.innerHTML = `<div class="tooltip">&nbsp;
+                                      <pre class="tooltiptext">${tipValue}</pre>
+                                    </div>`;
+              this.tooltip = true;
+              signalRowEl.appendChild( valueEl );
+
+              if( hInfo.maxTimestepCount ) {
+                if( signalInfo.element.childElementCount-1 > hInfo.maxTimestepCount ) {
+                  signalInfo.element.childNodes[1].remove();
+                }
+              }
+            }
+          }
+        }
+        addSignalValueList( name, timeValue, nameList, valueList, tipList ) {
+          const hInfo = this.heatmapList[name];
+          if( hInfo ) {
+            // Default value for timeValue is timestamp
+            if( ( timeValue == undefined ) || ( timeValue == null ) ) {
+              const d = new Date();
+              timeValue = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
+            }
+            // Add a new timeCell
+            this.addTimestep( name, timeValue );
+
+            // Add the new values
+            nameList = ( nameList? nameList: Object.keys( hInfo.signalList ) );
+            for( let i = 0; i < nameList.length; ++i ) {
+              const sname = nameList[i];
+              const value = valueList[i];
+              const tip = ( tipList? tipList[i]: undefined )
+              this.addSignalValue( name, sname, value, tip );
+            }
+          }
+        }
+        getColorMap( range, colorList ) {
+          return( this.computeColorMap.bind( this, range, colorList ) );
+        }
+        computeColorMap( range, colorList, value ) {
+          // Default range = [0, 1]
+          range = ( range == undefined? [0, 1]: range );
+          // Make sure value is in range
+          value = Math.max( range[0], value );
+          value = Math.min( range[1], value );
+          // Function to map [min, max] => [0, 1]
+          const line = ( z, min, max )=> (z-min)/(max-min);
+
+          // Color selection info ( value can only be between 2 colors)
+          const cInfo = {
+            // 2 colors between to select the color
+            c1: null,
+            c2: null,
+            // Value between c1 and c2
+            cValue: 0,
+          };
+
+          // Compute range for each color
+          const value01 = line( value, range[0], range[1] )
+          const colorCount = colorList.length;
+          // Check between which color value is
+          for( let i = 1; i < colorCount; ++i ) {
+            const minColor = (i-1)/(colorCount-1);
+            const maxColor = i/(colorCount-1);
+            if( ( minColor <= value01 ) && ( value01 <= maxColor ) ) {
+              // Set colors
+              cInfo.c1 = colorList[i-1];
+              cInfo.c2 = colorList[i];
+              // Recompute value in the range of the two colors
+              cInfo.cValue = line( value01, minColor, maxColor );
+              break;
+            }
+          }
+          // Compute the target color
+          if( cInfo.c1 && cInfo.c2 ) {
+            // Compute target color
+            var c0 = [ Math.round( cInfo.c1[0] * (1-cInfo.cValue) + cInfo.c2[0] * (cInfo.cValue) ),
+                       Math.round( cInfo.c1[1] * (1-cInfo.cValue) + cInfo.c2[1] * (cInfo.cValue) ),
+                       Math.round( cInfo.c1[2] * (1-cInfo.cValue) + cInfo.c2[2] * (cInfo.cValue) ) ];
+            return( `rgb(${c0[0]},${c0[1]},${c0[2]})` );
+          } else {
+            return( 'rgb(0,0,0)' );
+          }
+        }
+      }
+
+      const hm = new HeatMap( 'heatmap' );
+      { 
+        const name = 'M1';
+        hm.create( name );
+        hm.setValueMap( name, {
+          'ready': '#71A1C9',
+          'running': '#8caa55',
+          'suspended': '#eee957',
+          'terminated': '#D57C7A'
+        });
+        hm.addSignalList( name, [ 'Signal1 test', 'Signal2 prova', 'Signal3 probe', 'Signal4 new one' ] );
+        const dataList = [
+          [ 'running', 'ready', 'terminated', 'ready' ],
+          [ 'running', 'suspended', 'terminated', 'running' ],
+          [ 'running', 'ready', 'terminated', 'running' ],
+          [ 'running', 'suspended', 'terminated', 'running' ],
+          [ 'running', 'suspended', 'ready', 'running' ],
+          [ 'running', 'suspended', 'terminated', 'running' ],
+        ];
+        for( const data of dataList ) {
+          hm.addSignalValueList( name, null, null, data );
+        }
+      }
+      {
+        const name = 'M1';
+        hm.create( name, false );
+        hm.setValueMap( name, {
+          'ready': '#71A1C9',
+          'running': '#8caa55',
+          'suspended': '#eee957',
+          'terminated': '#D57C7A'
+        });
+        hm.addSignalList( name, [ 'Signal1 test', 'Signal2 prova', 'Signal3 probe', 'Signal4 new one' ] );
+        const dataList = [
+          [ 'running', 'suspended', 'ready', 'running' ],
+          [ 'running', 'suspended', 'terminated', 'running' ],
+          [ 'running', 'ready', 'terminated', 'running' ],
+          [ 'running', 'ready', 'terminated', 'ready' ],
+          [ 'running', 'suspended', 'terminated', 'running' ],
+          [ 'running', 'suspended', 'terminated', 'running' ],
+        ];
+        for( const data of dataList ) {
+          hm.addSignalValueList( name, '', null, data );
+        }
+      }
+      {
+        const name = 'CODETest';
+        hm.create( name, false );
+        const cRedGreenBlue = [ [255,0,0], [0,255,0], [0,0,255] ];
+        hm.setValueMap( name, hm.getColorMap( [-1,1], cRedGreenBlue ) );
+        hm.addSignalList( name, [ '1', '2', '3', '4', '5' ] );
+        for( let t = 0; t < 100; ++t ) {
+          data = [ 
+            Math.cos( t*0.1 ), 
+            Math.sin( t*0.02 ),
+            Math.cos( t*0.2 ),
+            Math.sin( t*0.05 ),
+            Math.cos( t*0.5 ),
+          ];
+          hm.addSignalValueList( name, '', null, data );
+        }
+      }
+      {
+        const name = 'CODETest';
+        hm.create( name, false );
+        const cWhiteYellowRedBlack = [ [255,255,255], [223,255,0], [255,0,0], [0,0,0] ];
+        hm.setValueMap( name, hm.getColorMap( [-1,1], cWhiteYellowRedBlack ) );
+        hm.addSignalList( name, [ '1', '2', '3', '4', '5' ] );
+        for( let t = 0; t < 100; ++t ) {
+          data = [ 
+            Math.cos( t*0.1 ), 
+            Math.sin( t*0.02 ),
+            Math.cos( t*0.2 ),
+            Math.sin( t*0.05 ),
+            Math.cos( t*0.5 ),
+          ];
+          hm.addSignalValueList( name, t, null, data );
+        }
+      }
+      {
+        const name = 'CODETest1';
+        hm.create( name );
+        hm.setProperty( name, 'MaxTimestepCount', 30 );
+        const cWhiteYellowRedBlack = [ [255,255,255], [223,255,0], [255,0,0], [0,0,0] ];
+        hm.setValueMap( name, hm.getColorMap( [-1,1], cWhiteYellowRedBlack ) );
+        hm.addSignalList( name, [ '1', '2', '3', '4', '5' ] );
+        let t = 0;
+        const dataStream = ()=> {
+          if( t < 100 ) {
+            data = [ 
+              Math.cos( t*0.1 ), 
+              Math.sin( t*0.02 ),
+              Math.cos( t*0.2 ),
+              Math.sin( t*0.05 ),
+              Math.cos( t*0.5 ),
+            ];
+            tip = [
+              new String( data[0] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[1] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[2] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[3] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[4] ).substring( 0, 4 )+' ['+t+']',
+            ];
+            hm.addSignalValueList( name, t++, null, data, tip );
+            setTimeout( dataStream, 200 );
+          }
+        };
+        dataStream();
+      }
+    </script>
+  </body>
+</html>
