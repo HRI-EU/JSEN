@@ -124,7 +124,7 @@ class HeatMap {
       const signalIndex = hInfo.tableBodyEl.childElementCount-2;
       // <td class="heatmapSignalName">${sname}`;
       const signalEl = document.createElement( 'td' );
-      signalEl.className = 'heatmapSignalName';
+      signalEl.className = 'heatmapSignalName heatmapFixTh';
       signalEl.onclick = ( event )=> this._onEvent( 'SignalClick', event, signalIndex, sname );
       signalEl.innerHTML = sname;
       // Append all
@@ -143,7 +143,11 @@ class HeatMap {
       // Default value for timeValue is timestamp
       if( ( timeValue == undefined ) || ( timeValue == null ) ) {
         const d = new Date();
-        timeValue = `${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}.${d.getMilliseconds()}`;
+        const h = ('0'+d.getHours()).slice( -2 );
+        const m = ('0'+d.getMinutes()).slice( -2 );
+        const s = ('0'+d.getSeconds()).slice( -2 );
+        const ms = ('000'+d.getMilliseconds()).slice( -4 );
+        timeValue = `${h}:${m}:${s}.${ms}`;
       }
 
       const timeIndex = hInfo.timeRowEl.childElementCount-1;
