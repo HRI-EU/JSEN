@@ -123,7 +123,7 @@ function main() {
     if( isAutoStart ) {
       // Wait 5 seconds and then start
       autoStartTimer = setTimeout( ()=> {
-        toggleRepeatStep();
+        JSENStudio_togglePlayPause();
         // Clear autostart timer
         autoStartTimer = null;
       }, autoStartDelay*1000 );
@@ -153,12 +153,12 @@ function JSENStudio_setWinStat( winStat ) {
   winStatBuffer = winStat;
 }
 function JSENStudio_stopStepByStep() {
-  stopRepeatStep();
+  JSENStudio_pause();
 }
 /******************************************
  * Public Thread Functions
  ******************************************/
-function stepMachine() {
+function JSENStudio_step() {
   //unhighlightHistoryIndex();
   JSENS_jvm.step('*');
   updateAllThreadsInfo( JSENS_jvm );
@@ -193,11 +193,11 @@ function setHistory( index ) {
     _updateAllThreadsInfo( stateRecordHistory[index], false, index );
   }
 }
-function forwardHistory() {
+function JSENStudio_forwardHistory() {
   const newIndex = ( stateHistoryIndex == null? 0: stateHistoryIndex+1 );
   setHistory( newIndex );
 }
-function backwardHistory() {
+function JSENStudio_backHistory() {
   const newIndex = ( stateHistoryIndex == null? stateRecordHistory.length-1: stateHistoryIndex-1 );
   setHistory( newIndex );
 }
@@ -248,10 +248,10 @@ function showRightEditor() {
 function startRepeatStep() {
   if( !repeatAutoStep ) {
     repeatAutoStep = setTimeout( doRepeatStep, repeatAutoStepPeriod );
-    stepMachine();
+    JSENStudio_step();
   }
 }
-function stopRepeatStep()
+function JSENStudio_pause()
 {
   // If we stop before the autoStart => clean the autostart timer
   if( autoStartTimer ) {
@@ -261,18 +261,19 @@ function stopRepeatStep()
   // Clear the repeat timer
   clearTimeout( repeatAutoStep );
   repeatAutoStep = null;
+  JSENS_jvm.pauseThread('*');
 }
-function toggleRepeatStep() {
+function JSENStudio_togglePlayPause() {
   if( !repeatAutoStep ) {
     startRepeatStep()
   } else {
-    stopRepeatStep();
+    JSENStudio_pause();
   }
 }
 function doRepeatStep() {
   if( repeatAutoStep ) {
     repeatAutoStep = setTimeout( doRepeatStep, repeatAutoStepPeriod );
-    stepMachine();
+    JSENStudio_step();
   }
 }
 // function highlightHistoryIndex() {
@@ -315,11 +316,11 @@ function _toogleLineBreakpoint( el, threadId, lineNumber ) {
   // Toogle class name
   if( className.endsWith( 'Off' ) ) {
     bpInfo.el.className = 'lineBreakpointOn';
-    JSENS_jvm.setBreakpoint( threadId, lineNumber, stopRepeatStep );
+    JSENS_jvm.setBreakpoint( threadId, lineNumber, JSENStudio_pause() );
     bpInfo.checked = true;
   } else {
     bpInfo.el.className = 'lineBreakpointOff';
-    JSENS_jvm.clearBreakpoint( threadId, lineNumber, stopRepeatStep );
+    JSENS_jvm.clearBreakpoint( threadId, lineNumber, JSENStudio_pause() );
     bpInfo.checked = false;
   }
   if( isNewKey ) {
@@ -348,7 +349,7 @@ function _addConditionBreakpoint( el, threadId ) {
     // Create breakpoint
     const key = threadId;
     const condFn = ()=> eval( condition );
-    const bId = JSENS_jvm.setBreakpoint( threadId, condFn, stopRepeatStep );
+    const bId = JSENS_jvm.setBreakpoint( threadId, condFn, JSENStudio_pause() );
 
     // Store breakpoint
     const bpIdx = breakpointConditionList.length;
@@ -372,7 +373,7 @@ function _toogleConditionBreakpoint( el, bpIdx ) {
   if( bpInfo ) {
     if( el.checked ) {
       const condFn = ()=> eval( bpImfo.condition );
-      const bId = JSENS_jvm.setBreakpoint( bpInfo.threadId, condFn, stopRepeatStep );
+      const bId = JSENS_jvm.setBreakpoint( bpInfo.threadId, condFn, JSENStudio_pause() );
       bpIdx.breakpointId = bId;
     } else {
       JSENS_jvm.clearBreakpointById( bpInfo.threadId, bpInfo.breakpointId );
@@ -443,7 +444,7 @@ function _setupSpeedSlider( jvm ) {
       startRepeatStep();
     }
     if( period == 1000 ) {
-      stopRepeatStep();
+      JSENStudio_pause();
     }
     repeatAutoStepPreviousPeriod = period;
   }
@@ -768,7 +769,7 @@ function _updateAllThreadsInfo( status, isOnLine, index ) {
 
   // Stop autoStep if no thread running
   if( ( runningThreadCount == 0 ) && isAutoStop ) {
-    stopRepeatStep();
+    JSENStudio_pause();
   }
 }
 /******************************************
