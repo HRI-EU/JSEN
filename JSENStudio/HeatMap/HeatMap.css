@@ -1,0 +1,83 @@
+/* HeatMap Style */
+#heatmap {
+  width: 100%;
+}
+.heatmapTimeCell {
+  font-weight: lighter;
+}
+.heatmapSignalName {
+  color: lightgray;           /* font color for signal names */
+  padding-right: 5px;        /* distance between signal names and start of heatmap */
+  text-align: right;
+}
+.heatmapRow {
+  height: 10px;                 /* height for valueCell */
+}
+.heatmamValueCell {
+  width: 3px;                  /* width for valueCell */
+  padding: 0px;
+}
+.heatmapFixTh {
+  position: sticky;
+}
+.heatmapTimeRowValue {
+  color: lightskyblue;        /* font color for time in timeline */
+  writing-mode: vertical-lr;
+  text-orientation: sideways;
+  margin: 0px;
+  padding-top: 10px;            /* distance between top and first digit of times */
+  padding-bottom: 10px;         /* distance between heatmap and last digit of times */
+}
+.heatmapTimeNotes {
+  color: yellow;
+}
+.heatmapTimeNoteText {
+  background-color: rgba(119, 119, 119, 0.25);
+  color: yellow;
+  writing-mode: vertical-lr;
+  text-orientation: sideways;
+}
+/* Set this class to show selected/current time */
+.heatmapTimeCellSelected {
+  color: white;
+  font-weight: normal;
+}
+/* tooltip from: https://www.w3schools.com/css/css_tooltip.asp */
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: rgba(0,0,0,0.7);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: -30px;
+  left: 105%;
+  margin-left: -20px;
+  padding: 5px;
+
+  /* Effects */
+  transition: opacity 1s;
+}
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 100%; /* At the bottom of the tooltip */
+  left: 15%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.7) transparent transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}

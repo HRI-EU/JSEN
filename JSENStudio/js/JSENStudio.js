@@ -82,6 +82,11 @@ const threadStatusColorVector = {
 // List of thread status
 const threadStatusList = [ 'ready', 'running', 'suspended', 'terminated' ];
 
+// TimeLine
+const timeLine = new HeatMap( 'heatmap' );
+timeLine.create( 'TimeLine' );
+timeLine.setValueMap( threadStatusColorVector );
+
 // Register the main to be executed onLoadDone
 $(document).ready( main );
 
