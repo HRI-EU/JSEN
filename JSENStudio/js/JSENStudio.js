@@ -159,7 +159,6 @@ function JSENStudio_stopStepByStep() {
  * Public Thread Functions
  ******************************************/
 function JSENStudio_step() {
-  //unhighlightHistoryIndex();
   JSENS_jvm.step('*');
   updateAllThreadsInfo( JSENS_jvm );
 }
@@ -182,7 +181,6 @@ function updateAllThreadsInfo( jvm ) {
 }
 function setHistory( index ) {
   if( index != null ) {
-    //unhighlightHistoryIndex();
     if( index >= stateRecordHistory.length ) {
       index = stateRecordHistory.length-1;
     }
@@ -276,20 +274,6 @@ function doRepeatStep() {
     JSENStudio_step();
   }
 }
-// function highlightHistoryIndex() {
-//   // Un-highlight previous state history
-//   if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-//     const timeEl = $( `#timeRowValue${stateHistoryIndex}` );
-//     timeEl.addClass( 'timeCellSelected' );
-//     timeEl[0].scrollIntoView( false );
-//   }
-// }
-// function unhighlightHistoryIndex() {
-//   // Un-highlight previous state history
-//   if( ( stateHistoryIndex != null ) && ( stateHistoryIndex >= 0 ) ) {
-//     $( `#timeRowValue${stateHistoryIndex}` ).removeClass( 'timeCellSelected' );
-//   }
-// }
 /******************************************
  * Private GUI Functions
  ******************************************/
@@ -420,9 +404,6 @@ function _setupJSENStudio( jvm )
 function _setupTimelineButton( jvm ) {
   $('.cleanTimelineButton')[0].onclick = function() {
     stateHistoryIndex = null;
-    // $('#statusTimeline tbody').empty();
-    // //$('#statusTimeline tbody').append( '<th id="timeRow"><td>' );
-    // $('#statusTimeline tbody').append( '<tr id="timeRow"><th id="timeCell" class="fixTh">' );
     timeLine.clear( 'TimeLine' );
     //TODO: move the next call (restoring code divs in a decent place)
     updateAllThreadsInfo( jvm );
@@ -603,7 +584,6 @@ function _selectThreadToQueue( newQueue ) {
   }
   if( threadList.length > 0 ) {
     _setThreadToQueue( newQueue, threadList, JSENS_jvm );
-    //unhighlightHistoryIndex();
   }
   // Update info (for debug messages)
   updateAllThreadsInfo( JSENS_jvm );
@@ -652,22 +632,6 @@ function _updateAllThreadsInfo( status, isOnLine, index ) {
   $('#threadQueueList').empty();
 
   if( isOnLine ) {
-    // // Add note cell
-    // $('#timeRow_notes')
-    //     .append($('<td>',{'style': 'color: aqua'})
-    //     .append('<div class="timeNoteText" contenteditable>&nbsp;</div>'));
-
-    // // Add timestamp in timeline
-    // if( status.length > 0 ) {
-    //   isTimeLineTimeSet = true;
-    //   stateHistoryIndex = stateRecordHistory.length-1;
-    //   const timeStr = _padNumber( status[0].timeStamp.getHours(), 2, '0' )+':'+
-    //                   _padNumber( status[0].timeStamp.getMinutes(), 2, '0' )+':'+
-    //                   _padNumber( status[0].timeStamp.getSeconds(), 2, '0' )+'.'+
-    //                   _padNumber( status[0].timeStamp.getMilliseconds(), 4, '0' );
-    //   $('#timeRow').append( '<td id="timeCell"><p style="margin:0px" class="timeRowValue" id="timeRowValue'+stateHistoryIndex+'"'+
-    //                         ' onclick="setHistory( '+stateHistoryIndex+' )">'+timeStr );
-    // }
     if( status.length ) {
       isTimeLineTimeSet = true;
       stateHistoryIndex = stateRecordHistory.length-1;
@@ -741,21 +705,6 @@ function _updateAllThreadsInfo( status, isOnLine, index ) {
         html = '<input type="checkbox" name="'+threadInfo.name+'"><label>['+threadInfo.queue+'] '+threadInfo.name+'</label></input><br>'
         $('#threadQueueList').append( html );
       }
-
-      // Update timeline
-      // if( $('#timeRow_'+threadHTMLId+' td').length == 0 ) {
-      //   html = '<tr id="timeRow_'+threadHTMLId+'" onclick="_addThreadCodeDiv(\''+threadInfo.id+'\')">'+
-      //         '<th class="fixTh">'+threadInfo.name+'</th>';
-      //   const numbOfTd = $('#timeRow td').length;
-      //   for( let i = 1; i < numbOfTd; ++i ) {
-      //     html += '<td>&nbsp;&nbsp;</td>'
-      //   }
-      //   html += '</tr>';
-      //   $('#statusTimeline tbody').append( html );
-      // }
-      // $('#timeRow_'+threadHTMLId)
-      //   .append($('<td>',{'style': 'background-color:'+statusColor, 'title': threadInfo.name})
-      //   .append('&nbsp;'));
       timeLine.addSignalValue( 'TimeLine', threadInfo.name, threadInfo.status );
     }
 
@@ -763,9 +712,6 @@ function _updateAllThreadsInfo( status, isOnLine, index ) {
     $('.collapsible').click();
     $('.collapsible').click();
   }
-
-  // Highlight current state history
-  //highlightHistoryIndex();
 
   // Stop autoStep if no thread running
   if( ( runningThreadCount == 0 ) && isAutoStop ) {
