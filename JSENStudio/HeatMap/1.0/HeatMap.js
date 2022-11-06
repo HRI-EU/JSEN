@@ -203,7 +203,7 @@ class HeatMap {
         valueEl.innerHTML = `<div class="tooltip">&nbsp;
                                 <pre class="tooltiptext">${tipValue}</pre>
                               </div>`;
-        this.tooltip = true;
+        //this.tooltip = true;
         signalRowEl.appendChild( valueEl );
 
         if( hInfo.maxTimestepCount ) {
@@ -227,6 +227,45 @@ class HeatMap {
         const value = valueList[i];
         const tip = ( tipList? tipList[i]: undefined )
         this.addSignalValue( name, sname, value, tip );
+      }
+    }
+  }
+  updateSignalValue( name, sname, value, tip ) {
+    const hInfo = this.heatmapList[name];
+    if( hInfo ) {
+      this.setSignal( name, sname );
+      const signalInfo = hInfo.signalList[sname];
+      if( signalInfo ) {
+        const signalRowEl = signalInfo.element;
+        const valueEl = signalRowEl.lastChild;
+        // Get value mapped
+        let cValue = ( typeof( hInfo.valueMap ) == 'object'? 
+                        hInfo.valueMap[value]: hInfo.valueMap( value ) );
+        if( !cValue ) {
+          cValue = 'black';
+        }
+        // Set value
+        valueEl.style['background-color'] = cValue;
+
+        // Get tooltip value
+        const tipValue = ( tip? tip: value );
+        valueEl.innerHTML = `<div class="tooltip">&nbsp;
+                                <pre class="tooltiptext">${tipValue}</pre>
+                              </div>`;
+        //this.tooltip = true;
+      }
+    }
+  }
+  updateSignalValueList( name, timeValue, nameList, valueList, tipList ) {
+    const hInfo = this.heatmapList[name];
+    if( hInfo ) {
+      // Add the new values
+      nameList = ( nameList? nameList: Object.keys( hInfo.signalList ) );
+      for( let i = 0; i < nameList.length; ++i ) {
+        const sname = nameList[i];
+        const value = valueList[i];
+        const tip = ( tipList? tipList[i]: undefined )
+        this.updateSignalValue( name, sname, value, tip );
       }
     }
   }

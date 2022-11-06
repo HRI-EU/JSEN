@@ -145,36 +145,36 @@
           hm.addSignalValueList( name, t, null, data );
         }
       }
-      // {
-      //   const name = 'CODETest1';
-      //   hm.create( name );
-      //   hm.setProperty( name, 'MaxTimestepCount', 30 );
-      //   const cWhiteYellowRedBlack = [ [255,255,255], [223,255,0], [255,0,0], [0,0,0] ];
-      //   hm.setValueMap( name, hm.getColorMap( [-1,1], cWhiteYellowRedBlack ) );
-      //   hm.addSignalList( name, [ '1', '2', '3', '4', '5' ] );
-      //   let t = 0;
-      //   const dataStream = ()=> {
-      //     if( t < 100 ) {
-      //       const data = [ 
-      //         Math.cos( t*0.1 ), 
-      //         Math.sin( t*0.02 ),
-      //         Math.cos( t*0.2 ),
-      //         Math.sin( t*0.05 ),
-      //         Math.cos( t*0.5 ),
-      //       ];
-      //       const tip = [
-      //         new String( data[0] ).substring( 0, 4 )+' ['+t+']',
-      //         new String( data[1] ).substring( 0, 4 )+' ['+t+']',
-      //         new String( data[2] ).substring( 0, 4 )+' ['+t+']',
-      //         new String( data[3] ).substring( 0, 4 )+' ['+t+']',
-      //         new String( data[4] ).substring( 0, 4 )+' ['+t+']',
-      //       ];
-      //       hm.addSignalValueList( name, t++, null, data, tip );
-      //       setTimeout( dataStream, 200 );
-      //     }
-      //   };
-      //   dataStream();
-      // }
+      {
+        const name = 'CODETest1';
+        hm.create( name );
+        hm.setProperty( name, 'MaxTimestepCount', 30 );
+        const cWhiteYellowRedBlack = [ [255,255,255], [223,255,0], [255,0,0], [0,0,0] ];
+        hm.setValueMap( name, hm.getColorMap( [-1,1], cWhiteYellowRedBlack ) );
+        hm.addSignalList( name, [ '1', '2', '3', '4', '5' ] );
+        let t = 0;
+        const dataStream = ()=> {
+          if( t < 100 ) {
+            const data = [ 
+              Math.cos( t*0.1 ), 
+              Math.sin( t*0.02 ),
+              Math.cos( t*0.2 ),
+              Math.sin( t*0.05 ),
+              Math.cos( t*0.5 ),
+            ];
+            const tip = [
+              new String( data[0] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[1] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[2] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[3] ).substring( 0, 4 )+' ['+t+']',
+              new String( data[4] ).substring( 0, 4 )+' ['+t+']',
+            ];
+            hm.addSignalValueList( name, t++, null, data, tip );
+            setTimeout( dataStream, 200 );
+          }
+        };
+        dataStream();
+      }
       {
         const name = 'SpeedTest';
         hm.create( name );
@@ -201,6 +201,7 @@
         console.timeEnd( 'Drawing Time' );
         console.log( 'End speed test' );
       }
+      
     </script>
   </body>
 </html>
