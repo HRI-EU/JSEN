@@ -234,11 +234,13 @@ class HeatMap {
     const hInfo = this.heatmapList[name];
     if( hInfo ) {
       const clearEl = ( el, startIdx )=> {
-        const tElCount = el.childElementCount;
-        for( let i = startIdx; i <= tElCount; ++i ) {
-          const child = el.childNodes[startIdx];
-          if( child ) {
-            child.remove();
+        if( el ) {
+          const tElCount = el.childElementCount;
+          for( let i = startIdx; i <= tElCount; ++i ) {
+            const child = el.childNodes[startIdx];
+            if( child ) {
+              child.remove();
+            }
           }
         }
       };
