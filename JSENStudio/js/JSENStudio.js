@@ -97,6 +97,7 @@ function main() {
   timeLine.create( 'TimeLine' );
   timeLine.setValueMap( 'TimeLine', threadStatusColorVector );
   timeLine.addEventListener( 'TimeLine', 'TimestepClick', (e,i)=> setHistory( i ) );
+  timeLine.addEventListener( 'TimeLine', 'SignalClick', (e,i,n)=> JSENStudio_openThreadCode( n ) );
 
   // Get URL parameters
   const queryString = window.location.search;
@@ -154,6 +155,12 @@ function JSENStudio_setWinStat( winStat ) {
 }
 function JSENStudio_stopStepByStep() {
   JSENStudio_pause();
+}
+function JSENStudio_openThreadCode( threadName ) {
+  const tIN = JSENS_jvm.getThreadNameId( threadName );
+  if( tIN ) {
+    _addThreadCodeDiv( tIN.id );
+  }
 }
 /******************************************
  * Public Thread Functions
