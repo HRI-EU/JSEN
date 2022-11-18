@@ -98,6 +98,7 @@ function main() {
   timeLine.setValueMap( 'TimeLine', threadStatusColorVector );
   timeLine.addEventListener( 'TimeLine', 'TimestepClick', (e,i)=> setHistory( i ) );
   timeLine.addEventListener( 'TimeLine', 'SignalClick', (e,i,n)=> JSENStudio_openThreadCode( n ) );
+  timeLine.setProperty( 'TimeLine', 'numTimestep', 1000 );
 
   // Get URL parameters
   const queryString = window.location.search;
@@ -118,6 +119,12 @@ function main() {
   const onScriptLoaded = function() {
     _setupJSENStudio( JSENS_jvm );
 
+    // Load thread names in timeLine
+    let threadNameList = [];
+    for( const threadState of stateRecordHistory[0] ) {
+      threadNameList.push( threadState.name );
+    }
+    timeLine.addSignalList( 'TimeLine', threadNameList );
     // Restore window position if available
     _restoreAllThreadCodeDivPosition( winStatBuffer );
 

@@ -72,3 +72,22 @@ function setDragElement( htmlElement, onCloseDrag ) {
     }
   }
 }
+
+function createFloatingDiv( id, x, y, width, height, zIndex ) {
+  const div = document.createElement( 'div' );
+  div.id = id;
+  div.style['position'] = 'absolute';
+  div.style['top'] = ( y? `${y}px`: '100px' );
+  div.style['left'] = ( x? `${x}px`: '400px' );
+  div.style['width'] = ( width? `${width}px`: '800px' );
+  div.style['height'] = ( height? `${height}px`: '400px');
+  div.style['border-style'] = 'inset';
+  div.style['border-color'] = 'lightgray';
+  div.style['background'] = '#363838';
+  div.style['overflow-x'] = 'scroll';
+  div.style['overflow-y'] = 'scroll';
+  div.style['z-index'] = ( zIndex? zIndex: '1000' );
+  document.body.append( div );
+  setDragElement( div );
+  return( div );
+}
