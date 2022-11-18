@@ -335,7 +335,7 @@ class HeatMap {
       this.setProperty( name, 'numSignal', nameList.length );
       let signalNameMaxLen = 0;
       for( const sname of nameList ) {
-        const len = sname.length;
+        const len = `${sname}`.length;
         if( len > signalNameMaxLen ) {
           signalNameMaxLen = len;
         }
